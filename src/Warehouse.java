@@ -24,31 +24,14 @@ public class Warehouse implements WarehouseInterface {
     }
 
     public void rentATool(String toolName, int quantity) {
-        if(repairToolContainer.get(toolName).quantity < quantity){
-            buyTool(toolName, quantity - repairToolContainer.get(toolName).quantity);
-        }
-        repairToolContainer.get(toolName).quantity = repairToolContainer.get(toolName).quantity - quantity;
+        repairToolContainer.get(toolName).rentATool(quantity);
     }
 
     public void takeMaterial(String materialName, int quantity) {
-        if(repairMaterialContainer.get(materialName).quantity < quantity){
-            buyMaterial(materialName, quantity - repairMaterialContainer.get(materialName).quantity);
-        }
-        repairMaterialContainer.get(materialName).quantity = repairMaterialContainer.get(materialName).quantity - quantity;
+        repairMaterialContainer.get(materialName).takeMaterial(quantity);
     }
 
     public void releaseTool(String toolName, int quantity) {
-        repairToolContainer.get(toolName).quantity = repairToolContainer.get(toolName).quantity + quantity;
+        repairToolContainer.get(toolName).releaseTool(quantity);
     }
-
-    private void buyTool(String toolType, int quantity) {
-        repairToolContainer.get(toolType).quantity += quantity;
-    }
-
-    private void buyMaterial(String materialType, int quantity) {
-        repairMaterialContainer.get(materialType).quantity += quantity;
-    }
-
-
-
 }
