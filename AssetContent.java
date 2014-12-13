@@ -2,32 +2,32 @@
  * Created by airbag on 12/9/14.
  */
 public class AssetContent{
-    private String Name;
-    private double Health;
-    private int RepairCostmultiplier;
-    private final int HEALTHYCONTENT = 65;
+    private String name;
+    private double health;
+    private int repairCostMultiplier;
+    private final int HEALTHY_CONTENT = 65;
 
-    public AssetContent(String contentName, int RepairCostmultiplier){
-        Name = contentName;
-        Health = 100;
-        this.RepairCostmultiplier = RepairCostmultiplier;
+    public AssetContent(String contentName, int repairCostMultiplier){
+        name = contentName;
+        health = 100;
+        this.repairCostMultiplier = repairCostMultiplier;
     }
 
-    public void reduceHealth(double precentage){
-        Health -= precentage;
+    public void reduceHealth(double percentage){
+        health -= percentage;
     }
 
-    public void Heal(){
-        Health = 100;
+    public void heal(){
+        health = 100;
     }
 
     public boolean isHealthy(){
-        return Health >= HEALTHYCONTENT;
+        return health >= HEALTHY_CONTENT;
     }
 
     public String toString(){
-        return "the content name is " + Name + " and miltiplier is " + RepairCostmultiplier;
+        return "the content name is " + name + " and multiplier is " + repairCostMultiplier;
     }
 
-    public String Name() { return Name;}
+    public String name() { return name; }
 }

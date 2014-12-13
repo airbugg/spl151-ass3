@@ -14,20 +14,20 @@ public class Asset {
     private int costPerNight;
     private int size;
 
-    public Asset(String name, String type, double x_coordinate, double y_coordinate, LinkedList<AssetContent> contentsList, int costPerNight, int size){
+    public Asset(String name, String type, double x, double y, LinkedList<AssetContent> contentsList, int costPerNight, int size){
         this.name = name;
         this.type = type;
-        location = new Location(x_coordinate, y_coordinate);
+        location = new Location(x, y);
         assetContentContainer = new LinkedList<AssetContent>(contentsList);
         status = "AVAILABLE";
         this.costPerNight = costPerNight;
         this.size = size;
     }
 
-    public void updateDamage(double precentage){
+    public void updateDamage(double percentage){
         ListIterator<AssetContent> it = assetContentContainer.listIterator();
         while(it.hasNext()){
-            it.next().reduceHealth(precentage);
+            it.next().reduceHealth(percentage);
         }
         checkHealth();
 
@@ -50,7 +50,7 @@ public class Asset {
         while(it.hasNext()){
             if(!it.next().isHealthy()){
                 it.previous();
-                 damagedGoods += it.next().Name() + ",";
+                 damagedGoods += it.next().name() + ",";
             }
         }
         if(damagedGoods.length() > 0){

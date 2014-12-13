@@ -14,12 +14,11 @@ public class RentalRequest {
     private int durationOfStay;
     private Asset asset;
 
-    public RentalRequest(String Id, String assetType, int assetSize, int durationOfStay, Asset asset) {
+    public RentalRequest(String Id, String assetType, int assetSize, int durationOfStay) {
         this.Id = Id;
         this.assetType = assetType;
         this.assetSize = assetSize;
         this.durationOfStay = durationOfStay;
-        this.asset = asset;
         requestStatus = RequestStatus.INCOMPLETE;
     }
 
@@ -27,7 +26,8 @@ public class RentalRequest {
         return (requestStatus==RequestStatus.FULFILLED);
     }
 
-    public void fulfill(){
+    public void fulfill(Asset asset){
+        this.asset = asset;
         requestStatus = RequestStatus.FULFILLED;
     }
 
