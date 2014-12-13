@@ -51,6 +51,8 @@ public class RunnableCustomerGroupManager implements Runnable {
 
     private void simulateStay(RentalRequest currentRequest) throws ExecutionException, InterruptedException{
 
+        currentRequest.inProgress();
+
         double totalDamage = 0;
 
         Executor executor = Executors.newCachedThreadPool();
@@ -66,7 +68,7 @@ public class RunnableCustomerGroupManager implements Runnable {
             totalDamage += completionService.take().get();
         }
 
-        currentRequest.
+        currentRequest.updateDamage(totalDamage);
 
     }
 }

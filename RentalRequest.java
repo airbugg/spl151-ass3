@@ -31,11 +31,17 @@ public class RentalRequest {
         requestStatus = RequestStatus.FULFILLED;
     }
 
+    public void inProgress() { requestStatus = RequestStatus.INPROGRESS; }
+
+    public void complete() { requestStatus = RequestStatus.COMPLETE; }
+
+    public void incomplete() { requestStatus = RequestStatus.INCOMPLETE; }
+
     public int stay(){
         return durationOfStay * DAYS_TO_MILLISECONDS;
     }
 
     public void updateDamage(double damagePercentage) {
-
+        asset.updateDamage(damagePercentage);
     }
 }
