@@ -1,12 +1,21 @@
 import java.util.HashMap;
+import java.util.ArrayList;
 
-/**
- * Created by gal on 12/8/2014.
- */
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.XmlValue;
+
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Warehouse implements WarehouseInterface {
 
-    public HashMap<String,RepairTool> repairToolContainer;
-    public HashMap<String,RepairMaterial> repairMaterialContainer;
+    @XmlElement(name = "Tools", required = true)
+    private HashMap<String,RepairTool> repairToolContainer;
+    @XmlElement(name = "Materials", required = true)
+    private HashMap<String,RepairMaterial> repairMaterialContainer;
 
 
     public Warehouse() {

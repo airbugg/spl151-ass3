@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<REIT>
+<!--  <REIT xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="InitialData.xsd">
+-->
+	<Warehouse>
+		<Tools>
+			<Tool>
+				<name>Vacuum Cleaner</name>
+				<quantity>3</quantity>
+			</Tool>
+			<Tool>
+				<name>Hammer</name>
+				<quantity>5</quantity>
+			</Tool>
+			<Tool>
+				<name>Jackhammer</name>
+				<quantity>2</quantity>
+			</Tool>
+			<Tool>
+				<name>Jacksaw</name>
+				<quantity>4</quantity>
+			</Tool>
+			<Tool>
+				<name>Drill</name>
+				<quantity>7</quantity>
+			</Tool>
+			<Tool>
+				<name>Screw Driver</name>
+				<quantity>5</quantity>
+			</Tool>
+			<Tool>
+				<name>Adjustable Spanner</name>
+				<quantity>5</quantity>
+			</Tool>
+			<Tool>
+				<name>Knife</name>
+				<quantity>5</quantity>
+			</Tool>
+			<Tool>
+				<name>Pliers</name>
+				<quantity>5</quantity>
+			</Tool>
+		</Tools>
+		<Materials>
+			<Material>
+				<name>Nails</name>
+				<quantity>5000</quantity>
+			</Material>
+			<Material>
+				<name>Carpet Cleaner</name>
+				<quantity>5000</quantity>
+			</Material>
+			<Material>
+				<name>Screws</name>
+				<quantity>5000</quantity>
+			</Material>
+			<Material>
+				<name>Kitchen Cleaner</name>
+				<quantity>2000</quantity>
+			</Material>
+			<Material>
+				<name>Glass Cleaner</name>
+				<quantity>1500</quantity>
+			</Material>
+			<Material>
+				<name>Disinfectant</name>
+				<quantity>1500</quantity>
+			</Material>
+			<Material>
+				<name>Floor Cleaner</name>
+				<quantity>1500</quantity>
+			</Material>
+			<Material>
+				<name>Trash Bag</name>
+				<quantity>2500</quantity>
+			</Material>
+			<Material>
+				<name>Paper Towel</name>
+				<quantity>1500</quantity>
+			</Material>
+			<Material>
+				<name>Bathroom Cleaner</name>
+				<quantity>150</quantity>
+			</Material>
+			<Material>
+				<name>Laundry Cleaner</name>
+				<quantity>2500</quantity>
+			</Material>
+			<Material>
+				<name>Cleaning Pads</name>
+				<quantity>2500</quantity>
+			</Material>
+			<Material>
+				<name>Sand Cloth</name>
+				<quantity>2500</quantity>
+			</Material>
+		</Materials>
+	</Warehouse>
+	<Staff>
+		<Clerks>
+			<Clerk>
+				<name>Ken Harush</name>
+				<Location x="3" y = "3"/>
+			</Clerk>
+			<Clerk>
+				<name>Paula Bitton</name>
+				<Location x="3" y = "3"/>
+			</Clerk>
+			<Clerk>
+				<name>Wolfgang Eisenkott</name>
+				<Location x="3" y = "3"/>
+			</Clerk>
+			<Clerk>
+				<name>Paula Die</name>
+				<Location x="3" y = "3"/>
+			</Clerk>
+		</Clerks>
+		<NumberOfMaintenancePersons>3</NumberOfMaintenancePersons>
+		<TotalNumberOfRentalRequests>7</TotalNumberOfRentalRequests>
+	</Staff>
+</REIT>
