@@ -8,6 +8,7 @@ public class RepairMaterial {
     private StringBuilder currentStatus;
 
 
+
     public RepairMaterial(String materialName, int quantity){
         this.materialName = materialName;
         totalQuantity = quantity;
@@ -34,6 +35,8 @@ public class RepairMaterial {
     }
 
     public int totalQuantity() { return  totalQuantity;  }
+
+
 
     public synchronized String toString(){
         currentStatus.delete(0,currentStatus.length());

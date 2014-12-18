@@ -10,6 +10,7 @@ public class RepairTool {
     private int currentQuantity;
     private StringBuilder currentStatus;
 
+
     public RepairTool(String toolName, int quantity){
         this.toolName = toolName;
         totalQuantity = quantity;
@@ -24,6 +25,7 @@ public class RepairTool {
         }
         currentQuantity -= quantity;
     }
+
 
     public synchronized void releaseTool(int quantity){
         currentQuantity += quantity;
@@ -42,9 +44,10 @@ public class RepairTool {
         return totalQuantity;
     }
 
+
     public synchronized String toString(){
         currentStatus.delete(0,currentStatus.length());
-        currentStatus.append(" current amount of " + toolName + " used int the simulator is " + (totalQuantity - currentQuantity));
+        currentStatus.append("current amount of " + toolName + " used int the simulator is " + (totalQuantity - currentQuantity));
         return String.valueOf(currentStatus);
     }
 

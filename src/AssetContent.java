@@ -13,6 +13,12 @@ public class AssetContent{
         this.RepairCostmultiplier = RepairCostmultiplier;
     }
 
+    public AssetContent(AssetContent other){
+        Name = other.Name;
+        Health = other.Health;
+        RepairCostmultiplier = other.RepairCostmultiplier;
+    }
+
     public void reduceHealth(double precentage){
         Health -= precentage;
     }
@@ -30,4 +36,6 @@ public class AssetContent{
     }
 
     public String Name() { return Name;}
+
+    public double timeToSleep(){ return (100-Health)*RepairCostmultiplier; }
 }

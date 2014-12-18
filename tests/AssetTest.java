@@ -15,7 +15,7 @@ public class AssetTest {
         asset = new Asset("gal's crib", "crib", 1 ,1 , contentList, 500, 5);
     }
 
-    private LinkedList<AssetContent> generateContentList() {
+    public static LinkedList<AssetContent> generateContentList() {
         LinkedList<AssetContent> list = new LinkedList<AssetContent>();
         list.addLast(new AssetContent("stove", 2));
         list.addLast(new AssetContent("microwave",7));
@@ -32,4 +32,14 @@ public class AssetTest {
         assertEquals("stove,microwave,fridge",asset.whatsDamaged());
         assertEquals("UNAVAILABLE",asset.status());
     }
-}
+
+    @Test
+    public void testBrokenContentsList(){
+        asset.updateDamage(70);
+        LinkedList<AssetContent> list = asset.BrokenContentsList();
+        ListIterator<AssetContent> it = list.listIterator();
+        while (it.hasNext()) {
+            System.out.println(it.next().toString());
+            }
+        }
+    }
