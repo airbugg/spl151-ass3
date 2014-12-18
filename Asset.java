@@ -10,16 +10,19 @@ public class Asset {
     private String	type;
     private Location location;
     private LinkedList<AssetContent> assetContentContainer;
-    private	String status;
+    private enum Status {AVAILABLE, BOOKED, OCCUPIED, UNAVAILABLE};
+    private	Status status;
     private int costPerNight;
     private int size;
 
-    public Asset(String name, String type, double x, double y, LinkedList<AssetContent> contentsList, int costPerNight, int size){
+    public Asset(String name, String type, Location location,
+                 LinkedList<AssetContent> contentList,
+                 int costPerNight, int size) {
         this.name = name;
         this.type = type;
-        location = new Location(x, y);
-        assetContentContainer = new LinkedList<AssetContent>(contentsList);
-        status = "AVAILABLE";
+        this.location = location;
+        assetContentContainer = new LinkedList<AssetContent>(contentList);
+        status = Status.AVAILABLE;
         this.costPerNight = costPerNight;
         this.size = size;
     }
@@ -30,15 +33,15 @@ public class Asset {
             it.next().reduceHealth(percentage);
         }
         checkHealth();
-
     }
 
     private void checkHealth() {
         boolean stillAvailable = true;
         ListIterator<AssetContent> it = assetContentContainer.listIterator();
+
         while(it.hasNext() && stillAvailable){
             if(!it.next().isHealthy()){
-                status = "UNAVAILABLE";
+                status = Status.UNAVAILABLE;
                 stillAvailable = false;
             }
         }
@@ -47,6 +50,7 @@ public class Asset {
     public String whatsDamaged(){
         String damagedGoods = "";
         ListIterator<AssetContent> it = assetContentContainer.listIterator();
+
         while(it.hasNext()){
             if(!it.next().isHealthy()){
                 it.previous();
@@ -59,5 +63,9 @@ public class Asset {
         return damagedGoods;
     }
 
-    public String status() { return status; }
+    public boolean isSuitable(String type, int size){
+        return (this.type == type &&
+                this.size >= size &&
+                this.status == Status.AVAILABLE);
+    }
 }

@@ -16,7 +16,9 @@ public class RunnableCustomerGroupManager implements Runnable {
     private Management management;
 
 
-    public RunnableCustomerGroupManager(Management management,CustomerGroupDetails customerGroupDetails,BlockingQueue<RentalRequest> rentalRequests) {
+    public RunnableCustomerGroupManager(Management management,
+                                        CustomerGroupDetails customerGroupDetails,
+                                        BlockingQueue<RentalRequest> rentalRequests) {
         this.management = management;
         this.customerGroupDetails = customerGroupDetails;
         this.rentalRequests = rentalRequests;

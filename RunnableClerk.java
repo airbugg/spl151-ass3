@@ -31,7 +31,7 @@ public class RunnableClerk implements Runnable{
 
                     synchronized (currRequest) {
                         System.out.println("About to fulfill request...");
-                        currRequest.fulfill();
+                        //currRequest.fulfill();
                         System.out.println("About to notify Group Manager...");
                         currRequest.notify();
                     }
