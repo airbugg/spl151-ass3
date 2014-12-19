@@ -5,8 +5,8 @@ import java.util.concurrent.ArrayBlockingQueue;
 
 public class Assets {
 
-    ArrayList<Asset> assets;
-    ArrayBlockingQueue<DamageReport> damageReports;
+    private ArrayList<Asset> assets;
+    private ArrayBlockingQueue<DamageReport> damageReports;
 
     public Assets(ArrayList<Asset> assets) {
         this.assets = assets;
@@ -21,11 +21,11 @@ public class Assets {
         return null;
     }
 
-    public void addDamageReport(DamageReport damageReport) {
+    public void addDamageReport(DamageReport damageReport) { // adds another damageReport to
         damageReports.add(damageReport);
     }
 
-    public Iterator<DamageReport> getDamageReports() {
+    public Iterator<DamageReport> getDamageReports() { // returns iterator for damageReport list
         return damageReports.iterator();
     }
 
