@@ -37,11 +37,13 @@ public class Management {
         customers.add(customerGroupDetails);
     }
 
-    public void addItemRepairTool(String name, ArrayList<RepairToolInformation> repairToolInformation) {
+    public void addItemRepairTool(String name,
+                                  ArrayList<RepairToolInformation> repairToolInformation) {
         repairToolInformationMap.put(name, repairToolInformation);
     }
 
-    public void addItemRepairMaterial(String name, ArrayList<RepairMaterialInformation> repairMaterialInformation) {
+    public void addItemRepairMaterial(String name,
+                                      ArrayList<RepairMaterialInformation> repairMaterialInformation) {
         repairMaterialInformationMap.put(name, repairMaterialInformation);
     }
 

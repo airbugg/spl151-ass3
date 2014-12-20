@@ -276,7 +276,7 @@ public final class Parser {
                     }
             }
         }
-    } //TODO: TEST.
+    }
 
     public static void parseAssetContentRepairDetails (Management management,
                                                        String xmlPath) throws  XMLStreamException, FileNotFoundException {
