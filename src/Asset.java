@@ -16,15 +16,18 @@ public class Asset {
     private int size;
 
     public Asset(String name, String type, Location location,
-                 LinkedList<AssetContent> contentList,
                  int costPerNight, int size) {
         this.name = name;
         this.type = type;
         this.location = location;
-        assetContentContainer = new LinkedList<AssetContent>(contentList);
+        assetContentContainer = new LinkedList<AssetContent>();
         status = Status.AVAILABLE;
         this.costPerNight = costPerNight;
         this.size = size;
+    }
+
+    public void addContent(AssetContent assetContent) {
+        assetContentContainer.add(assetContent);
     }
 
     public void updateDamage(double percentage){

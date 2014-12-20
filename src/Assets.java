@@ -8,8 +8,12 @@ public class Assets {
     private ArrayList<Asset> assets;
     private ArrayBlockingQueue<DamageReport> damageReports;
 
-    public Assets(ArrayList<Asset> assets) {
-        this.assets = assets;
+    public Assets() {
+        this.assets = new ArrayList<Asset>();
+    }
+
+    public void addAsset(Asset asset) {
+        assets.add(asset);
     }
 
     public Asset find(String type, int size) {
