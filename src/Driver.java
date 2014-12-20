@@ -15,6 +15,7 @@ public class Driver {
         Parser.parseAssetContentRepairDetails(management, "xml/AssetContentsRepairDetails.xml");
         Parser.parseCustomersGroups(management, "xml/CustomersGroups.xml");
 
-        System.out.println("Finished parsing Warehouse object. Warehouse contains the following: ");
+        System.out.println("Finished parsing files.");
+        System.out.println(management);
     }
 }

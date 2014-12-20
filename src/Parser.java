@@ -7,9 +7,10 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Vector;
 
 public final class Parser {
 
@@ -18,7 +19,7 @@ public final class Parser {
 
 
     public static Management createManagement(String initialDataXmlPath,
-                                              String assetsXmlPath) throws XMLStreamException{
+                                              String assetsXmlPath) throws XMLStreamException, FileNotFoundException{
 
         // Management object
         Management management = null;
@@ -35,7 +36,7 @@ public final class Parser {
 
         // initialize parser
         XMLInputFactory factory = XMLInputFactory.newInstance();
-        XMLStreamReader reader = factory.createXMLStreamReader(ClassLoader.getSystemResourceAsStream(initialDataXmlPath));
+        XMLStreamReader reader = factory.createXMLStreamReader(new FileInputStream(initialDataXmlPath));
 
         String elementContent = "";
 
@@ -85,6 +86,7 @@ public final class Parser {
 
                     }
                     if (endElement.equals("Clerk")) {
+                        assert management != null;
                         management.addClerk(new ClerkDetails(name, location));
 
                     }
@@ -95,7 +97,7 @@ public final class Parser {
         return management;
     } //TODO: TEST.
 
-    public static Assets parseAssets(String xmlPath) throws XMLStreamException {
+    private static Assets parseAssets(String xmlPath) throws XMLStreamException, FileNotFoundException {
 
         // initialize Assets object
         Assets assets = new Assets();
@@ -103,11 +105,8 @@ public final class Parser {
         // initialize single asset
         Asset asset = null;
 
-        // initialize AssetContent object
-        AssetContent assetContent = null;
-
         // initialize AssetContent fields
-        int repairMultiplier = 0;
+        double repairMultiplier = 0;
 
         // initialize Asset fields
         String name = null;
@@ -119,7 +118,7 @@ public final class Parser {
 
 
         XMLInputFactory factory = XMLInputFactory.newInstance();
-        XMLStreamReader reader = factory.createXMLStreamReader(ClassLoader.getSystemResourceAsStream(xmlPath));
+        XMLStreamReader reader = factory.createXMLStreamReader(new FileInputStream(xmlPath));
 
         String elementContent = null;
 
@@ -169,7 +168,7 @@ public final class Parser {
 
                     }
                     if (endElement.equals("RepairMultiplier")) {
-                        repairMultiplier = Integer.parseInt(elementContent);
+                        repairMultiplier = Double.parseDouble(elementContent);
 
                     }
                     if (endElement.equals("AssetContent")) {
@@ -187,14 +186,14 @@ public final class Parser {
     } //TODO: TEST.
 
     public static void parseCustomersGroups (Management management,
-                                             String xmlPath) throws XMLStreamException {
+                                             String xmlPath) throws XMLStreamException, FileNotFoundException {
 
         // collection fields
         CustomerGroupDetails customerGroup = null;
 
         // Customer fields
         String name = null;
-        Customer.VandalismType vandalismType = Customer.VandalismType.NONE;
+        Customer.VandalismType vandalismType = Customer.VandalismType.None;
         int minDamage = 0;
         int maxDamage = 0;
 
@@ -206,7 +205,7 @@ public final class Parser {
 
         // initialize parser
         XMLInputFactory factory = XMLInputFactory.newInstance();
-        XMLStreamReader reader = factory.createXMLStreamReader(ClassLoader.getSystemResourceAsStream(xmlPath));
+        XMLStreamReader reader = factory.createXMLStreamReader(new FileInputStream(xmlPath));
 
         String elementContent = null;
 
@@ -217,7 +216,7 @@ public final class Parser {
             switch (event) {
 
                 case XMLStreamConstants.START_ELEMENT:
-                    String startElement = reader.getElementText();
+                    String startElement = reader.getLocalName();
 
                     if (startElement.equals("Request")) {
                         id = reader.getAttributeValue(null,"id");
@@ -280,7 +279,7 @@ public final class Parser {
     } //TODO: TEST.
 
     public static void parseAssetContentRepairDetails (Management management,
-                                                       String xmlPath) throws  XMLStreamException {
+                                                       String xmlPath) throws  XMLStreamException, FileNotFoundException {
 
         ArrayList<RepairToolInformation> tools = new ArrayList<RepairToolInformation>();
         ArrayList<RepairMaterialInformation> materials = new ArrayList<RepairMaterialInformation>();
@@ -290,7 +289,7 @@ public final class Parser {
         int quantity = 0;
 
         XMLInputFactory factory = XMLInputFactory.newInstance();
-        XMLStreamReader reader = factory.createXMLStreamReader(ClassLoader.getSystemResourceAsStream(xmlPath));
+        XMLStreamReader reader = factory.createXMLStreamReader(new FileInputStream(xmlPath));
 
         String elementContent = "";
 

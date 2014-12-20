@@ -23,6 +23,10 @@ public class Management {
         this.warehouse = warehouse;
         this.assets = assets;
         this.rentalRequests = new LinkedBlockingDeque<RentalRequest>();
+        this.clerks = new Vector<ClerkDetails>();
+        this.repairToolInformationMap = new HashMap<String, ArrayList<RepairToolInformation>>();
+        this.repairMaterialInformationMap = new HashMap<String, ArrayList<RepairMaterialInformation>>();
+        this.customers = new Vector<CustomerGroupDetails>();
     }
 
     public void addClerk(ClerkDetails clerkDetails) {
@@ -47,5 +51,15 @@ public class Management {
 
     public void addRentalRequest(RentalRequest rentalRequest) {
         rentalRequests.add(rentalRequest);
+    }
+
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder("Management: \n");
+
+        for (CustomerGroupDetails customerGroupDetails : customers) {
+            stringBuilder.append(customerGroupDetails);
+        }
+
+        return stringBuilder.toString();
     }
 }

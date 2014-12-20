@@ -3,7 +3,7 @@
 public class RepairTool {
 
     private String name;
-    private int quantity;
+    public int quantity;
 
     public RepairTool(String name, int quantity){
         this.name = name;

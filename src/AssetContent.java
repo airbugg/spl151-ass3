@@ -4,10 +4,10 @@
 public class AssetContent{
     private String name;
     private double health;
-    private int repairCostMultiplier;
+    private double repairCostMultiplier;
     private final int HEALTHY_CONTENT = 65;
 
-    public AssetContent(String contentName, int repairCostMultiplier){
+    public AssetContent(String contentName, double repairCostMultiplier){
         name = contentName;
         health = 100;
         this.repairCostMultiplier = repairCostMultiplier;

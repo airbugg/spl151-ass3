@@ -44,4 +44,13 @@ public class RentalRequest {
     public void updateDamage(double damagePercentage) {
         asset.updateDamage(damagePercentage);
     }
+
+    public String toString() {
+        return "[ Request ID: " +
+                Id + " ; Asset Type: " +
+                assetType + " ; Asset Size: " +
+                assetSize + " ; Duration:" +
+                durationOfStay + " ; Status: " +
+                requestStatus.toString() + " ] \n";
+    }
 }

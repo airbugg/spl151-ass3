@@ -38,4 +38,24 @@ public class CustomerGroupDetails {
 
     }
 
+    public String toString() {
+
+        StringBuilder stringBuilder = new StringBuilder("This CustomerGroupDetails object contains: \n");
+
+        stringBuilder.append("Group Manager name: ");
+        stringBuilder.append(groupManagerName);
+        stringBuilder.append("\nRental Requests: \n");
+
+        for (RentalRequest rentalRequest : rentalRequests) {
+            stringBuilder.append(rentalRequest);
+        }
+
+        stringBuilder.append("Customers:\n");
+
+        for (Customer customer : customers) {
+            stringBuilder.append(customer);
+        }
+
+        return stringBuilder.toString();
+    }
 }

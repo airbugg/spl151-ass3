@@ -4,7 +4,7 @@
 public class Customer {
 
     // fields
-    public enum VandalismType { ARBITRARY, FIXED, NONE };
+    public enum VandalismType { Arbitrary, Fixed, None };
     private VandalismType vandalismType;
     private String name;
     private int minDamage;
@@ -23,19 +23,27 @@ public class Customer {
 
         switch (vandalismType) {
 
-         case ARBITRARY: // generate random number in minDamage - maxDamage range
+         case Arbitrary: // generate random number in minDamage - maxDamage range
              damage = minDamage + Math.random() * (maxDamage - minDamage);
              break;
 
-         case FIXED: // calc average
+         case Fixed: // calc average
              damage = (minDamage + maxDamage) / 2;
              break;
 
-         case NONE: // leave default value unchanged
+         case None: // leave default value unchanged
              break;
         }
 
         return damage;
+    }
+
+    public String toString() {
+        return "[ Customer Name: " +
+                name + " ; Vandalism Type: " +
+                vandalismType.toString() + " ; minDamage: " +
+                minDamage + " ; maxDamage: " +
+                maxDamage + " ]\n";
     }
 
 }
