@@ -76,7 +76,17 @@ public class Management {
         return stringBuilder.toString();
     }
 
+    private void runCustomers() {
+        for (CustomerGroupDetails customerGroup : customers) {
+            (new Thread )
+        }
+    }
+
     private void runClerks() {
+
+    }
+
+    private void runMaintenance() {
 
     }
 

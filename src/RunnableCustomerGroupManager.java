@@ -8,26 +8,23 @@ public class RunnableCustomerGroupManager implements Runnable {
 
     // fields
     private CustomerGroupDetails customerGroupDetails;
-    private BlockingQueue<RentalRequest> rentalRequests;
     private Management management;
 
 
     public RunnableCustomerGroupManager(Management management,
-                                        CustomerGroupDetails customerGroupDetails,
-                                        BlockingQueue<RentalRequest> rentalRequests) {
+                                        CustomerGroupDetails customerGroupDetails) {
         this.management = management;
         this.customerGroupDetails = customerGroupDetails;
-        this.rentalRequests = rentalRequests;
     }
 
 
     @Override
     public void run() {
 
-        while (!rentalRequests.isEmpty()) { // let's iterate over these rental requests..
+        while (customerGroupDetails.isRequestsLeft()) { // let's iterate over these rental requests..
 
-            RentalRequest currentRequest = rentalRequests.peek();
-            management.addRentalRequest(rentalRequests.remove()); // send rentalRequest to Management
+            RentalRequest currentRequest = customerGroupDetails.pullRentalRequest();
+            management.addRentalRequest(currentRequest); // send rentalRequest to Management
 
             System.out.println("Sent Request to Management. Waiting for fulfillment.."); //TODO: log event
             synchronized (currentRequest) {

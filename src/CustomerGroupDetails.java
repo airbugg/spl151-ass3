@@ -29,6 +29,16 @@ public class CustomerGroupDetails {
 
     }
 
+    public RentalRequest pullRentalRequest() {
+        if (!rentalRequests.isEmpty())
+            return rentalRequests.remove();
+        return null;
+    }
+
+    public boolean isRequestsLeft() {
+        return !rentalRequests.isEmpty();
+    }
+
     public Iterator<Customer> customerIterator(){
         return customers.iterator();
     }
