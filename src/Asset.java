@@ -71,4 +71,12 @@ public class Asset {
                 this.size >= size &&
                 this.status == Status.AVAILABLE);
     }
+
+    public long distanceToClerk (Location location) {
+        return (Math.round(this.location.calculateDistance(location)));
+    }
+
+    public void book() {
+        status = Status.BOOKED;
+    }
 }

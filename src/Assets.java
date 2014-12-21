@@ -16,10 +16,10 @@ public class Assets {
         assets.add(asset);
     }
 
-    public Asset find(String type, int size) {
+    public Asset find(RentalRequest rentalRequest) {
 
         for (Asset asset : assets) {
-            if (asset.isSuitable(type,size))
+            if (rentalRequest.isSuitable(asset))
                 return asset;
         }
         return null;

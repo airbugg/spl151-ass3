@@ -42,8 +42,13 @@ public class RunnableCustomerGroupManager implements Runnable {
 
             System.out.println("Current request fulfilled. Simulating stay..."); //TODO: log event
 
-
-
+            try {
+                simulateStay(currentRequest);
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 

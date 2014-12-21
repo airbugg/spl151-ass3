@@ -10,4 +10,8 @@ public class ClerkDetails {
         this.name = name;
         this.location = location;
     }
+
+    public long distanceToTravel(Asset asset) {
+        return asset.distanceToClerk(location);
+    }
 }

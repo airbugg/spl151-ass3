@@ -8,14 +8,14 @@ public class RentalRequest {
 
     private enum RequestStatus { INCOMPLETE, FULFILLED, INPROGRESS, COMPLETE };
     private RequestStatus requestStatus;
-    private String Id;
+    private String id;
     private String assetType;
     private int assetSize;
     private int durationOfStay;
     private Asset asset;
 
-    public RentalRequest(String Id, String assetType, int assetSize, int durationOfStay) {
-        this.Id = Id;
+    public RentalRequest(String id, String assetType, int assetSize, int durationOfStay) {
+        this.id = id;
         this.assetType = assetType;
         this.assetSize = assetSize;
         this.durationOfStay = durationOfStay;
@@ -29,6 +29,10 @@ public class RentalRequest {
     public void fulfill(Asset asset){
         this.asset = asset;
         requestStatus = RequestStatus.FULFILLED;
+    }
+
+    public boolean isSuitable (Asset asset) {
+        return asset.isSuitable(assetType, assetSize);
     }
 
     public void inProgress() { requestStatus = RequestStatus.INPROGRESS; }
@@ -47,7 +51,7 @@ public class RentalRequest {
 
     public String toString() {
         return "[ Request ID: " +
-                Id + " ; Asset Type: " +
+                id + " ; Asset Type: " +
                 assetType + " ; Asset Size: " +
                 assetSize + " ; Duration:" +
                 durationOfStay + " ; Status: " +

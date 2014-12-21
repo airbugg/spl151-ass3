@@ -29,6 +29,10 @@ public class Management {
         this.customers = new Vector<CustomerGroupDetails>();
     }
 
+    public void run() {
+
+    }
+
     public void addClerk(ClerkDetails clerkDetails) {
         clerks.add(clerkDetails);
     }

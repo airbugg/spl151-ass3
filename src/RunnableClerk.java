@@ -1,4 +1,6 @@
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.BrokenBarrierException;
+import java.util.concurrent.CyclicBarrier;
 
 
 /**
@@ -6,38 +8,64 @@ import java.util.concurrent.BlockingQueue;
  */
 public class RunnableClerk implements Runnable{
 
+    private final int SEC_TO_MILL = 1000;
+    private double currentShiftLength;
     private ClerkDetails clerkDetails;
     private BlockingQueue<RentalRequest> rentalRequests;
-    private int numOfRentalRequests;
+    private RentalRequest currentRequest;
+    private Assets assets;
+    private CyclicBarrier barrier;
+    //private int nRentalRequests;
 
-    public RunnableClerk(ClerkDetails clerkDetails, BlockingQueue<RentalRequest> rentalRequests) {
+    public RunnableClerk(ClerkDetails clerkDetails,
+                         BlockingQueue<RentalRequest> rentalRequests,
+                         CyclicBarrier barrier,
+                         Assets assets) {
         this.clerkDetails = clerkDetails;
         this.rentalRequests = rentalRequests;
+        this.barrier = barrier;
+        this.assets = assets;
+        this.currentRequest = null;
     }
 
 
     @Override
     public void run() {
-        while (true) {
+        while (!rentalRequests.isEmpty()) {
+            while (currentShiftLength < 8) { // min 8 hour shifts..
+                try {
+                    currentRequest = rentalRequests.take(); // pull rental request from queue
 
-            if (!rentalRequests.isEmpty()) {
-                RentalRequest currRequest = rentalRequests.peek();
-                if (!currRequest.isFulfilled()) {
-                    try {
-                        Thread.sleep(3000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+                    synchronized (currentRequest) {
+                        Asset asset = assets.find(currentRequest);
+                        asset.book();
+                        travelToAsset(asset);
+                        currentRequest.fulfill(asset);
+                        notify(); // asset is booked, request fulfilled. notify customers.
                     }
 
-                    synchronized (currRequest) {
-                        System.out.println("About to fulfill request...");
-                        //currRequest.fulfill();
-                        System.out.println("About to notify Group Manager...");
-                        currRequest.notify();
-                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
-
+            }
+            try { // done for today. waiting for a new shift to begin.
+                barrier.await();
+                beginShift(); // done waiting. back to work.
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (BrokenBarrierException e) {
+                e.printStackTrace();
             }
         }
+    }
+
+    private void travelToAsset(Asset asset) throws InterruptedException {
+        long timeToSleep = clerkDetails.distanceToTravel(asset);
+        currentShiftLength += timeToSleep;
+        Thread.sleep(timeToSleep * SEC_TO_MILL); // sleep at the wheel
+    }
+
+    private void beginShift() { // i hate mondays
+        currentShiftLength = 0;
     }
 }
