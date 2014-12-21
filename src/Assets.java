@@ -25,7 +25,7 @@ public class Assets {
         return null;
     }
 
-    public void addDamageReport(DamageReport damageReport) { // adds another damageReport to
+    public void submitDamageReport(DamageReport damageReport) { // adds another damageReport to
         damageReports.add(damageReport);
     }
 

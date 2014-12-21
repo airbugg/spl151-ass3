@@ -3,6 +3,7 @@ import java.util.HashMap;
 import java.util.Vector;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by airbag on 12/8/14.
@@ -11,12 +12,16 @@ public class Management {
 
     // fields
     private Warehouse warehouse;
-    private BlockingQueue<RentalRequest> rentalRequests;
     private Assets assets;
-    private Vector<CustomerGroupDetails> customers;
-    private Vector<ClerkDetails> clerks;
+
     private HashMap<String, ArrayList<RepairMaterialInformation>> repairMaterialInformationMap;
     private HashMap<String, ArrayList<RepairToolInformation>> repairToolInformationMap;
+
+    AtomicInteger nUnhandledRequests;
+    private BlockingQueue<RentalRequest> rentalRequests;
+    private Vector<CustomerGroupDetails> customers;
+    private Vector<ClerkDetails> clerks;
+
 
 
     public Management(Warehouse warehouse, Assets assets) { // public constructor
@@ -27,6 +32,7 @@ public class Management {
         this.repairToolInformationMap = new HashMap<String, ArrayList<RepairToolInformation>>();
         this.repairMaterialInformationMap = new HashMap<String, ArrayList<RepairMaterialInformation>>();
         this.customers = new Vector<CustomerGroupDetails>();
+        this.nUnhandledRequests = new AtomicInteger(0);
     }
 
     public void run() {
@@ -52,11 +58,12 @@ public class Management {
     }
 
     public void submitDamageReport(DamageReport damageReport) {
-        assets.addDamageReport(damageReport);
+        assets.submitDamageReport(damageReport);
     }
 
     public void addRentalRequest(RentalRequest rentalRequest) {
         rentalRequests.add(rentalRequest);
+        nUnhandledRequests.getAndIncrement();
     }
 
     public String toString() {
@@ -67,5 +74,13 @@ public class Management {
         }
 
         return stringBuilder.toString();
+    }
+
+    private void runClerks() {
+
+    }
+
+    private void updateDamage() {
+
     }
 }

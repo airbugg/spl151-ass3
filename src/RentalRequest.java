@@ -35,7 +35,10 @@ public class RentalRequest {
         return asset.isSuitable(assetType, assetSize);
     }
 
-    public void inProgress() { requestStatus = RequestStatus.INPROGRESS; }
+    public void inProgress() {
+        requestStatus = RequestStatus.INPROGRESS;
+        asset.occupy();
+    }
 
     public void complete() { requestStatus = RequestStatus.COMPLETE; }
 
@@ -47,6 +50,10 @@ public class RentalRequest {
 
     public void updateDamage(double damagePercentage) {
         asset.updateDamage(damagePercentage);
+    }
+
+    public DamageReport createDamageReport(double totalDamage) {
+        return new DamageReport(asset, totalDamage);
     }
 
     public String toString() {

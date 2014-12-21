@@ -79,4 +79,8 @@ public class Asset {
     public void book() {
         status = Status.BOOKED;
     }
+
+    public void occupy() {
+        status = Status.OCCUPIED;
+    }
 }

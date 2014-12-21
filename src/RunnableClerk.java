@@ -1,6 +1,7 @@
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 /**
@@ -15,17 +16,19 @@ public class RunnableClerk implements Runnable{
     private RentalRequest currentRequest;
     private Assets assets;
     private CyclicBarrier barrier;
-    //private int nRentalRequests;
+    private AtomicInteger nUnhandledRequests;
 
     public RunnableClerk(ClerkDetails clerkDetails,
                          BlockingQueue<RentalRequest> rentalRequests,
                          CyclicBarrier barrier,
-                         Assets assets) {
+                         Assets assets,
+                         AtomicInteger nUnhandledRequests) {
         this.clerkDetails = clerkDetails;
         this.rentalRequests = rentalRequests;
         this.barrier = barrier;
         this.assets = assets;
         this.currentRequest = null;
+        this.nUnhandledRequests = nUnhandledRequests;
     }
 
 
@@ -39,8 +42,9 @@ public class RunnableClerk implements Runnable{
                     synchronized (currentRequest) {
                         Asset asset = assets.find(currentRequest);
                         asset.book();
-                        travelToAsset(asset);
+                        travelToAsset(asset); // wasting time
                         currentRequest.fulfill(asset);
+                        nUnhandledRequests.getAndDecrement(); // decrement unhandled requests count by one, safely..
                         notify(); // asset is booked, request fulfilled. notify customers.
                     }
 

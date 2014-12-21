@@ -58,20 +58,21 @@ public class RunnableCustomerGroupManager implements Runnable {
 
         double totalDamage = 0;
 
+        // we'll sum up the damage values returned by each simulated customer
         Executor executor = Executors.newCachedThreadPool();
         CompletionService<Double> completionService = new ExecutorCompletionService<Double>(executor);
 
         Iterator<Customer> customerIterator = customerGroupDetails.customerIterator();
 
-        while(customerIterator.hasNext()){
+        while(customerIterator.hasNext()){ // launch each customer as a CallableSimulateStayInAsset
             completionService.submit(new CallableSimulateStayInAsset(currentRequest,customerIterator.next()));
         }
 
-        for (int i=0; i<customerGroupDetails.numOfCustomers(); i++){
+        for (int i=0; i<customerGroupDetails.numOfCustomers(); i++){ // sum up damages
             totalDamage += completionService.take().get();
         }
 
-        currentRequest.updateDamage(totalDamage);
-
+        // submit DamageReport to management
+        management.submitDamageReport(currentRequest.createDamageReport(totalDamage));
     }
 }
