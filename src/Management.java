@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Vector;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -77,13 +78,16 @@ public class Management {
     }
 
     private void runCustomers() {
-        for (CustomerGroupDetails customerGroup : customers) {
-            (new Thread )
-        }
+        for (CustomerGroupDetails customerGroup : customers)
+            new Thread(new RunnableCustomerGroupManager(this,customerGroup)).start();
     }
 
     private void runClerks() {
+        CyclicBarrier barrier = new CyclicBarrier(clerks.size());
 
+        for (ClerkDetails clerk : clerks) {
+            new Thread(new RunnableClerk(clerk,rentalRequests,barrier,assets,nUnhandledRequests)).start();
+        }
     }
 
     private void runMaintenance() {
