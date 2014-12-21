@@ -17,19 +17,19 @@ public class RepairInformationTest {
 
     }
 
-    public static LinkedList<Pair> generatePairList() {
-        LinkedList<Pair> list = new LinkedList<Pair>();
-        list.addLast(new Pair("kalsimo",4));
-        list.addLast(new Pair("sand",2));
-        list.addLast(new Pair("iron",8));
+    public static LinkedList<RepairToolInformation> generateRepairToolInformationList() {
+        LinkedList<RepairToolInformation> list = new LinkedList<RepairToolInformation>();
+        list.addLast(new RepairToolInformation("driller",4));
+        list.addLast(new RepairToolInformation("spoon",2));
+        list.addLast(new RepairToolInformation("gun",8));
         return list;
     }
 
-
-
-    public static void printList(LinkedList list){
-        for(Iterator it= list.listIterator() ; it.hasNext(); ){
-            System.out.println(it.next().toString());
-        }
+    public static LinkedList<RepairMaterialInformation> generateRepairMaterialInformationList() {
+        LinkedList<RepairMaterialInformation> list = new LinkedList<RepairMaterialInformation>();
+        list.addLast(new RepairMaterialInformation("kalsiom",4));
+        list.addLast(new RepairMaterialInformation("sand",2));
+        list.addLast(new RepairMaterialInformation("iron",8));
+        return list;
     }
 }

@@ -10,7 +10,8 @@ public class Asset {
     private String type;
     private Location location;
     private LinkedList<AssetContent> assetContentContainer;
-    private String status;
+    private enum Status {AVAILABLE, BOOKED, OCCUPIED, UNAVAILABLE};
+    private Status status;
     private int costPerNight;
     private int size;
 
@@ -19,7 +20,7 @@ public class Asset {
         this.type = type;
         location = new Location(x, y);
         assetContentContainer = new LinkedList<AssetContent>(contentsList);
-        status = "AVAILABLE";
+        status = Status.AVAILABLE;
         this.costPerNight = costPerNight;
         this.size = size;
     }
@@ -38,7 +39,7 @@ public class Asset {
         ListIterator<AssetContent> it = assetContentContainer.listIterator();
         while (it.hasNext() && stillAvailable) {
             if (!it.next().isHealthy()) {
-                status = "UNAVAILABLE";
+                status = Status.UNAVAILABLE;
                 stillAvailable = false;
             }
         }
@@ -59,10 +60,6 @@ public class Asset {
         return damagedGoods;
     }
 
-    public String status() {
-        return status;
-    }
-
 
     public int size() {
         return size;
@@ -78,5 +75,37 @@ public class Asset {
             }
         }
         return list;
+    }
+
+    public void makeAvailable() { status = Status.AVAILABLE ;}
+
+    public void makeUnavailable() { status = Status.UNAVAILABLE ; }
+
+    public void Heal(){
+        ListIterator<AssetContent> it = assetContentContainer.listIterator();
+        while (it.hasNext()) {
+            AssetContent currentContent = it.next();
+            if (!currentContent.isHealthy()) {
+                currentContent.Heal();
+            }
+        }
+
+        }
+
+    public String status() {
+        if(status == Status.UNAVAILABLE){
+            return "Unavailable";
+        }
+        else if(status == Status.AVAILABLE){
+            return "Available";
+        }
+        return "dont know";
+    }
+
+
+    public boolean isSuitable(String type, int size){
+        return (this.type == type &&
+                this.size >= size &&
+                this.status == Status.AVAILABLE);
     }
 }

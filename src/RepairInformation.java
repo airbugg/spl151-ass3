@@ -14,4 +14,9 @@ public class RepairInformation {
         fQuantity = quantity;
     }
 
+    public String Name(){ return fName;     }
+
+    public int quantity(){ return fQuantity;    }
+
+
 }

@@ -5,8 +5,8 @@ import java.util.HashMap;
  */
 public class Warehouse implements WarehouseInterface {
 
-    public HashMap<String,RepairTool> repairToolContainer; // a data structor that contains all repair-tools of the warehouse
-    public HashMap<String,RepairMaterial> repairMaterialContainer; // a data structor that contains all repair-materials of the warehouse
+    private HashMap<String,RepairTool> repairToolContainer; // a data structor that contains all repair-tools of the warehouse
+    private HashMap<String,RepairMaterial> repairMaterialContainer; // a data structor that contains all repair-materials of the warehouse
 
 
 
@@ -39,4 +39,9 @@ public class Warehouse implements WarehouseInterface {
     public void releaseTool(String toolName, int quantity) {
         repairToolContainer.get(toolName).releaseTool(quantity);
     }
+
+    public RepairTool getRepairTool(String repairTool){ return repairToolContainer.get(repairTool);}
+
+    public RepairMaterial getRepairMaterial(String repairMaterial){ return repairMaterialContainer.get(repairMaterial);}
 }
+

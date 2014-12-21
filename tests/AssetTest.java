@@ -19,7 +19,6 @@ public class AssetTest {
         LinkedList<AssetContent> list = new LinkedList<AssetContent>();
         list.addLast(new AssetContent("stove", 2));
         list.addLast(new AssetContent("microwave",7));
-        list.addLast(new AssetContent("fridge",22));
         return list;
     }
 
@@ -27,10 +26,8 @@ public class AssetTest {
     public void testUpdateDamage() throws Exception {
         asset.updateDamage(33);
         assertEquals("",asset.whatsDamaged());
-        assertEquals("AVAILABLE",asset.status());
         asset.updateDamage(33);
-        assertEquals("stove,microwave,fridge",asset.whatsDamaged());
-        assertEquals("UNAVAILABLE",asset.status());
+        assertEquals("stove,microwave",asset.whatsDamaged());
     }
 
     @Test
