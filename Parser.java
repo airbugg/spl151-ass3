@@ -10,6 +10,8 @@ import javax.xml.stream.XMLStreamReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 public final class Parser {
 
@@ -56,7 +58,7 @@ public final class Parser {
 
                     }
                     if (startElement.equals("Staff")) { // creating Management object here
-                        management = new Management(warehouse, parseAssets(assetsXmlPath));
+                        management = new Management(warehouse, parseAssets(assetsXmlPath)); // TODO: Change constructor to make package protected.
 
                     }
                     break;
@@ -344,10 +346,12 @@ public final class Parser {
 
                     }
                     if (endElement.equals("Tools")) {
+                        Collections.sort(tools);
                         management.addItemRepairTool(contentName, tools);
 
                     }
                     if (endElement.equals("Materials")) {
+                        Collections.sort(materials);
                         management.addItemRepairMaterial(contentName, materials);
 
                     }

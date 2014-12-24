@@ -1,6 +1,6 @@
 
 
-public class RepairTool {
+public class RepairTool implements Comparable<RepairTool> {
 
     private String name;
     public int quantity;
@@ -12,4 +12,8 @@ public class RepairTool {
 
     public String toString() { return "[" + name + " - " + quantity + "]" ;}
 
+    @Override
+    public int compareTo(RepairTool o) {
+        return name.compareTo(o.name);
+    }
 }

@@ -1,7 +1,7 @@
 /**
  * Created by gal on 12/8/2014.
  */
-public class RepairMaterial {
+public class RepairMaterial implements Comparable<RepairMaterial>{
     private String materialName;
     private int totalQuantity;
     private int currentQuantity;
@@ -42,5 +42,10 @@ public class RepairMaterial {
         currentStatus.delete(0,currentStatus.length());
         currentStatus.append("the current quantity of " + materialName + " beeing used is " + (totalQuantity - currentQuantity));
         return String.valueOf(currentStatus);
+    }
+
+    @Override
+    public int compareTo(RepairMaterial o) {
+        return materialName.compareTo(o.materialName);
     }
 }

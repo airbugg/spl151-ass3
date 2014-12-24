@@ -80,15 +80,15 @@ public class Asset {
         return (Math.round(this.location.calculateDistance(location)));
     }
 
-    public void book() {
+    public synchronized void book() {
         status = Status.BOOKED;
     }
 
-    public void occupy() {
+    public synchronized void occupy() {
         status = Status.OCCUPIED;
     }
 
-    public void vacate() {
+    public synchronized void vacate() {
         status = status.AVAILABLE;
     }
 }
