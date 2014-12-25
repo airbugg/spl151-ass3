@@ -1,3 +1,5 @@
+import org.omg.CORBA.MARSHAL;
+
 import java.util.*;
 import java.util.concurrent.CountDownLatch;
 import java.util.logging.ConsoleHandler;
@@ -8,9 +10,7 @@ import java.util.logging.Logger;
  */
 class RunnableMaintenanceRequest implements Runnable {
 
-    private static final Logger logger = Logger.getLogger(RunnableMaintenanceRequest.class.getName());
 
-    private final int SEC_TO_MILL = 1000;
     private Asset fAsset;
     private HashMap<String, ArrayList<RepairToolInformation>> repairToolInformationMap;
     private HashMap<String, ArrayList<RepairMaterialInformation>> repairMaterialInformationMap;
@@ -34,9 +34,6 @@ class RunnableMaintenanceRequest implements Runnable {
         this.warehouse = warehouse;
         this.contentToFix = contentToFix();
         this.shiftLatch = shiftLatch;
-        ConsoleHandler consoleHandler = new ConsoleHandler();
-        logger.addHandler(consoleHandler);
-
     }
 
 
@@ -55,60 +52,54 @@ class RunnableMaintenanceRequest implements Runnable {
 
     private void repairAsset() {
         fAsset.repairAsset();
+        Management.logger.info("MAINTENANCE: ASSET FIXED. MOVING ON!");
     }
 
     private void acquireTools() {
+        Management.logger.info("MAINTENANCE: ACQUIRING TOOLS...");
         for (String content : contentToFix) {
-            for (RepairToolInformation repairTool : repairToolInformationMap.get(content)) {
-                if (requiredTools.get(repairTool) == null ) {
-                    requiredTools.put(repairTool.getName(),
-                            Integer.valueOf(repairTool.getQuantity()));
+            ArrayList<RepairToolInformation> toolList = repairToolInformationMap.get(content);
 
+            for (RepairToolInformation tool : toolList) {
+                if (!requiredTools.containsKey(tool.getName())) {
+                    requiredTools.put(tool.getName(),tool.getQuantity());
                 }
-                else if (requiredTools.get(repairTool) < Integer.valueOf(repairTool.getQuantity())) {
-                    requiredTools.put(repairTool.getName(),
-                            Integer.valueOf(repairTool.getQuantity()));
-
+                else if (requiredTools.get(tool.getName()).intValue() < tool.getQuantity()) {
+                    requiredTools.put(tool.getName(), tool.getQuantity());
                 }
             }
-        }
-
-        for (Map.Entry<String, Integer> entry : requiredTools.entrySet()) {
-            warehouse.rentATool(entry.getKey(), entry.getValue());
         }
     }
 
-    private void acquireMaterials() { // TODO: Consider unifying under one function, accepting generics
+    private void acquireMaterials() {
+        Management.logger.info("MAINTENANCE: ACQUIRING MATERIALS...");
         for (String content : contentToFix) {
-            for (RepairMaterialInformation repairMaterial : repairMaterialInformationMap.get(content)) {
-                if (requiredMaterials.get(repairMaterial) == null ) {
-                    requiredMaterials.put(repairMaterial.getName(),
-                            Integer.valueOf(repairMaterial.getQuantity()));
+            ArrayList<RepairMaterialInformation> materialList = repairMaterialInformationMap.get(content);
 
+            for (RepairMaterialInformation material : materialList) {
+                if (!requiredMaterials.containsKey(material.getName())) {
+                    requiredMaterials.put(material.getName(),material.getQuantity());
                 }
-                else if (requiredMaterials.get(repairMaterial) < Integer.valueOf(repairMaterial.getQuantity())) {
-                    requiredMaterials.put(repairMaterial.getName(),
-                            Integer.valueOf(repairMaterial.getQuantity()));
-
+                else {
+                    Integer updateQuantity = requiredMaterials.get(material.getName()) + material.getQuantity();
+                    requiredMaterials.put(material.getName(),updateQuantity);
                 }
             }
-        }
-
-        for (Map.Entry<String, Integer> entry : requiredMaterials.entrySet()) {
-            warehouse.takeMaterial(entry.getKey(), entry.getValue());
         }
     }
 
     private void releaseTools() {
+        Management.logger.info("MAINTENANCE: RELEASING TOOLS...");
         for (Map.Entry<String,Integer> entry : requiredTools.entrySet()) {
             warehouse.releaseTool(entry.getKey(),entry.getValue());
         }
     }
 
 
-    private void repairingAsset (double timeToFix) {
+    private void repairingAsset (long timeToFix) {
+        Management.logger.info("MAINTENANCE: FIXING ASSET...");
         try {
-            Thread.sleep(Math.round(timeToFix * SEC_TO_MILL));
+            Thread.sleep(timeToFix);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

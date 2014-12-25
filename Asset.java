@@ -47,14 +47,14 @@ class Asset {
         }
     }
 
-    public double timeToFix() {
+    public long timeToFix() {
         double timeToFix = 0;
 
         for (AssetContent assetContent : assetContentContainer) {
             timeToFix += assetContent.timeToFix();
         }
 
-        return timeToFix;
+        return Math.round(timeToFix);
     }
 
     private void checkHealth() {
@@ -82,9 +82,9 @@ class Asset {
     }
 
     public boolean isSuitable(String type, int size) {
-        return (this.type == type &&
+        return (this.type.equals(type) &&
                 this.size >= size &&
-                this.status == Status.AVAILABLE);
+                this.status.equals(Status.AVAILABLE));
     }
 
     public long distanceToClerk(Location location) {

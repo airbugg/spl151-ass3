@@ -11,7 +11,7 @@ class Driver {
         Parser.parseCustomersGroups(management, "xml/CustomersGroups.xml");
 
         System.out.println("Finished parsing files.");
-        //management.simulate();
-        System.out.println(management);
+        management.simulate();
+        //System.out.println(management);
     }
 }

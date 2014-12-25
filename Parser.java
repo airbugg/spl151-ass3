@@ -310,7 +310,7 @@ final class Parser {
                     String startElement = reader.getLocalName();
 
                     if (startElement.equals("Tools")) {
-                        contentName = elementContent;
+                        contentName = name;
                         tools = new ArrayList<RepairToolInformation>();
 
                     }

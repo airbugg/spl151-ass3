@@ -1,6 +1,4 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Vector;
+import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
@@ -11,7 +9,7 @@ import java.util.logging.Logger;
 public class Management {
 
     // fields
-    private static final Logger logger = Logger.getLogger(Management.class.getName());
+    public static final Logger logger = Logger.getLogger(Management.class.getName());
 
     private Warehouse warehouse;
     private Assets assets;
@@ -56,6 +54,8 @@ public class Management {
             beginMaintenanceShift(); // call maintenance
             beginNewShift(); // notify clerks a new shift has begun.
         }
+
+        logger.info("<<<<<<<<< SIMULATION COMPLETE!!! >>>>>>>>>");
     }
 
     public void addClerk(ClerkDetails clerkDetails) {
@@ -86,6 +86,7 @@ public class Management {
 
     public void submitDamageReport(DamageReport damageReport) {
         assets.submitDamageReport(damageReport); // submit report to Assets.
+        logger.info("MANAGEMENT: damageReport was submitted.");
         reportSemaphore.release(1); // decrease waiting by 1 report.
     }
 
@@ -103,11 +104,19 @@ public class Management {
         for (ClerkDetails clerkDetails : clerks) {
             stringBuilder.append(clerkDetails).append("\n");
         }
+
+        for (SortedMap.Entry<String, ArrayList<RepairToolInformation>> entry : repairToolInformationMap.entrySet()) {
+            stringBuilder.append(entry.getKey()).append(" \tTools: [");
+            for (RepairToolInformation repairToolInformation: entry.getValue()) {
+                stringBuilder.append("<").append(repairToolInformation.getName()).append(",").append(repairToolInformation.getQuantity()).append(">");
+            }
+            stringBuilder.append("]\n");
+        }
         return stringBuilder.toString();
     }
 
     private void runCustomers() {
-        logger.info("Initializing Customer Groups...");
+        logger.info("MANAGEMENT: Initializing Customer Groups...");
         for (CustomerGroupDetails customerGroup : customers) {
             new Thread(new RunnableCustomerGroupManager(this, customerGroup)).start();
         }
@@ -115,8 +124,8 @@ public class Management {
 
     private void runClerks() {
         // ensuring we'll wait for all clerks to end their shift
-        clerkShiftBarrier = new CyclicBarrier(clerks.size());
-        logger.info("Initializing RunnableClerks...");
+        clerkShiftBarrier = new CyclicBarrier(clerks.size() + 1);
+        logger.info("MANAGEMENT: Initializing RunnableClerks...");
         for (ClerkDetails clerk : clerks) {
             new Thread(new RunnableClerk(clerk, rentalRequests,
                     clerkShiftBarrier, assets,
@@ -126,12 +135,13 @@ public class Management {
     }
 
     private void beginMaintenanceShift() {
+        logger.info("MANAGEMENT: Maintenance shift begins.. Retrieving damaged asset list.");
         ArrayList<Asset> damagedAssets = assets.getDamagedAssets();
         // initialize latch. when this reaches zero, maintenance work is done.
         maintenanceShiftLatch = new CountDownLatch(damagedAssets.size());
 
         ExecutorService maintenanceExecutor = Executors.newFixedThreadPool(nMaintenanceWorkers);
-
+        logger.info("MANAGEMENT: Executing maintenance worker threads..");
         for (Asset asset : damagedAssets) {
             maintenanceExecutor.execute(new RunnableMaintenanceRequest(asset,
                     repairToolInformationMap,
@@ -141,10 +151,12 @@ public class Management {
         }
 
         try {
+            logger.info("MANAGEMENT: Waiting for maintenance workers to finish repairs..");
             maintenanceShiftLatch.await(); // waiting for maintenance workers to finish repairs
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        logger.info("Done! let's hit the bar!");
         // done. let's hit the bar!
     }
 
@@ -153,12 +165,16 @@ public class Management {
     }
 
     private void beginNewShift() {
-        beginNewShift.notifyAll();
+        synchronized (beginNewShift) {
+            logger.info("MANAGEMENT: CALLING ALL CLERKS!! NEW SHIFT HAS BEGUN!");
+            beginNewShift.notifyAll();
+        }
     }
 
     private void waitForReports() {
 
         try {
+            logger.info("MANAGEMENT: Waiting for clerks to finish their shift.");
             clerkShiftBarrier.await(); // waiting for all clerks to finish their shift.
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -170,7 +186,9 @@ public class Management {
         // draining the semaphore will provide us with the # of reports we should expect to be submitted.
         // immediately acquiring the drained amount will guarantee that only once all reports have been submitted,
         // maintenance will be called upon.
+
         int nReportsToReceive = reportSemaphore.drainPermits();
+        logger.info("MANAGEMENT: All clerks are done with their shift. waiting for " + nReportsToReceive + " reports.");
 
         try {
             reportSemaphore.acquire(nReportsToReceive);

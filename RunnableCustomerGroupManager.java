@@ -8,8 +8,7 @@ import java.util.logging.Logger;
  */
 class RunnableCustomerGroupManager implements Runnable {
 
-    // fields
-    private static final Logger logger = Logger.getLogger(RunnableCustomerGroupManager.class.getName());
+    // field
 
     private CustomerGroupDetails customerGroupDetails;
     private Management management;
@@ -19,25 +18,26 @@ class RunnableCustomerGroupManager implements Runnable {
                                         CustomerGroupDetails customerGroupDetails) {
         this.management = management;
         this.customerGroupDetails = customerGroupDetails;
-        ConsoleHandler consoleHandler = new ConsoleHandler();
-        logger.addHandler(consoleHandler);
+
     }
 
 
     @Override
     public void run() {
-        logger.info(customerGroupDetails.getManager() + "'s Customer Group is alive!");
+        Management.logger.info(customerGroupDetails.getManager() + "'s Customer Group is alive!");
+
         while (customerGroupDetails.isRequestsLeft()) { // let's iterate over these rental requests..
 
-            logger.info("Pulling first request from queue.");
             RentalRequest currentRequest = customerGroupDetails.pullRentalRequest();
-            logger.info("Pushing request to shared repository in Management..");
+            Management.logger.info(customerGroupDetails.getManager() + ": Pulled request " + currentRequest.requestId() + " from queue.");
+
+            Management.logger.info(customerGroupDetails.getManager() + ": Pushing request " + currentRequest.requestId() + " to shared repository in Management..");
             management.addRentalRequest(currentRequest); // send rentalRequest to Management
 
             synchronized (currentRequest) {
                 try {
                     while (!currentRequest.isFulfilled()) {
-                        logger.info("Waiting for request to be fulfilled...");
+                        Management.logger.info(customerGroupDetails.getManager() + ": Waiting for request " + currentRequest.requestId() + " to be fulfilled...");
                         currentRequest.wait();
                     }
                 } catch (InterruptedException e) {
@@ -45,7 +45,7 @@ class RunnableCustomerGroupManager implements Runnable {
                 }
             }
 
-            logger.info("Current request fulfilled. Simulating stay...");
+            Management.logger.info(customerGroupDetails.getManager() + ": request" + currentRequest.requestId() +" fulfilled. Simulating stay...");
 
             try {
                 simulateStay(currentRequest);
@@ -55,10 +55,12 @@ class RunnableCustomerGroupManager implements Runnable {
                 e.printStackTrace();
             }
         }
+
+        Management.logger.info(customerGroupDetails.getManager() + ": No rental requests left to handle. WE'RE DONE!");
     }
 
     private void simulateStay(RentalRequest currentRequest) throws ExecutionException, InterruptedException {
-        logger.info(customerGroupDetails + " updated rentalRequest " + currentRequest.requestId() + " status to INPROGRESS");
+        Management.logger.info(customerGroupDetails.getManager() + ": updated rentalRequest " + currentRequest.requestId() + " status to: IN PROGRESS");
         currentRequest.inProgress();
 
         double totalDamage = 0;
@@ -68,7 +70,7 @@ class RunnableCustomerGroupManager implements Runnable {
         CompletionService<Double> completionService = new ExecutorCompletionService<Double>(executor);
 
         Iterator<Customer> customerIterator = customerGroupDetails.customerIterator();
-        logger.info("Simulating living...");
+        Management.logger.info(customerGroupDetails.getManager() + ": Simulating living...");
         while (customerIterator.hasNext()) { // launch each customer as a CallableSimulateStayInAsset
             completionService.submit(new CallableSimulateStayInAsset(currentRequest, customerIterator.next()));
         }
@@ -79,9 +81,9 @@ class RunnableCustomerGroupManager implements Runnable {
 
         // vacate asset
         currentRequest.complete();
-        logger.info(customerGroupDetails + " updated rentalRequest " + currentRequest.requestId() + " status to COMPLETE");
+        Management.logger.info(customerGroupDetails.getManager() + ": updated rentalRequest " + currentRequest.requestId() + " status to: COMPLETE");
         // submit DamageReport to management
-        logger.info(customerGroupDetails + " is Submitting damageReport to management.");
+        Management.logger.info(customerGroupDetails.getManager() + ": SUBMITTING DAMAGE REPORT TO MANAGEMENT.");
         management.submitDamageReport(currentRequest.createDamageReport(totalDamage));
     }
 }

@@ -3,6 +3,8 @@
  */
 public class Customer {
 
+    // fields
+    public enum VandalismType { Arbitrary, Fixed, None }
     private VandalismType vandalismType;
     private String name;
     private int minDamage;
@@ -44,9 +46,12 @@ public class Customer {
                 maxDamage + " ]\n";
     }
 
-    // fields
-    public enum VandalismType {
-        Arbitrary, Fixed, None
+    public String getCustomerName() {
+        return name;
     }
+
+
+
+
 
 }

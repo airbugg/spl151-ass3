@@ -57,7 +57,7 @@ class CustomerGroupDetails {
         stringBuilder.append("\nRental Requests: \n");
 
         for (RentalRequest rentalRequest : rentalRequests) {
-            stringBuilder.append(rentalRequest);
+            stringBuilder.append(rentalRequest.report());
         }
 
         stringBuilder.append("Customers:\n");

@@ -5,6 +5,7 @@ public class RentalRequest {
 
     // fields
     private final int DAYS_TO_MILLISECONDS = 24000;
+    private enum RequestStatus {INCOMPLETE, FULFILLED, INPROGRESS, COMPLETE}
     private RequestStatus requestStatus;
     private String id;
     private String assetType;
@@ -72,5 +73,4 @@ public class RentalRequest {
         return id;
     }
 
-    private enum RequestStatus {INCOMPLETE, FULFILLED, INPROGRESS, COMPLETE}
 }
