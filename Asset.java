@@ -1,17 +1,16 @@
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.ListIterator;
 
 /**
  * Created by airbag on 12/9/14.
  */
-public class Asset {
+class Asset {
 
     private String name;
-    private String	type;
+    private String type;
     private Location location;
-    private LinkedList<AssetContent> assetContentContainer;
-    private enum Status {AVAILABLE, BOOKED, OCCUPIED, UNAVAILABLE};
-    private	Status status;
+    private ArrayList<AssetContent> assetContentContainer;
+    private Status status;
     private int costPerNight;
     private int size;
 
@@ -20,7 +19,7 @@ public class Asset {
         this.name = name;
         this.type = type;
         this.location = location;
-        assetContentContainer = new LinkedList<AssetContent>();
+        assetContentContainer = new ArrayList<AssetContent>();
         status = Status.AVAILABLE;
         this.costPerNight = costPerNight;
         this.size = size;
@@ -30,53 +29,65 @@ public class Asset {
         assetContentContainer.add(assetContent);
     }
 
-    public boolean isWrecked () {
+    public boolean isWrecked() {
         return !(status == Status.UNAVAILABLE);
     }
 
-    public void updateDamage(double percentage){
-        ListIterator<AssetContent> it = assetContentContainer.listIterator();
-        while(it.hasNext()){
-            it.next().reduceHealth(percentage);
+    public void updateDamage(double percentage) {
+
+        for (AssetContent assetContent : assetContentContainer) {
+            assetContent.breakAsset(percentage);
         }
         checkHealth();
+    }
+
+    public void repairAsset() {
+        for (AssetContent assetContent : assetContentContainer) {
+            assetContent.fix();
+        }
+    }
+
+    public double timeToFix() {
+        double timeToFix = 0;
+
+        for (AssetContent assetContent : assetContentContainer) {
+            timeToFix += assetContent.timeToFix();
+        }
+
+        return timeToFix;
     }
 
     private void checkHealth() {
         boolean stillAvailable = true;
         ListIterator<AssetContent> it = assetContentContainer.listIterator();
 
-        while(it.hasNext() && stillAvailable){
-            if(!it.next().isHealthy()){
+        while (it.hasNext() && stillAvailable) {
+            if (it.next().isBroken()) {
                 status = Status.UNAVAILABLE;
                 stillAvailable = false;
             }
         }
     }
 
-    public String whatsDamaged(){
+    public String whatsDamaged() {
         String damagedGoods = "";
-        ListIterator<AssetContent> it = assetContentContainer.listIterator();
 
-        while(it.hasNext()){
-            if(!it.next().isHealthy()){
-                it.previous();
-                damagedGoods += it.next().name() + ",";
-            }
+        for (AssetContent assetContent : assetContentContainer) {
+            damagedGoods += assetContent.name() + ",";
         }
-        if(damagedGoods.length() > 0){
-            damagedGoods = damagedGoods.substring(0,damagedGoods.length()-1);
+        if (damagedGoods.length() > 0) {
+            damagedGoods = damagedGoods.substring(0, damagedGoods.length() - 1); // remove pesky trailing comma
         }
         return damagedGoods;
     }
 
-    public boolean isSuitable(String type, int size){
+    public boolean isSuitable(String type, int size) {
         return (this.type == type &&
                 this.size >= size &&
                 this.status == Status.AVAILABLE);
     }
 
-    public long distanceToClerk (Location location) {
+    public long distanceToClerk(Location location) {
         return (Math.round(this.location.calculateDistance(location)));
     }
 
@@ -89,6 +100,12 @@ public class Asset {
     }
 
     public synchronized void vacate() {
-        status = status.AVAILABLE;
+        status = Status.AVAILABLE;
+    }
+
+    private enum Status {AVAILABLE, BOOKED, OCCUPIED, UNAVAILABLE}
+
+    public String toString() {
+        return name;
     }
 }

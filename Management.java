@@ -3,6 +3,7 @@ import java.util.HashMap;
 import java.util.Vector;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.logging.Logger;
 
 /**
  * Created by airbag on 12/8/14.
@@ -10,6 +11,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class Management {
 
     // fields
+    private static final Logger logger = Logger.getLogger(Management.class.getName());
+
     private Warehouse warehouse;
     private Assets assets;
 
@@ -73,11 +76,11 @@ public class Management {
         repairMaterialInformationMap.put(name, repairMaterialInformation);
     }
 
-    public void setTotalNumberOfRentalRequests (int nRentalRequests) { // TODO: THERE MUST BE A BETTER WAY...
+    public void setTotalNumberOfRentalRequests(int nRentalRequests) { // TODO: THERE MUST BE A BETTER WAY...
         this.nUnhandledRequests.set(nRentalRequests);
     }
 
-    public void setNumberOfMaintenanceWorkers (int nMaintenanceWorkers) { // TODO: THERE MUST BE A BETTER WAY..
+    public void setNumberOfMaintenanceWorkers(int nMaintenanceWorkers) { // TODO: THERE MUST BE A BETTER WAY..
         this.nMaintenanceWorkers = nMaintenanceWorkers;
     }
 
@@ -94,24 +97,29 @@ public class Management {
         StringBuilder stringBuilder = new StringBuilder("Management: \n");
 
         for (CustomerGroupDetails customerGroupDetails : customers) {
-            stringBuilder.append(customerGroupDetails);
+            stringBuilder.append(customerGroupDetails).append("\n");
         }
 
+        for (ClerkDetails clerkDetails : clerks) {
+            stringBuilder.append(clerkDetails).append("\n");
+        }
         return stringBuilder.toString();
     }
 
     private void runCustomers() {
-        for (CustomerGroupDetails customerGroup : customers)
-            new Thread(new RunnableCustomerGroupManager(this,customerGroup)).start();
+        logger.info("Initializing Customer Groups...");
+        for (CustomerGroupDetails customerGroup : customers) {
+            new Thread(new RunnableCustomerGroupManager(this, customerGroup)).start();
+        }
     }
 
     private void runClerks() {
         // ensuring we'll wait for all clerks to end their shift
         clerkShiftBarrier = new CyclicBarrier(clerks.size());
-
+        logger.info("Initializing RunnableClerks...");
         for (ClerkDetails clerk : clerks) {
-            new Thread(new RunnableClerk(clerk,rentalRequests,
-                    clerkShiftBarrier,assets,
+            new Thread(new RunnableClerk(clerk, rentalRequests,
+                    clerkShiftBarrier, assets,
                     nUnhandledRequests, reportSemaphore,
                     beginNewShift)).start();
         }
@@ -126,9 +134,10 @@ public class Management {
 
         for (Asset asset : damagedAssets) {
             maintenanceExecutor.execute(new RunnableMaintenanceRequest(asset,
-                            repairToolInformationMap,
-                            repairMaterialInformationMap,
-                            warehouse));
+                    repairToolInformationMap,
+                    repairMaterialInformationMap,
+                    warehouse,
+                    maintenanceShiftLatch));
         }
 
         try {

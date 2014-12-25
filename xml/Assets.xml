@@ -7,25 +7,25 @@
 	<Asset>
 		<Name>Asset 1</Name>
 		<Type>Apartment</Type>
-		<Size>4</Size>
-		<Location x = "4" y = "2" />
+		<Size>3</Size>
+		<Location x = "20" y = "20" />
 		<CostPerNight>100</CostPerNight>
 		<AssetContents>
 			<AssetContent>
 				<Name>TV</Name>
-				<RepairMultiplier>50</RepairMultiplier>
+				<RepairMultiplier>5</RepairMultiplier>
 			</AssetContent>
 			<AssetContent>
 				<Name>Bed</Name>
-				<RepairMultiplier>40</RepairMultiplier>
+				<RepairMultiplier>8</RepairMultiplier>
 			</AssetContent>
 			<AssetContent>
 				<Name>Fridge</Name>
-				<RepairMultiplier>20</RepairMultiplier>
+				<RepairMultiplier>3</RepairMultiplier>
 			</AssetContent>
 			<AssetContent>
 				<Name>Desk</Name>
-				<RepairMultiplier>15</RepairMultiplier>
+				<RepairMultiplier>4</RepairMultiplier>
 			</AssetContent>
 			<AssetContent>
 				<Name>Stove</Name>
@@ -37,7 +37,7 @@
 		<Name>Asset 2</Name>
 		<Type>Loft</Type>
 		<Size>5</Size>
-		<Location x = "2" y = "4" />
+		<Location x = "20" y = "25" />
 		<CostPerNight>30</CostPerNight>
 		<AssetContents>
 			<AssetContent>
@@ -56,9 +56,9 @@
 	</Asset>
 	<Asset>
 		<Name>Asset 3</Name>	
-		<Type>Apartment</Type>
-		<Size>2</Size>
-		<Location x = "5" y = "1" />
+		<Type>Hut</Type>
+		<Size>3</Size>
+		<Location x = "15" y = "21" />
 		<CostPerNight>25</CostPerNight>
 		<AssetContents>
 			<AssetContent>
@@ -73,9 +73,9 @@
 	</Asset>
 	<Asset>
 		<Name>Asset 4</Name>
-		<Type>Hut</Type>
-		<Size>4</Size>
-		<Location x = "0" y = "5" />
+		<Type>House</Type>
+		<Size>5</Size>
+		<Location x = "20" y = "15" />
 		<CostPerNight>50</CostPerNight>
 		<AssetContents>
 			<AssetContent>
@@ -103,8 +103,8 @@
 	<Asset>
 		<Name>Asset 5</Name>	
 		<Type>Cottage</Type>
-		<Size>10</Size>
-		<Location x = "2" y = "6"/>
+		<Size>5</Size>
+		<Location x = "12" y = "16"/>
 		<CostPerNight>120</CostPerNight>
 		<AssetContents>
 			<AssetContent>
@@ -126,35 +126,6 @@
 			<AssetContent>
 				<Name>Stove</Name>
 				<RepairMultiplier>4.75</RepairMultiplier>
-			</AssetContent>
-		</AssetContents>
-	</Asset>
-	<Asset>
-		<Name>Asset 6</Name>	
-		<Type>Villa</Type>
-		<Size>10</Size>
-		<Location x = "0" y = "1"/>
-		<CostPerNight>110</CostPerNight>
-		<AssetContents>
-			<AssetContent>
-				<Name>TV</Name>
-				<RepairMultiplier>5</RepairMultiplier>
-			</AssetContent>
-			<AssetContent>
-				<Name>Bed</Name>
-				<RepairMultiplier>1</RepairMultiplier>
-			</AssetContent>
-			<AssetContent>
-				<Name>Fridge</Name>
-				<RepairMultiplier>1.5</RepairMultiplier>
-			</AssetContent>
-			<AssetContent>
-				<Name>Desk</Name>
-				<RepairMultiplier>2.5</RepairMultiplier>
-			</AssetContent>
-			<AssetContent>
-				<Name>Computer</Name>
-				<RepairMultiplier>2.25</RepairMultiplier>
 			</AssetContent>
 		</AssetContents>
 	</Asset>

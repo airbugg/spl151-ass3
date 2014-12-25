@@ -1,7 +1,7 @@
 /**
  * Created by airbag on 12/9/14.
  */
-public class Driver {
+class Driver {
 
     public static void main(String[] args) throws Exception {
 
@@ -11,6 +11,7 @@ public class Driver {
         Parser.parseCustomersGroups(management, "xml/CustomersGroups.xml");
 
         System.out.println("Finished parsing files.");
+        //management.simulate();
         System.out.println(management);
     }
 }

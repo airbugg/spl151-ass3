@@ -1,8 +1,7 @@
 /**
  * Created by airbag on 12/9/14.
- *
  */
-public class Location {
+class Location {
 
     private double x;
     private double y;

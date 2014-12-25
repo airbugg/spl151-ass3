@@ -3,13 +3,13 @@ import java.util.concurrent.Callable;
 /**
  * Created by airbag on 12/9/14.
  */
-public class CallableSimulateStayInAsset implements Callable {
+class CallableSimulateStayInAsset implements Callable {
 
     // fields
     private RentalRequest rentalRequest;
     private Customer customer;
 
-    public CallableSimulateStayInAsset(RentalRequest rentalRequest,Customer customer){
+    public CallableSimulateStayInAsset(RentalRequest rentalRequest, Customer customer) {
         this.rentalRequest = rentalRequest;
         this.customer = customer;
     }
@@ -24,7 +24,7 @@ public class CallableSimulateStayInAsset implements Callable {
 
     // retrieve damage inflicted percentage,
     // calculated by customer.
-    private Double retrieveDamagePercentage(){
+    private Double retrieveDamagePercentage() {
         return customer.vandalize();
     }
 }

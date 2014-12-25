@@ -10,17 +10,16 @@ import javax.xml.stream.XMLStreamReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 
-public final class Parser {
+final class Parser {
 
     private Parser() { // private constructor for static class
     }
 
 
     public static Management createManagement(String initialDataXmlPath,
-                                              String assetsXmlPath) throws XMLStreamException, FileNotFoundException{
+                                              String assetsXmlPath) throws XMLStreamException, FileNotFoundException {
 
         // Management object
         Management management = null;
@@ -54,7 +53,7 @@ public final class Parser {
                         int x = Integer.parseInt(reader.getAttributeValue(0));
                         int y = Integer.parseInt(reader.getAttributeValue(1));
 
-                        location = new Location(x,y);
+                        location = new Location(x, y);
 
                     }
                     if (startElement.equals("Staff")) { // creating Management object here
@@ -64,7 +63,7 @@ public final class Parser {
                     break;
 
                 case XMLStreamConstants.CHARACTERS:
-                   elementContent = reader.getText().trim();
+                    elementContent = reader.getText().trim();
                     break;
 
                 case XMLStreamConstants.END_ELEMENT:
@@ -125,7 +124,6 @@ public final class Parser {
         int costPerNight = 0;
 
 
-
         XMLInputFactory factory = XMLInputFactory.newInstance();
         XMLStreamReader reader = factory.createXMLStreamReader(new FileInputStream(xmlPath));
 
@@ -144,7 +142,7 @@ public final class Parser {
                         int x = Integer.parseInt(reader.getAttributeValue(0));
                         int y = Integer.parseInt(reader.getAttributeValue(1));
 
-                        location = new Location(x,y);
+                        location = new Location(x, y);
 
                     }
                     if (startElement.equals("AssetContents")) {
@@ -194,8 +192,8 @@ public final class Parser {
         return assets;
     } //TODO: TEST.
 
-    public static void parseCustomersGroups (Management management,
-                                             String xmlPath) throws XMLStreamException, FileNotFoundException {
+    public static void parseCustomersGroups(Management management,
+                                            String xmlPath) throws XMLStreamException, FileNotFoundException {
 
         // collection fields
         CustomerGroupDetails customerGroup = null;
@@ -228,7 +226,7 @@ public final class Parser {
                     String startElement = reader.getLocalName();
 
                     if (startElement.equals("Request")) {
-                        id = reader.getAttributeValue(null,"id");
+                        id = reader.getAttributeValue(null, "id");
 
                     }
                     break;
@@ -261,7 +259,7 @@ public final class Parser {
 
                     }
                     if (endElement.equals("Customer")) {
-                        customerGroup.addCustomer(new Customer(name,vandalismType,minDamage,maxDamage));
+                        customerGroup.addCustomer(new Customer(name, vandalismType, minDamage, maxDamage));
 
                     }
                     if (endElement.equals("Type")) {
@@ -277,7 +275,7 @@ public final class Parser {
 
                     }
                     if (endElement.equals("Request")) {
-                        customerGroup.addRentalRequest(new RentalRequest(id,type,size,duration));
+                        customerGroup.addRentalRequest(new RentalRequest(id, type, size, duration));
 
                     }
                     if (endElement.equals("CustomerGroupDetails")) {
@@ -287,8 +285,8 @@ public final class Parser {
         }
     }
 
-    public static void parseAssetContentRepairDetails (Management management,
-                                                       String xmlPath) throws  XMLStreamException, FileNotFoundException {
+    public static void parseAssetContentRepairDetails(Management management,
+                                                      String xmlPath) throws XMLStreamException, FileNotFoundException {
 
         ArrayList<RepairToolInformation> tools = new ArrayList<RepairToolInformation>();
         ArrayList<RepairMaterialInformation> materials = new ArrayList<RepairMaterialInformation>();

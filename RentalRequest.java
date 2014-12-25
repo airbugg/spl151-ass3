@@ -4,9 +4,7 @@
 public class RentalRequest {
 
     // fields
-    final int DAYS_TO_MILLISECONDS = 24000;
-
-    private enum RequestStatus { INCOMPLETE, FULFILLED, INPROGRESS, COMPLETE };
+    private final int DAYS_TO_MILLISECONDS = 24000;
     private RequestStatus requestStatus;
     private String id;
     private String assetType;
@@ -23,15 +21,15 @@ public class RentalRequest {
     }
 
     public boolean isFulfilled() {
-        return (requestStatus==RequestStatus.FULFILLED);
+        return (requestStatus == RequestStatus.FULFILLED);
     }
 
-    public void fulfill(Asset asset){
+    public void fulfill(Asset asset) {
         this.asset = asset;
         requestStatus = RequestStatus.FULFILLED;
     }
 
-    public boolean isSuitable (Asset asset) {
+    public boolean isSuitable(Asset asset) {
         return asset.isSuitable(assetType, assetSize);
     }
 
@@ -45,9 +43,11 @@ public class RentalRequest {
         requestStatus = RequestStatus.COMPLETE;
     }
 
-    public void incomplete() { requestStatus = RequestStatus.INCOMPLETE; }
+    public void incomplete() {
+        requestStatus = RequestStatus.INCOMPLETE;
+    }
 
-    public int stay(){
+    public int stay() {
         return durationOfStay * DAYS_TO_MILLISECONDS;
     }
 
@@ -59,7 +59,7 @@ public class RentalRequest {
         return new DamageReport(asset, totalDamage);
     }
 
-    public String toString() {
+    public String report() {
         return "[ Request ID: " +
                 id + " ; Asset Type: " +
                 assetType + " ; Asset Size: " +
@@ -67,4 +67,10 @@ public class RentalRequest {
                 durationOfStay + " ; Status: " +
                 requestStatus.toString() + " ] \n";
     }
+
+    public String requestId() {
+        return id;
+    }
+
+    private enum RequestStatus {INCOMPLETE, FULFILLED, INPROGRESS, COMPLETE}
 }

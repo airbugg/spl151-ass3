@@ -1,9 +1,8 @@
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.concurrent.ArrayBlockingQueue;
 
 
-public class Assets {
+class Assets {
 
     private ArrayList<Asset> assets;
     private ArrayBlockingQueue<DamageReport> damageReports;
@@ -26,7 +25,7 @@ public class Assets {
                 for (Asset asset : assets) { // look for assets
                     if (rentalRequest.isSuitable(asset)) { // if suitable asset has been found
                         assetFound = true;
-                         suitableAsset = asset;
+                        suitableAsset = asset;
                     }
                 }
                 try { // no available assets have been found

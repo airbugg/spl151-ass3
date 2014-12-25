@@ -1,11 +1,7 @@
-import javafx.util.Pair;
-
-import java.util.LinkedList;
-
 /**
  * Created by gal on 12/17/2014.
  */
-public class RepairInformation {
+class RepairInformation {
     private String fName;
     private int fQuantity;
 
@@ -14,9 +10,13 @@ public class RepairInformation {
         fQuantity = quantity;
     }
 
-    public String Name(){ return fName;     }
+    public String Name() {
+        return fName;
+    }
 
-    public int quantity(){ return fQuantity;    }
+    public int quantity() {
+        return fQuantity;
+    }
 
 
 }

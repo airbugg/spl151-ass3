@@ -115,8 +115,12 @@
 				<Name>Paula Die</Name>
 				<Location x="3" y = "3"/>
 			</Clerk>
+			<Clerk>
+				<Name>Leonidas I</Name>
+				<Location x="3" y = "3"/>
+			</Clerk>
 		</Clerks>
 		<NumberOfMaintenancePersons>3</NumberOfMaintenancePersons>
-		<TotalNumberOfRentalRequests>7</TotalNumberOfRentalRequests>
+		<TotalNumberOfRentalRequests>15</TotalNumberOfRentalRequests>
 	</Staff>
 </REIT>

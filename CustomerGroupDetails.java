@@ -6,7 +6,7 @@ import java.util.Vector;
 /**
  * Created by airbag on 12/9/14.
  */
-public class CustomerGroupDetails {
+class CustomerGroupDetails {
 
     private String groupManagerName;
     private Queue<RentalRequest> rentalRequests;
@@ -39,7 +39,7 @@ public class CustomerGroupDetails {
         return !rentalRequests.isEmpty();
     }
 
-    public Iterator<Customer> customerIterator(){
+    public Iterator<Customer> customerIterator() {
         return customers.iterator();
     }
 
@@ -67,5 +67,9 @@ public class CustomerGroupDetails {
         }
 
         return stringBuilder.toString();
+    }
+
+    public String getManager() {
+        return groupManagerName;
     }
 }

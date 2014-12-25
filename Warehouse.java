@@ -3,10 +3,10 @@ import java.util.HashMap;
 /**
  * Created by gal on 12/8/2014.
  */
-public class Warehouse {
+class Warehouse {
 
-    private HashMap<String,RepairTool> repairToolContainer;
-    private HashMap<String,RepairMaterial> repairMaterialContainer;
+    private HashMap<String, RepairTool> repairToolContainer;
+    private HashMap<String, RepairMaterial> repairMaterialContainer;
 
 
     public Warehouse() {
@@ -16,39 +16,22 @@ public class Warehouse {
 
 
     public void addRepairTool(String toolName, int quantity) {
-        repairToolContainer.put(toolName,new RepairTool(toolName,quantity));
+        repairToolContainer.put(toolName, new RepairTool(toolName, quantity));
     }
 
     public void addRepairMaterial(String materialName, int quantity) {
-        repairMaterialContainer.put(materialName,new RepairMaterial(materialName,quantity));
+        repairMaterialContainer.put(materialName, new RepairMaterial(materialName, quantity));
     }
 
     public void rentATool(String toolName, int quantity) {
-        if(repairToolContainer.get(toolName).quantity < quantity){
-            buyTool(toolName, quantity - repairToolContainer.get(toolName).quantity);
-        }
-        repairToolContainer.get(toolName).quantity = repairToolContainer.get(toolName).quantity - quantity;
+        repairToolContainer.get(toolName).acquireTool(quantity);
     }
 
     public void takeMaterial(String materialName, int quantity) {
-        if(repairMaterialContainer.get(materialName).quantity < quantity){
-            buyMaterial(materialName, quantity - repairMaterialContainer.get(materialName).quantity);
-        }
-        repairMaterialContainer.get(materialName).quantity = repairMaterialContainer.get(materialName).quantity - quantity;
+        repairMaterialContainer.get(materialName).acquireMaterial(quantity);
     }
 
     public void releaseTool(String toolName, int quantity) {
-        repairToolContainer.get(toolName).quantity = repairToolContainer.get(toolName).quantity + quantity;
+        repairToolContainer.get(toolName).releaseTool(quantity);
     }
-
-    private void buyTool(String toolType, int quantity) {
-        repairToolContainer.get(toolType).quantity += quantity;
-    }
-
-    private void buyMaterial(String materialType, int quantity) {
-        repairMaterialContainer.get(materialType).quantity += quantity;
-    }
-
-
-
 }

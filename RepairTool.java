@@ -1,16 +1,30 @@
+import java.util.concurrent.Semaphore;
 
+class RepairTool implements Comparable<RepairTool> {
 
-public class RepairTool implements Comparable<RepairTool> {
-
+    private Semaphore quantity;
     private String name;
-    public int quantity;
 
-    public RepairTool(String name, int quantity){
+    public RepairTool(String name, int quantity) {
         this.name = name;
-        this.quantity = quantity;
+        this.quantity = new Semaphore(quantity);
     }
 
-    public String toString() { return "[" + name + " - " + quantity + "]" ;}
+    public void acquireTool(int quantity) {
+        try {
+            this.quantity.acquire(quantity);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void releaseTool(int amount) {
+        quantity.release(amount);
+    }
+
+    public String toString() {
+        return "[" + name + " - " + quantity + "]";
+    }
 
     @Override
     public int compareTo(RepairTool o) {

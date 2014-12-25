@@ -3,8 +3,6 @@
  */
 public class Customer {
 
-    // fields
-    public enum VandalismType { Arbitrary, Fixed, None };
     private VandalismType vandalismType;
     private String name;
     private int minDamage;
@@ -17,22 +15,22 @@ public class Customer {
         this.maxDamage = maxDamage;
     }
 
-    public double vandalize(){
+    public double vandalize() {
 
         double damage = 0.5; // default wear&tear value
 
         switch (vandalismType) {
 
-         case Arbitrary: // generate random number in minDamage - maxDamage range
-             damage = minDamage + Math.random() * (maxDamage - minDamage);
-             break;
+            case Arbitrary: // generate random number in minDamage - maxDamage range
+                damage = minDamage + Math.random() * (maxDamage - minDamage);
+                break;
 
-         case Fixed: // calc average
-             damage = (minDamage + maxDamage) / 2;
-             break;
+            case Fixed: // calc average
+                damage = (minDamage + maxDamage) / 2;
+                break;
 
-         case None: // leave default value unchanged
-             break;
+            case None: // leave default value unchanged
+                break;
         }
 
         return damage;
@@ -44,6 +42,11 @@ public class Customer {
                 vandalismType.toString() + " ; minDamage: " +
                 minDamage + " ; maxDamage: " +
                 maxDamage + " ]\n";
+    }
+
+    // fields
+    public enum VandalismType {
+        Arbitrary, Fixed, None
     }
 
 }

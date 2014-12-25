@@ -1,10 +1,10 @@
 /**
  * Created by airbag on 12/9/14.
  */
-public class ClerkDetails {
+class ClerkDetails {
 
     private String name;
-    Location location;
+    private Location location;
 
     public ClerkDetails(String name, Location location) {
         this.name = name;
@@ -13,5 +13,9 @@ public class ClerkDetails {
 
     public long distanceToTravel(Asset asset) {
         return asset.distanceToClerk(location);
+    }
+
+    public String toString() {
+        return name;
     }
 }

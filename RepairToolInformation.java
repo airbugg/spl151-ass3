@@ -1,7 +1,7 @@
 /**
  * Created by airbag on 12/9/14.
  */
-public class RepairToolInformation implements Comparable<RepairToolInformation>{
+class RepairToolInformation implements Comparable<RepairToolInformation> {
 
     // fields
     private String name;
@@ -12,8 +12,19 @@ public class RepairToolInformation implements Comparable<RepairToolInformation>{
         this.quantity = quantity;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
     @Override
     public int compareTo(RepairToolInformation o) {
+        if (name.compareTo(o.name) == 0) {
+            return quantity - o.quantity;
+        }
         return name.compareTo(o.name);
     }
 }
