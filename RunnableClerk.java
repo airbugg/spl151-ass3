@@ -59,7 +59,7 @@ class RunnableClerk implements Runnable {
                         Management.logger.info(clerkDetails + ": Asset Booked! Traveling to asset..");
                         travelToAsset(asset); // wasting time
                         currentRequest.fulfill(asset);
-                        reportSemaphore.release(1);
+                        reportSemaphore.acquire(1);
                         nUnhandledRequests.getAndDecrement(); // decrement unhandled requests count by one, safely..
                         currentRequest.notifyAll(); // asset is booked, request fulfilled. notify customers.
                         Management.logger.info(clerkDetails + ": Arrived. Request fulfilled. notifying Group Manager.");

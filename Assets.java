@@ -75,4 +75,13 @@ class Assets {
 
         damageReports.clear();
     }
+
+    public String toString() {
+        StringBuilder output = new StringBuilder("::Asset Report::\n");
+
+        for (Asset asset : assets) {
+            output.append(asset).append("\n");
+        }
+        return output.toString();
+    }
 }

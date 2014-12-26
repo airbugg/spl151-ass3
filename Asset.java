@@ -10,6 +10,7 @@ class Asset {
     private String type;
     private Location location;
     private ArrayList<AssetContent> assetContentContainer;
+    private enum Status {AVAILABLE, BOOKED, OCCUPIED, UNAVAILABLE}
     private Status status;
     private int costPerNight;
     private int size;
@@ -30,10 +31,10 @@ class Asset {
     }
 
     public boolean isWrecked() {
-        return !(status == Status.UNAVAILABLE);
+        return (status == Status.UNAVAILABLE);
     }
 
-    public void updateDamage(double percentage) {
+    public synchronized void updateDamage(double percentage) {
 
         for (AssetContent assetContent : assetContentContainer) {
             assetContent.breakAsset(percentage);
@@ -41,10 +42,11 @@ class Asset {
         checkHealth();
     }
 
-    public void repairAsset() {
+    public synchronized void repairAsset() {
         for (AssetContent assetContent : assetContentContainer) {
             assetContent.fix();
         }
+        status = Status.AVAILABLE; // making asset available
     }
 
     public long timeToFix() {
@@ -103,9 +105,7 @@ class Asset {
         status = Status.AVAILABLE;
     }
 
-    private enum Status {AVAILABLE, BOOKED, OCCUPIED, UNAVAILABLE}
-
     public String toString() {
-        return name;
+        return "[Name=" + name + "][Type=" + type + "][Size=" + size + "][Status=" + status.toString() + "]";
     }
 }

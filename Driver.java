@@ -12,6 +12,5 @@ class Driver {
 
         System.out.println("Finished parsing files.");
         management.simulate();
-        //System.out.println(management);
     }
 }

@@ -21,6 +21,7 @@ public class Management {
     private CyclicBarrier clerkShiftBarrier;
     private CountDownLatch maintenanceShiftLatch;
     private AtomicInteger nUnhandledRequests;
+    private int nUnhandledRequestsPerShift;
     private Object beginNewShift;
     private BlockingQueue<RentalRequest> rentalRequests;
 
@@ -38,6 +39,7 @@ public class Management {
         this.repairMaterialInformationMap = new HashMap<String, ArrayList<RepairMaterialInformation>>();
         this.customers = new Vector<CustomerGroupDetails>();
         this.nUnhandledRequests = new AtomicInteger(0);
+        this.nUnhandledRequestsPerShift = 0;
         this.nMaintenanceWorkers = 0;
         this.beginNewShift = new Object();
         this.reportSemaphore = new Semaphore(0);
@@ -45,6 +47,7 @@ public class Management {
 
     public void simulate() { // main simulation loop
 
+        init();
         runCustomers();
         runClerks();
 
@@ -78,6 +81,7 @@ public class Management {
 
     public void setTotalNumberOfRentalRequests(int nRentalRequests) { // TODO: THERE MUST BE A BETTER WAY...
         this.nUnhandledRequests.set(nRentalRequests);
+        this.nUnhandledRequestsPerShift = nRentalRequests;
     }
 
     public void setNumberOfMaintenanceWorkers(int nMaintenanceWorkers) { // TODO: THERE MUST BE A BETTER WAY..
@@ -86,12 +90,8 @@ public class Management {
 
     public void submitDamageReport(DamageReport damageReport) {
         assets.submitDamageReport(damageReport); // submit report to Assets.
+        reportSemaphore.release(1);
         logger.info("MANAGEMENT: damageReport was submitted.");
-        try {
-            reportSemaphore.acquire(1); // decrease waiting by 1 report.
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     public void addRentalRequest(RentalRequest rentalRequest) {
@@ -117,6 +117,11 @@ public class Management {
             stringBuilder.append("]\n");
         }
         return stringBuilder.toString();
+    }
+
+    private void init() {
+        reportSemaphore.release(nUnhandledRequests.get()); // initialize reportSemaphore to # of rental requests
+        nUnhandledRequestsPerShift = nUnhandledRequests.get(); // before the simulation begins, these are equal
     }
 
     private void runCustomers() {
@@ -160,6 +165,8 @@ public class Management {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        System.out.println(assets.toString());
+        maintenanceExecutor.shutdown();
         logger.info("MAINTENANCE: Done! let's hit the bar!");
         // done. let's hit the bar!
     }
@@ -191,13 +198,14 @@ public class Management {
         // immediately acquiring the drained amount will guarantee that only once all reports have been submitted,
         // maintenance will be called upon.
 
-        int nReportsToReceive = reportSemaphore.drainPermits();
-        logger.info("MANAGEMENT: All clerks are done with their shift. waiting for " + nReportsToReceive + " reports.");
-
+        int semaphoreCount = reportSemaphore.drainPermits();
         try {
-            reportSemaphore.acquire(nReportsToReceive);
+            reportSemaphore.acquire(nUnhandledRequestsPerShift - semaphoreCount); // essentially emptying the semaphore
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+        nUnhandledRequestsPerShift = nUnhandledRequests.get();
+        reportSemaphore.release(nUnhandledRequestsPerShift); // filling it up again, before clerks' next shift begins
     }
 }
