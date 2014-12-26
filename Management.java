@@ -87,7 +87,11 @@ public class Management {
     public void submitDamageReport(DamageReport damageReport) {
         assets.submitDamageReport(damageReport); // submit report to Assets.
         logger.info("MANAGEMENT: damageReport was submitted.");
-        reportSemaphore.release(1); // decrease waiting by 1 report.
+        try {
+            reportSemaphore.acquire(1); // decrease waiting by 1 report.
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void addRentalRequest(RentalRequest rentalRequest) {
@@ -124,7 +128,7 @@ public class Management {
 
     private void runClerks() {
         // ensuring we'll wait for all clerks to end their shift
-        clerkShiftBarrier = new CyclicBarrier(clerks.size() + 1);
+        clerkShiftBarrier = new CyclicBarrier(clerks.size() + 1); // +1 for management
         logger.info("MANAGEMENT: Initializing RunnableClerks...");
         for (ClerkDetails clerk : clerks) {
             new Thread(new RunnableClerk(clerk, rentalRequests,
@@ -156,7 +160,7 @@ public class Management {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        logger.info("Done! let's hit the bar!");
+        logger.info("MAINTENANCE: Done! let's hit the bar!");
         // done. let's hit the bar!
     }
 

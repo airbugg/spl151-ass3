@@ -34,7 +34,6 @@ public class Customer {
             case None: // leave default value unchanged
                 break;
         }
-
         return damage;
     }
 
