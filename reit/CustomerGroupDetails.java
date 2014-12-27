@@ -1,3 +1,5 @@
+package reit;
+
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -6,14 +8,14 @@ import java.util.Vector;
 /**
  * Created by airbag on 12/9/14.
  */
-class CustomerGroupDetails {
+public class CustomerGroupDetails {
 
     private String groupManagerName;
     private Queue<RentalRequest> rentalRequests;
     private Vector<Customer> customers;
 
 
-    public CustomerGroupDetails(String groupManagerName) {
+    protected CustomerGroupDetails(String groupManagerName) {
         this.groupManagerName = groupManagerName;
         this.customers = new Vector<Customer>();
         this.rentalRequests = new LinkedList<RentalRequest>();
@@ -48,28 +50,14 @@ class CustomerGroupDetails {
 
     }
 
+    public String getName() {
+        return "[" + groupManagerName + "]";
+
+    }
+
     public String toString() {
+        return "[" + groupManagerName + "]";
 
-        StringBuilder stringBuilder = new StringBuilder("This CustomerGroupDetails object contains: \n");
-
-        stringBuilder.append("Group Manager name: ");
-        stringBuilder.append(groupManagerName);
-        stringBuilder.append("\nRental Requests: \n");
-
-        for (RentalRequest rentalRequest : rentalRequests) {
-            stringBuilder.append(rentalRequest.report());
-        }
-
-        stringBuilder.append("Customers:\n");
-
-        for (Customer customer : customers) {
-            stringBuilder.append(customer);
-        }
-
-        return stringBuilder.toString();
     }
 
-    public String getManager() {
-        return groupManagerName;
-    }
 }

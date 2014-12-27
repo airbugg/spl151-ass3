@@ -1,7 +1,9 @@
+package reit;
+
 /**
  * Created by airbag on 12/9/14.
  */
-public class DamageReport {
+class DamageReport {
 
     private Asset asset;
     private double damagePercent;
@@ -13,5 +15,9 @@ public class DamageReport {
 
     public void inflictDamage() {
         asset.updateDamage(damagePercent);
+    }
+
+    public String toString() {
+        return "[reit.Asset=" + asset + "][Damage=" + damagePercent + "]";
     }
 }

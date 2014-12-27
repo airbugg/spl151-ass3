@@ -1,9 +1,7 @@
-import org.omg.CORBA.MARSHAL;
+package reit;
 
 import java.util.*;
 import java.util.concurrent.CountDownLatch;
-import java.util.logging.ConsoleHandler;
-import java.util.logging.Logger;
 
 /**
  * Created by airbag on 12/9/14.
@@ -36,7 +34,6 @@ class RunnableMaintenanceRequest implements Runnable {
         this.shiftLatch = shiftLatch;
     }
 
-
     @Override
     public void run() { // forest, run!
         acquireTools();
@@ -52,7 +49,6 @@ class RunnableMaintenanceRequest implements Runnable {
 
     private void repairAsset() {
         fAsset.repairAsset();
-        Management.logger.info("MAINTENANCE: ASSET FIXED. MOVING ON!");
     }
 
     private void acquireTools() {

@@ -1,9 +1,14 @@
+package reit;
+
+import reit.RepairMaterial;
+import reit.RepairTool;
+
 import java.util.HashMap;
 
 /**
  * Created by gal on 12/8/2014.
  */
-class Warehouse {
+public class Warehouse {
 
     private HashMap<String, RepairTool> repairToolContainer;
     private HashMap<String, RepairMaterial> repairMaterialContainer;

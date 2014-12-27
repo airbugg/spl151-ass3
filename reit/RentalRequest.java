@@ -1,10 +1,11 @@
+package reit;
+
 /**
  * Created by airbag on 12/9/14.
  */
-public class RentalRequest {
+class RentalRequest {
 
     // fields
-    private final int DAYS_TO_MILLISECONDS = 24000;
     private enum RequestStatus {INCOMPLETE, FULFILLED, INPROGRESS, COMPLETE}
     private RequestStatus requestStatus;
     private String id;
@@ -28,6 +29,7 @@ public class RentalRequest {
     public void fulfill(Asset asset) {
         this.asset = asset;
         requestStatus = RequestStatus.FULFILLED;
+        Management.logger.info(getId() + " status changed to FULFILLED.");
     }
 
     public boolean isSuitable(Asset asset) {
@@ -37,11 +39,13 @@ public class RentalRequest {
     public void inProgress() {
         requestStatus = RequestStatus.INPROGRESS;
         asset.occupy();
+        Management.logger.info(getId() + " status changed to IN PROGRESS.");
     }
 
     public void complete() {
         asset.vacate();
         requestStatus = RequestStatus.COMPLETE;
+        Management.logger.info(getId() + " status changed to COMPLETE.");
     }
 
     public void incomplete() {
@@ -49,7 +53,7 @@ public class RentalRequest {
     }
 
     public int stay() {
-        return durationOfStay * DAYS_TO_MILLISECONDS;
+        return durationOfStay * Management.DAYS_TO_MILLISECONDS;
     }
 
     public void updateDamage(double damagePercentage) {
@@ -60,17 +64,20 @@ public class RentalRequest {
         return new DamageReport(asset, totalDamage);
     }
 
-    public String report() {
-        return "[ Request ID: " +
-                id + " ; Asset Type: " +
-                assetType + " ; Asset Size: " +
-                assetSize + " ; Duration:" +
-                durationOfStay + " ; Status: " +
-                requestStatus.toString() + " ] \n";
+    public int getDurationOfStay () {
+        return durationOfStay;
     }
 
-    public String requestId() {
-        return id;
-    }
+    public String getId() {
+        return "[Rental Request " + id + "]";
 
+    }
+    public String toString() {
+        return "[ID=" + id +
+                "][Type=" + assetType +
+                "][Size=" + assetSize +
+                "][Duration=" + durationOfStay +
+                "][Status=" + requestStatus.toString() +
+                "]";
+    }
 }

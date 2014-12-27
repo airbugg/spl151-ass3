@@ -1,7 +1,9 @@
+package reit;
+
 /**
  * Created by airbag on 12/9/14.
  */
-public class Customer {
+class Customer {
 
     // fields
     public enum VandalismType { Arbitrary, Fixed, None }
@@ -37,18 +39,17 @@ public class Customer {
         return damage;
     }
 
-    public String toString() {
-        return "[ Customer Name: " +
-                name + " ; Vandalism Type: " +
-                vandalismType.toString() + " ; minDamage: " +
-                minDamage + " ; maxDamage: " +
-                maxDamage + " ]\n";
-    }
-
-    public String getCustomerName() {
+    public String getName() {
         return name;
     }
 
+    public String toString() {
+        return "[Name=" + name +
+                "][Vandalism=" + vandalismType.toString() +
+                "][MinDamage=" + minDamage +
+                "][MaxDamage=" + maxDamage +
+                "]";
+    }
 
 
 

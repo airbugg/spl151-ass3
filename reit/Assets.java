@@ -1,9 +1,8 @@
+package reit;
+
 import java.util.ArrayList;
-import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.logging.ConsoleHandler;
-import java.util.logging.Logger;
 
 
 class Assets {
@@ -22,7 +21,7 @@ class Assets {
         assets.add(asset);
     }
 
-    public Asset find(RentalRequest rentalRequest) {
+    public Asset find(RentalRequest rentalRequest, ClerkDetails clerk) {
         boolean assetFound = false;
         Asset suitableAsset = null;
         synchronized (assetLock) {
@@ -30,12 +29,11 @@ class Assets {
                 for (Asset asset : assets) { // look for assets
                     if (rentalRequest.isSuitable(asset)) { // if suitable asset has been found
                         assetFound = true;
-                        Management.logger.info("Asset Found!");
                         return asset; // TODO: UGLY HACK.
                     }
                 }
                 try { // no available assets have been found
-                    Management.logger.info("NO SUITABLE ASSET CURRENTLY AVAILABLE. PLEASE WAIT.");
+                    Management.logger.info(clerk.getName() + " couldn't find a suitable asset. WAITING...");
                     assetLock.wait(); // so we wait.
                     Management.logger.info("NOTIFY ALL CLERKS! AN ASSET HAS BEEN VACATED!!");
                 } catch (InterruptedException e) {
@@ -76,8 +74,9 @@ class Assets {
         damageReports.clear();
     }
 
+
     public String toString() {
-        StringBuilder output = new StringBuilder("::Asset Report::\n");
+        StringBuilder output = new StringBuilder("::reit.Asset Report::\n");
 
         for (Asset asset : assets) {
             output.append(asset).append("\n");

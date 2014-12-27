@@ -1,3 +1,5 @@
+package reit;
+
 import java.util.concurrent.Semaphore;
 
 class RepairTool implements Comparable<RepairTool> {
@@ -20,6 +22,14 @@ class RepairTool implements Comparable<RepairTool> {
 
     public void releaseTool(int amount) {
         quantity.release(amount);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getQuantity() {
+        return quantity.availablePermits();
     }
 
     public String toString() {

@@ -1,3 +1,5 @@
+package reit;
+
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -10,6 +12,8 @@ public class Management {
 
     // fields
     public static final Logger logger = Logger.getLogger(Management.class.getName());
+    public static final int DAYS_TO_MILLISECONDS = 24000;
+    public static final int SEC_TO_MILL = 1000;
 
     private Warehouse warehouse;
     private Assets assets;
@@ -30,9 +34,7 @@ public class Management {
 
     private int nMaintenanceWorkers;
 
-    public Management(Warehouse warehouse, Assets assets) { // public constructor
-        this.warehouse = warehouse;
-        this.assets = assets;
+    public Management() { // public constructor
         this.rentalRequests = new LinkedBlockingDeque<RentalRequest>();
         this.clerks = new Vector<ClerkDetails>();
         this.repairToolInformationMap = new HashMap<String, ArrayList<RepairToolInformation>>();
@@ -57,16 +59,20 @@ public class Management {
             beginMaintenanceShift(); // call maintenance
             beginNewShift(); // notify clerks a new shift has begun.
         }
+    }
 
-        logger.info("<<<<<<<<< SIMULATION COMPLETE!!! >>>>>>>>>");
+    public void addWarehouse (Warehouse warehouse) {
+        this.warehouse = warehouse;
     }
 
     public void addClerk(ClerkDetails clerkDetails) {
         clerks.add(clerkDetails);
     }
 
-    public void addCustomerGroup(CustomerGroupDetails customerGroupDetails) {
-        customers.add(customerGroupDetails);
+    public CustomerGroupDetails addCustomerGroup(String groupManager) {
+        CustomerGroupDetails customerGroup = new CustomerGroupDetails(groupManager);
+        customers.add(customerGroup);
+        return customerGroup;
     }
 
     public void addItemRepairTool(String name,
@@ -79,44 +85,23 @@ public class Management {
         repairMaterialInformationMap.put(name, repairMaterialInformation);
     }
 
-    public void setTotalNumberOfRentalRequests(int nRentalRequests) { // TODO: THERE MUST BE A BETTER WAY...
-        this.nUnhandledRequests.set(nRentalRequests);
-        this.nUnhandledRequestsPerShift = nRentalRequests;
-    }
-
-    public void setNumberOfMaintenanceWorkers(int nMaintenanceWorkers) { // TODO: THERE MUST BE A BETTER WAY..
-        this.nMaintenanceWorkers = nMaintenanceWorkers;
-    }
-
-    public void submitDamageReport(DamageReport damageReport) {
-        assets.submitDamageReport(damageReport); // submit report to Assets.
-        reportSemaphore.release(1);
-        logger.info("MANAGEMENT: damageReport was submitted.");
-    }
-
     public void addRentalRequest(RentalRequest rentalRequest) {
         rentalRequests.add(rentalRequest);
     }
 
-    public String toString() {
-        StringBuilder stringBuilder = new StringBuilder("Management: \n");
 
-        for (CustomerGroupDetails customerGroupDetails : customers) {
-            stringBuilder.append(customerGroupDetails).append("\n");
-        }
+    public void setTotalNumberOfRentalRequests(int nRentalRequests) {
+        this.nUnhandledRequests.set(nRentalRequests);
+        this.nUnhandledRequestsPerShift = nRentalRequests;
+    }
 
-        for (ClerkDetails clerkDetails : clerks) {
-            stringBuilder.append(clerkDetails).append("\n");
-        }
+    public void setNumberOfMaintenanceWorkers(int nMaintenanceWorkers) {
+        this.nMaintenanceWorkers = nMaintenanceWorkers;
+    }
 
-        for (SortedMap.Entry<String, ArrayList<RepairToolInformation>> entry : repairToolInformationMap.entrySet()) {
-            stringBuilder.append(entry.getKey()).append(" \tTools: [");
-            for (RepairToolInformation repairToolInformation: entry.getValue()) {
-                stringBuilder.append("<").append(repairToolInformation.getName()).append(",").append(repairToolInformation.getQuantity()).append(">");
-            }
-            stringBuilder.append("]\n");
-        }
-        return stringBuilder.toString();
+    public void submitDamageReport(DamageReport damageReport) {
+        assets.submitDamageReport(damageReport); // submit report to reit.Assets.
+        reportSemaphore.release(1);
     }
 
     private void init() {
@@ -125,7 +110,7 @@ public class Management {
     }
 
     private void runCustomers() {
-        logger.info("MANAGEMENT: Initializing Customer Groups...");
+        logger.info("MANAGEMENT: Initializing reit.Customer Groups...");
         for (CustomerGroupDetails customerGroup : customers) {
             new Thread(new RunnableCustomerGroupManager(this, customerGroup)).start();
         }
@@ -160,12 +145,11 @@ public class Management {
         }
 
         try {
-            logger.info("MANAGEMENT: Waiting for maintenance workers to finish repairs..");
             maintenanceShiftLatch.await(); // waiting for maintenance workers to finish repairs
+
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        System.out.println(assets.toString());
         maintenanceExecutor.shutdown();
         logger.info("MAINTENANCE: Done! let's hit the bar!");
         // done. let's hit the bar!
@@ -185,7 +169,6 @@ public class Management {
     private void waitForReports() {
 
         try {
-            logger.info("MANAGEMENT: Waiting for clerks to finish their shift.");
             clerkShiftBarrier.await(); // waiting for all clerks to finish their shift.
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -201,6 +184,7 @@ public class Management {
         int semaphoreCount = reportSemaphore.drainPermits();
         try {
             reportSemaphore.acquire(nUnhandledRequestsPerShift - semaphoreCount); // essentially emptying the semaphore
+
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -208,4 +192,26 @@ public class Management {
         nUnhandledRequestsPerShift = nUnhandledRequests.get();
         reportSemaphore.release(nUnhandledRequestsPerShift); // filling it up again, before clerks' next shift begins
     }
+
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder("reit.Management: \n");
+
+        for (CustomerGroupDetails customerGroupDetails : customers) {
+            stringBuilder.append(customerGroupDetails).append("\n");
+        }
+
+        for (ClerkDetails clerkDetails : clerks) {
+            stringBuilder.append(clerkDetails).append("\n");
+        }
+
+        for (SortedMap.Entry<String, ArrayList<RepairToolInformation>> entry : repairToolInformationMap.entrySet()) {
+            stringBuilder.append(entry.getKey()).append(" \tTools: [");
+            for (RepairToolInformation repairToolInformation: entry.getValue()) {
+                stringBuilder.append("<").append(repairToolInformation.getName()).append(",").append(repairToolInformation.getQuantity()).append(">");
+            }
+            stringBuilder.append("]\n");
+        }
+        return stringBuilder.toString();
+    }
+
 }

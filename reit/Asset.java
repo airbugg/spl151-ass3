@@ -1,3 +1,5 @@
+package reit;
+
 import java.util.ArrayList;
 import java.util.ListIterator;
 
@@ -47,6 +49,7 @@ class Asset {
             assetContent.fix();
         }
         status = Status.AVAILABLE; // making asset available
+        Management.logger.info(getName() + " has been repaired.");
     }
 
     public long timeToFix() {
@@ -75,7 +78,7 @@ class Asset {
         String damagedGoods = "";
 
         for (AssetContent assetContent : assetContentContainer) {
-            damagedGoods += assetContent.name() + ",";
+            damagedGoods += assetContent.getName() + ",";
         }
         if (damagedGoods.length() > 0) {
             damagedGoods = damagedGoods.substring(0, damagedGoods.length() - 1); // remove pesky trailing comma
@@ -103,6 +106,21 @@ class Asset {
 
     public synchronized void vacate() {
         status = Status.AVAILABLE;
+        Management.logger.info(getName() + " has been vacated.");
+    }
+
+    public String listContent() {
+        StringBuilder contentList = new StringBuilder();
+
+        for (AssetContent content : assetContentContainer) {
+            contentList.append(content).append("\n");
+        }
+
+        return contentList.toString();
+    }
+
+    public String getName() {
+        return "[" + name + "]";
     }
 
     public String toString() {

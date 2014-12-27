@@ -1,3 +1,5 @@
+package reit;
+
 /**
  * Created by airbag on 12/9/14.
  */
@@ -15,7 +17,11 @@ class ClerkDetails {
         return asset.distanceToClerk(location);
     }
 
+    public String getName() {
+        return "[" + name + "]";
+    }
+
     public String toString() {
-        return name;
+        return "[name=" + name + "][reit.Location=" + location + "]";
     }
 }

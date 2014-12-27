@@ -1,3 +1,5 @@
+package reit;
+
 import java.util.concurrent.Semaphore;
 
 /**
@@ -14,17 +16,20 @@ class RepairMaterial implements Comparable<RepairMaterial> {
 
     }
 
-    public void acquireMaterial (int quantity) {
+    public  void acquireMaterial (int quantity) {
         try {
             this.quantity.acquire(quantity);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
-    public String materialName() {
+    public String getName() {
         return materialName;
     }
 
+    public int getQuantity() {
+        return quantity.availablePermits();
+    }
 
 
     @Override

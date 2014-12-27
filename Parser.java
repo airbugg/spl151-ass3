@@ -3,6 +3,8 @@
  *
  */
 
+import reit.*;
+
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
@@ -21,10 +23,10 @@ final class Parser {
     public static Management createManagement(String initialDataXmlPath,
                                               String assetsXmlPath) throws XMLStreamException, FileNotFoundException {
 
-        // Management object
-        Management management = null;
+        // reit.Management object
+        Management management = new Management();
 
-        // Warehouse fields
+        // reit.Warehouse fields
         Warehouse warehouse = new Warehouse();
 
         // tools and materials fields
@@ -49,14 +51,14 @@ final class Parser {
                 case XMLStreamConstants.START_ELEMENT:
                     String startElement = reader.getLocalName();
 
-                    if (startElement.equals("Location")) {
+                    if (startElement.equals("reit.Location")) {
                         int x = Integer.parseInt(reader.getAttributeValue(0));
                         int y = Integer.parseInt(reader.getAttributeValue(1));
 
                         location = new Location(x, y);
 
                     }
-                    if (startElement.equals("Staff")) { // creating Management object here
+                    if (startElement.equals("Staff")) { // creating reit.Management object here
                         management = new Management(warehouse, parseAssets(assetsXmlPath)); // TODO: Change constructor to make package protected.
 
                     }
@@ -107,16 +109,16 @@ final class Parser {
 
     private static Assets parseAssets(String xmlPath) throws XMLStreamException, FileNotFoundException {
 
-        // initialize Assets object
+        // initialize reit.Assets object
         Assets assets = new Assets();
 
         // initialize single asset
         Asset asset = null;
 
-        // initialize AssetContent fields
+        // initialize reit.AssetContent fields
         double repairMultiplier = 0;
 
-        // initialize Asset fields
+        // initialize reit.Asset fields
         String name = null;
         String type = null;
         int size = 0;
@@ -138,7 +140,7 @@ final class Parser {
                 case XMLStreamConstants.START_ELEMENT:
                     String startElement = reader.getLocalName();
 
-                    if (startElement.equals("Location")) {
+                    if (startElement.equals("reit.Location")) {
                         int x = Integer.parseInt(reader.getAttributeValue(0));
                         int y = Integer.parseInt(reader.getAttributeValue(1));
 
@@ -178,11 +180,11 @@ final class Parser {
                         repairMultiplier = Double.parseDouble(elementContent);
 
                     }
-                    if (endElement.equals("AssetContent")) {
+                    if (endElement.equals("reit.AssetContent")) {
                         asset.addContent(new AssetContent(name, repairMultiplier));
 
                     }
-                    if (endElement.equals("Asset")) {
+                    if (endElement.equals("reit.Asset")) {
                         assets.addAsset(asset);
 
                     }
@@ -198,13 +200,13 @@ final class Parser {
         // collection fields
         CustomerGroupDetails customerGroup = null;
 
-        // Customer fields
+        // reit.Customer fields
         String name = null;
         Customer.VandalismType vandalismType = Customer.VandalismType.None;
         int minDamage = 0;
         int maxDamage = 0;
 
-        // RentalRequest fields
+        // reit.RentalRequest fields
         String id = null;
         String type = null;
         int size = 0;
@@ -258,7 +260,7 @@ final class Parser {
                         maxDamage = Integer.parseInt(elementContent);
 
                     }
-                    if (endElement.equals("Customer")) {
+                    if (endElement.equals("reit.Customer")) {
                         customerGroup.addCustomer(new Customer(name, vandalismType, minDamage, maxDamage));
 
                     }
@@ -278,7 +280,7 @@ final class Parser {
                         customerGroup.addRentalRequest(new RentalRequest(id, type, size, duration));
 
                     }
-                    if (endElement.equals("CustomerGroupDetails")) {
+                    if (endElement.equals("reit.CustomerGroupDetails")) {
                         management.addCustomerGroup(customerGroup);
                     }
             }

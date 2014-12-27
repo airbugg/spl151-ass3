@@ -1,3 +1,5 @@
+package reit;
+
 /**
  * Created by airbag on 12/9/14.
  */
@@ -28,11 +30,10 @@ class AssetContent {
         return health <= DAMAGE_THRESHOLD;
     }
 
-    public String toString() {
-        return "the content name is " + name + " and multiplier is " + repairCostMultiplier;
-    }
-
-    public String name() {
+    public String getName() {
         return name;
+    }
+    public String toString() {
+        return "[Content=" + name + "][Health=" + health + "][RepairMultiplier=" + repairCostMultiplier + "]";
     }
 }
