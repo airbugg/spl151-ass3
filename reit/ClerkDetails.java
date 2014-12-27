@@ -22,6 +22,6 @@ class ClerkDetails {
     }
 
     public String toString() {
-        return "[name=" + name + "][reit.Location=" + location + "]";
+        return "[name=" + name + "][Location=" + location + "]";
     }
 }
