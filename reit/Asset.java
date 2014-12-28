@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.ListIterator;
 
 /**
- * Created by airbag on 12/9/14.
+ * Asset:
+ * This class represents an Asset object, with mandatory fields, as defined in the assignment documentation.
+ * @version 1.0
+ *
  */
 public class Asset {
 

@@ -22,7 +22,9 @@ class RunnableCustomerGroupManager implements Runnable {
     }
 
 
-    @Override
+    /**
+     *
+     */
     public void run() {
         while (customerGroupDetails.isRequestsLeft()) { // let's iterate over these rental requests..
 
@@ -50,6 +52,11 @@ class RunnableCustomerGroupManager implements Runnable {
         Management.logger.info(customerGroupDetails.getName() + " has no rental requests left. TERMINATING.");
     }
 
+    /**
+     * @param currentRequest
+     * @throws ExecutionException
+     * @throws InterruptedException
+     */
     private void simulateStay(RentalRequest currentRequest) throws ExecutionException, InterruptedException {
         currentRequest.inProgress();
         double totalDamage = 0;

@@ -3,7 +3,11 @@ package reit;
 import java.util.concurrent.Callable;
 
 /**
- * Created by airbag on 12/9/14.
+ * CallableSimulateStayInAsset:
+ * This is a Callable wrapper for Customer class. It's purpose is to simulate the duration of stay and damage
+ * inflicted by a single Customer.
+ * @version 1.0
+ *
  */
 class CallableSimulateStayInAsset implements Callable {
 

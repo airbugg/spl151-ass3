@@ -4,7 +4,13 @@ import java.util.ArrayList;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-
+/**
+ * Assets:
+ * This class holds a collection of Asset objects, providing methods for searching suitable assets,
+ * submitting damageReports & retrieving a collection of damaged assets.
+ * @version 1.0
+ *
+ */
 class Assets {
 
     private final ArrayList<Asset> assets;

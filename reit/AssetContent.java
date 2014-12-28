@@ -1,7 +1,9 @@
 package reit;
 
 /**
- * Created by airbag on 12/9/14.
+ * AssetContent:
+ * This class represents a single asset content object.
+ * @version 1.0
  */
 class AssetContent {
     private final int DAMAGE_THRESHOLD = 65;
