@@ -97,16 +97,13 @@ public class Management {
         repairToolInformationMap.get(content).add(new RepairToolInformation(repairToolName, quantity));
     }
 
-    public void sortRepairInformationMaps() {
-        //Collections.sort();
-    }
 
-    public void setTotalNumberOfRentalRequests(int nRentalRequests) { // TODO: THERE MUST BE A BETTER WAY...
+    public void setTotalNumberOfRentalRequests(int nRentalRequests) {
         this.nUnhandledRequests.set(nRentalRequests);
         this.nUnhandledRequestsPerShift = nRentalRequests;
     }
 
-    public void setNumberOfMaintenanceWorkers(int nMaintenanceWorkers) { // TODO: THERE MUST BE A BETTER WAY..
+    public void setNumberOfMaintenanceWorkers(int nMaintenanceWorkers) {
         this.nMaintenanceWorkers = nMaintenanceWorkers;
     }
 

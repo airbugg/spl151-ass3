@@ -4,7 +4,6 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
@@ -20,9 +19,8 @@ public final class XMLParser {
             throws FileNotFoundException, XMLStreamException { // helper method to parse XMLStreamReader object
         // initialize parser
         XMLInputFactory factory = XMLInputFactory.newInstance();
-        XMLStreamReader reader = factory.createXMLStreamReader(new FileInputStream(xmlPath));
 
-        return reader;
+        return factory.createXMLStreamReader(new FileInputStream(xmlPath));
     }
 
     private static Location parseLocation (XMLStreamReader reader) { // helper method to parse Location object
@@ -214,9 +212,6 @@ public final class XMLParser {
                     if (endElement.equals("Material")) {
                         management.addItemRepairMaterialInformation(contentName, repairName, quantity);
 
-                    }
-                    if ("AssetContentsRepairDetails".equals(endElement)) {
-                        management.sortRepairInformationMaps();
                     }
                     break;
             }
