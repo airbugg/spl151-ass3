@@ -8,14 +8,14 @@ import java.util.Vector;
 /**
  * Created by airbag on 12/9/14.
  */
-public class CustomerGroupDetails {
+class CustomerGroupDetails {
 
     private String groupManagerName;
     private Queue<RentalRequest> rentalRequests;
     private Vector<Customer> customers;
 
 
-    protected CustomerGroupDetails(String groupManagerName) {
+    public CustomerGroupDetails(String groupManagerName) {
         this.groupManagerName = groupManagerName;
         this.customers = new Vector<Customer>();
         this.rentalRequests = new LinkedList<RentalRequest>();
@@ -52,12 +52,10 @@ public class CustomerGroupDetails {
 
     public String getName() {
         return "[" + groupManagerName + "]";
-
     }
 
     public String toString() {
         return "[" + groupManagerName + "]";
-
     }
 
 }

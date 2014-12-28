@@ -3,7 +3,7 @@ package reit;
 /**
  * Created by airbag on 12/9/14.
  */
-class RentalRequest {
+public class RentalRequest {
 
     // fields
     private enum RequestStatus {INCOMPLETE, FULFILLED, INPROGRESS, COMPLETE}

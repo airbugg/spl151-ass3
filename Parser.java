@@ -23,7 +23,7 @@ final class Parser {
     public static Management createManagement(String initialDataXmlPath,
                                               String assetsXmlPath) throws XMLStreamException, FileNotFoundException {
 
-        // reit.Management object
+        // reit.reit.Management object
         Management management = new Management();
 
         // reit.Warehouse fields
@@ -58,7 +58,7 @@ final class Parser {
                         location = new Location(x, y);
 
                     }
-                    if (startElement.equals("Staff")) { // creating reit.Management object here
+                    if (startElement.equals("Staff")) { // creating reit.reit.Management object here
                         management = new Management(warehouse, parseAssets(assetsXmlPath)); // TODO: Change constructor to make package protected.
 
                     }
@@ -200,13 +200,13 @@ final class Parser {
         // collection fields
         CustomerGroupDetails customerGroup = null;
 
-        // reit.Customer fields
+        // reit.reit.Customer fields
         String name = null;
         Customer.VandalismType vandalismType = Customer.VandalismType.None;
         int minDamage = 0;
         int maxDamage = 0;
 
-        // reit.RentalRequest fields
+        // reit.reit.RentalRequest fields
         String id = null;
         String type = null;
         int size = 0;
@@ -260,7 +260,7 @@ final class Parser {
                         maxDamage = Integer.parseInt(elementContent);
 
                     }
-                    if (endElement.equals("reit.Customer")) {
+                    if (endElement.equals("reit.reit.Customer")) {
                         customerGroup.addCustomer(new Customer(name, vandalismType, minDamage, maxDamage));
 
                     }
@@ -280,7 +280,7 @@ final class Parser {
                         customerGroup.addRentalRequest(new RentalRequest(id, type, size, duration));
 
                     }
-                    if (endElement.equals("reit.CustomerGroupDetails")) {
+                    if (endElement.equals("reit.reit.CustomerGroupDetails")) {
                         management.addCustomerGroup(customerGroup);
                     }
             }

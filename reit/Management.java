@@ -34,7 +34,8 @@ public class Management {
 
     private int nMaintenanceWorkers;
 
-    public Management() { // public constructor
+    public Management(Warehouse warehouse) { // public constructor
+        this.warehouse = warehouse;
         this.rentalRequests = new LinkedBlockingDeque<RentalRequest>();
         this.clerks = new Vector<ClerkDetails>();
         this.repairToolInformationMap = new HashMap<String, ArrayList<RepairToolInformation>>();
@@ -61,18 +62,18 @@ public class Management {
         }
     }
 
-    public void addWarehouse (Warehouse warehouse) {
-        this.warehouse = warehouse;
+    public void addClerk(String name, Location location) {
+        clerks.add(new ClerkDetails(name, location));
     }
 
-    public void addClerk(ClerkDetails clerkDetails) {
-        clerks.add(clerkDetails);
+    public Asset addAsset (String name, String type, int size, Location location, int cost) {
+        Asset asset = new Asset(name, type, location, cost, size);
+        assets.addAsset(asset);
+        return asset;
     }
 
-    public CustomerGroupDetails addCustomerGroup(String groupManager) {
-        CustomerGroupDetails customerGroup = new CustomerGroupDetails(groupManager);
-        customers.add(customerGroup);
-        return customerGroup;
+    public void addCustomerGroup(CustomerGroupDetails customerGroupDetails) {
+        customers.add(customerGroupDetails);
     }
 
     public void addItemRepairTool(String name,
@@ -85,23 +86,43 @@ public class Management {
         repairMaterialInformationMap.put(name, repairMaterialInformation);
     }
 
-    public void addRentalRequest(RentalRequest rentalRequest) {
-        rentalRequests.add(rentalRequest);
-    }
-
-
-    public void setTotalNumberOfRentalRequests(int nRentalRequests) {
+    public void setTotalNumberOfRentalRequests(int nRentalRequests) { // TODO: THERE MUST BE A BETTER WAY...
         this.nUnhandledRequests.set(nRentalRequests);
         this.nUnhandledRequestsPerShift = nRentalRequests;
     }
 
-    public void setNumberOfMaintenanceWorkers(int nMaintenanceWorkers) {
+    public void setNumberOfMaintenanceWorkers(int nMaintenanceWorkers) { // TODO: THERE MUST BE A BETTER WAY..
         this.nMaintenanceWorkers = nMaintenanceWorkers;
     }
 
     public void submitDamageReport(DamageReport damageReport) {
-        assets.submitDamageReport(damageReport); // submit report to reit.Assets.
+        assets.submitDamageReport(damageReport); // submit report to Assets.
         reportSemaphore.release(1);
+    }
+
+    public void addRentalRequest(RentalRequest rentalRequest) {
+        rentalRequests.add(rentalRequest);
+    }
+
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder("reit.Management: \n");
+
+        for (CustomerGroupDetails customerGroupDetails : customers) {
+            stringBuilder.append(customerGroupDetails).append("\n");
+        }
+
+        for (ClerkDetails clerkDetails : clerks) {
+            stringBuilder.append(clerkDetails).append("\n");
+        }
+
+        for (SortedMap.Entry<String, ArrayList<RepairToolInformation>> entry : repairToolInformationMap.entrySet()) {
+            stringBuilder.append(entry.getKey()).append(" \tTools: [");
+            for (RepairToolInformation repairToolInformation: entry.getValue()) {
+                stringBuilder.append("<").append(repairToolInformation.getName()).append(",").append(repairToolInformation.getQuantity()).append(">");
+            }
+            stringBuilder.append("]\n");
+        }
+        return stringBuilder.toString();
     }
 
     private void init() {
@@ -191,27 +212,6 @@ public class Management {
 
         nUnhandledRequestsPerShift = nUnhandledRequests.get();
         reportSemaphore.release(nUnhandledRequestsPerShift); // filling it up again, before clerks' next shift begins
-    }
-
-    public String toString() {
-        StringBuilder stringBuilder = new StringBuilder("reit.Management: \n");
-
-        for (CustomerGroupDetails customerGroupDetails : customers) {
-            stringBuilder.append(customerGroupDetails).append("\n");
-        }
-
-        for (ClerkDetails clerkDetails : clerks) {
-            stringBuilder.append(clerkDetails).append("\n");
-        }
-
-        for (SortedMap.Entry<String, ArrayList<RepairToolInformation>> entry : repairToolInformationMap.entrySet()) {
-            stringBuilder.append(entry.getKey()).append(" \tTools: [");
-            for (RepairToolInformation repairToolInformation: entry.getValue()) {
-                stringBuilder.append("<").append(repairToolInformation.getName()).append(",").append(repairToolInformation.getQuantity()).append(">");
-            }
-            stringBuilder.append("]\n");
-        }
-        return stringBuilder.toString();
     }
 
 }

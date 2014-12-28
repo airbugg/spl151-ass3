@@ -6,7 +6,7 @@ import java.util.ListIterator;
 /**
  * Created by airbag on 12/9/14.
  */
-class Asset {
+public class Asset {
 
     private String name;
     private String type;
@@ -17,7 +17,7 @@ class Asset {
     private int costPerNight;
     private int size;
 
-    public Asset(String name, String type, Location location,
+    protected Asset(String name, String type, Location location,
                  int costPerNight, int size) {
         this.name = name;
         this.type = type;
@@ -28,15 +28,15 @@ class Asset {
         this.size = size;
     }
 
-    public void addContent(AssetContent assetContent) {
-        assetContentContainer.add(assetContent);
+    public void addContent(String name, double repairMultiplier) {
+        assetContentContainer.add(new AssetContent(name, repairMultiplier));
     }
 
-    public boolean isWrecked() {
+    protected boolean isWrecked() {
         return (status == Status.UNAVAILABLE);
     }
 
-    public synchronized void updateDamage(double percentage) {
+    protected synchronized void updateDamage(double percentage) {
 
         for (AssetContent assetContent : assetContentContainer) {
             assetContent.breakAsset(percentage);
@@ -44,7 +44,7 @@ class Asset {
         checkHealth();
     }
 
-    public synchronized void repairAsset() {
+    protected synchronized void repairAsset() {
         for (AssetContent assetContent : assetContentContainer) {
             assetContent.fix();
         }
@@ -52,7 +52,7 @@ class Asset {
         Management.logger.info(getName() + " has been repaired.");
     }
 
-    public long timeToFix() {
+    protected long timeToFix() {
         double timeToFix = 0;
 
         for (AssetContent assetContent : assetContentContainer) {
@@ -74,7 +74,7 @@ class Asset {
         }
     }
 
-    public String whatsDamaged() {
+    protected String whatsDamaged() {
         String damagedGoods = "";
 
         for (AssetContent assetContent : assetContentContainer) {
@@ -86,30 +86,30 @@ class Asset {
         return damagedGoods;
     }
 
-    public boolean isSuitable(String type, int size) {
+    protected boolean isSuitable(String type, int size) {
         return (this.type.equals(type) &&
                 this.size >= size &&
                 this.status.equals(Status.AVAILABLE));
     }
 
-    public long distanceToClerk(Location location) {
+    protected long distanceToClerk(Location location) {
         return (Math.round(this.location.calculateDistance(location)));
     }
 
-    public synchronized void book() {
+    protected synchronized void book() {
         status = Status.BOOKED;
     }
 
-    public synchronized void occupy() {
+    protected synchronized void occupy() {
         status = Status.OCCUPIED;
     }
 
-    public synchronized void vacate() {
+    protected synchronized void vacate() {
         status = Status.AVAILABLE;
         Management.logger.info(getName() + " has been vacated.");
     }
 
-    public String listContent() {
+    protected String listContent() {
         StringBuilder contentList = new StringBuilder();
 
         for (AssetContent content : assetContentContainer) {
@@ -119,7 +119,7 @@ class Asset {
         return contentList.toString();
     }
 
-    public String getName() {
+    protected String getName() {
         return "[" + name + "]";
     }
 

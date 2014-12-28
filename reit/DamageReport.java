@@ -3,7 +3,7 @@ package reit;
 /**
  * Created by airbag on 12/9/14.
  */
-class DamageReport {
+public class DamageReport {
 
     private Asset asset;
     private double damagePercent;
@@ -18,6 +18,6 @@ class DamageReport {
     }
 
     public String toString() {
-        return "[reit.Asset=" + asset + "][Damage=" + damagePercent + "]";
+        return "[Asset=" + asset + "][Damage=" + damagePercent + "]";
     }
 }

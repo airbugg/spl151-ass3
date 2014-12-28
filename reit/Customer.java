@@ -3,7 +3,7 @@ package reit;
 /**
  * Created by airbag on 12/9/14.
  */
-class Customer {
+public class Customer {
 
     // fields
     public enum VandalismType { Arbitrary, Fixed, None }

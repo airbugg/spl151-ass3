@@ -1,9 +1,13 @@
-import reit.*;
+import reit.Asset;
+import reit.Location;
+import reit.Management;
+import reit.Warehouse;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
@@ -15,8 +19,8 @@ public final class XMLParser {
     private XMLParser() {
     }
 
-    private static XMLStreamReader initializeReader (String xmlPath)
-            throws FileNotFoundException, XMLStreamException {
+    private static XMLStreamReader initializeReader(String xmlPath)
+            throws FileNotFoundException, XMLStreamException { // helper method to parse XMLStreamReader object
         // initialize parser
         XMLInputFactory factory = XMLInputFactory.newInstance();
         XMLStreamReader reader = factory.createXMLStreamReader(new FileInputStream(xmlPath));
@@ -24,14 +28,16 @@ public final class XMLParser {
         return reader;
     }
 
-    public static Management createManagement() {
-        return new Management();
+    private static Location parseLocation (XMLStreamReader reader) { // helper method to parse Location object
+        return new Location(Integer.parseInt(reader.getAttributeValue(0)),
+                            Integer.parseInt(reader.getAttributeValue(1)));
     }
 
-    public static void parseInitialData(String initialDataXmlPath)
+    public static Management parseInitialData(String initialDataXmlPath)
             throws FileNotFoundException, XMLStreamException {
 
         Warehouse warehouse = new Warehouse();
+        Management management = new Management(warehouse);
         String name = "";
         int quantity = 0;
 
@@ -45,13 +51,13 @@ public final class XMLParser {
             switch (event) {
 
                 case XMLStreamConstants.START_ELEMENT:
+
                     String startElement = reader.getLocalName();
 
-                    if ("Name".equals(startElement)) {
-                        name = elementContent;
+                    if ("Location".equals(startElement)) {
+                        management.addClerk(name, parseLocation(reader));
 
                     }
-
                     break;
 
                 case XMLStreamConstants.CHARACTERS:
@@ -59,6 +65,7 @@ public final class XMLParser {
                     break;
 
                 case XMLStreamConstants.END_ELEMENT:
+
                     String endElement = reader.getLocalName();
 
                     if ("Tool".equals(endElement)) {
@@ -77,9 +84,97 @@ public final class XMLParser {
                         quantity = Integer.parseInt(elementContent);
 
                     }
+                    if ("NumberOfMaintenancePersons".equals(endElement)) {
+                        management.setNumberOfMaintenanceWorkers(Integer.parseInt(elementContent));
+
+                    }
+                    if ("TotalNumberOfRentalRequests".equals(endElement)) {
+                        management.setTotalNumberOfRentalRequests(Integer.parseInt(elementContent));
+
+                    }
+                    break;
+            }
+        }
+        return management;
+    }
+
+
+    public static void parseAssets(String assetsXmlPath, Management management)
+            throws FileNotFoundException, XMLStreamException {
+
+        String name = "";
+        String type = "";
+        int size = 0;
+        int cost = 0;
+        double repairMultiplier = 0;
+        Location location = null;
+        Asset asset = null;
+
+        XMLStreamReader reader = initializeReader(assetsXmlPath);
+        String elementContent = "";
+
+        while (reader.hasNext()) {
+
+            int event = reader.next();
+
+            switch (event) {
+
+                case XMLStreamConstants.START_ELEMENT:
+                    String startElement = reader.getLocalName();
+
+                    if ("Location".equals(startElement)) {
+                        location = parseLocation(reader);
+
+                    }
+                    if ("AssetContents".equals(startElement)) {
+                        asset = management.addAsset(name, type, size, location, cost);
+
+                    }
+                    break;
+
+                case XMLStreamConstants.CHARACTERS:
+                    elementContent = reader.getText().trim();
+                    break;
+
+                case XMLStreamConstants.END_ELEMENT:
+                    String endElement = reader.getLocalName();
+
+                    if ("Name".equals(endElement)) {
+                        name = elementContent;
+
+                    }
+                    if ("Type".equals(endElement)) {
+                        type = elementContent;
+
+                    }
+                    if ("Size".equals(endElement)) {
+                        size = Integer.parseInt(elementContent);
+
+                    }
+                    if ("CostPerNight".equals(endElement)) {
+                        cost = Integer.parseInt(elementContent);
+
+                    }
+                    if ("RepairMultiplier".equals(endElement)) {
+                        repairMultiplier = Integer.parseInt(elementContent);
+
+                    }
+                    if ("AssetContents".equals(endElement)) {
+                        asset.addContent(name, repairMultiplier);
+
+                    }
+                    break;
             }
         }
     }
 
+    public static void parseContentRepairDetails (String contentRepairDetailsXmlPath, Management management)
+            throws FileNotFoundException, XMLStreamException {
 
+    }
+
+    public static void parseCustomerGroups (String customerGroupsXmlPath, Management management)
+            throws FileNotFoundException, XMLStreamException {
+
+    }
 }

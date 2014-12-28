@@ -1,4 +1,4 @@
-import reit.Management;
+package reit;
 
 /**
  * Created by airbag on 12/9/14.

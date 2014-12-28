@@ -27,7 +27,7 @@ class RunnableCustomerGroupManager implements Runnable {
         while (customerGroupDetails.isRequestsLeft()) { // let's iterate over these rental requests..
 
             RentalRequest currentRequest = customerGroupDetails.pullRentalRequest();
-            management.addRentalRequest(currentRequest); // send rentalRequest to reit.Management
+            management.addRentalRequest(currentRequest); // send rentalRequest to reit.reit.Management
 
             synchronized (currentRequest) {
                 try {
@@ -73,7 +73,7 @@ class RunnableCustomerGroupManager implements Runnable {
 
         // vacate asset
         currentRequest.complete();
-        // submit reit.DamageReport to management
+        // submit reit.reit.DamageReport to management
         Management.logger.info(damageDetails.append("====> [Total Damage=").append(Math.round(totalDamage)).append("]").toString());
         management.submitDamageReport(currentRequest.createDamageReport(totalDamage));
         Management.logger.info(customerGroupDetails.getName() + " has submitted a damage report to management.");
