@@ -27,6 +27,11 @@ class Assets {
         assets.add(asset);
     }
 
+    /**
+     * @param rentalRequest - RentalRequest object that holds the requirements for Asset.
+     * @param clerk - ClerkDetails object representing the clerk calling this method.
+     * @return Asset object fitting requirements specified in rental request.
+     */
     Asset find(RentalRequest rentalRequest, ClerkDetails clerk) {
         boolean assetFound = false;
         Asset suitableAsset = null;
@@ -50,6 +55,9 @@ class Assets {
         return suitableAsset;
     }
 
+    /**
+     * @param damageReport - DamageReport object to be submitted.
+     */
     void submitDamageReport(DamageReport damageReport) { // adds another damageReport to
         damageReports.add(damageReport);
         synchronized (assetLock) {
@@ -64,14 +72,17 @@ class Assets {
     ArrayList<Asset> getDamagedAssets() {
         ArrayList<Asset> damagedProperty = new ArrayList<Asset>();
 
-        for (Asset asset : assets) { // TODO: figure out where the hell we should use damageReport..
+        for (Asset asset : assets) {
             if (asset.isWrecked())
                 damagedProperty.add(asset);
         }
-
         return damagedProperty;
     }
 
+    /**
+     * applyDamage:
+     * This method applies damage to Assets that have an active DamageReport.
+     */
     void applyDamage() { // iterate over damage reports, inflict damage
         for (DamageReport damageReport : damageReports) {
             damageReport.inflictDamage();
