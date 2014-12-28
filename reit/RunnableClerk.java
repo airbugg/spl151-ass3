@@ -78,7 +78,7 @@ class RunnableClerk implements Runnable {
             }
         }
 
-        Management.logger.info(clerkDetails.getName() + ": TERMINATING...");
+        Management.logger.info(clerkDetails.getName() + ": NO RENTAL REQUESTS LEFT. TERMINATING...");
     }
 
     private void travelToAsset(Asset asset) throws InterruptedException {

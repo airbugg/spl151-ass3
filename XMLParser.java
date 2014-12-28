@@ -1,7 +1,4 @@
-import reit.Asset;
-import reit.Location;
-import reit.Management;
-import reit.Warehouse;
+import reit.*;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
@@ -156,10 +153,10 @@ public final class XMLParser {
 
                     }
                     if ("RepairMultiplier".equals(endElement)) {
-                        repairMultiplier = Integer.parseInt(elementContent);
+                        repairMultiplier = Double.parseDouble(elementContent);
 
                     }
-                    if ("AssetContents".equals(endElement)) {
+                    if ("AssetContent".equals(endElement)) {
                         asset.addContent(name, repairMultiplier);
 
                     }
@@ -171,10 +168,147 @@ public final class XMLParser {
     public static void parseContentRepairDetails (String contentRepairDetailsXmlPath, Management management)
             throws FileNotFoundException, XMLStreamException {
 
+        String contentName = "";
+        String repairName = "";
+        int quantity = 0;
+
+        // initialize XMLStreamReader
+        XMLStreamReader reader = initializeReader(contentRepairDetailsXmlPath);
+        String elementContent  = "";
+
+        while (reader.hasNext()) {
+
+            int event = reader.next();
+
+            switch (event) {
+
+                case XMLStreamConstants.START_ELEMENT:
+                    String startElement = reader.getLocalName();
+
+                    if (startElement.equals("Tools")) {
+                        contentName = repairName;
+                        management.addNewContentRepairInformation(contentName);
+
+                    }
+                    break;
+
+                case XMLStreamConstants.CHARACTERS:
+                    elementContent = reader.getText().trim();
+                    break;
+
+                case XMLStreamConstants.END_ELEMENT:
+                    String endElement = reader.getLocalName();
+
+                    if (endElement.equals("Name")) {
+                        repairName = elementContent;
+
+                    }
+                    if (endElement.equals("Quantity")) {
+                        quantity = Integer.parseInt(elementContent);
+
+                    }
+                    if (endElement.equals("Tool")) {
+                        management.addItemRepairToolInformation(contentName, repairName, quantity);
+
+                    }
+                    if (endElement.equals("Material")) {
+                        management.addItemRepairMaterialInformation(contentName, repairName, quantity);
+
+                    }
+                    if ("AssetContentsRepairDetails".equals(endElement)) {
+                        management.sortRepairInformationMaps();
+                    }
+                    break;
+            }
+        }
+
     }
 
     public static void parseCustomerGroups (String customerGroupsXmlPath, Management management)
             throws FileNotFoundException, XMLStreamException {
 
+        // customer fields
+        String name = "";
+        String vandalismType = "";
+        int minDamage = 0;
+        int maxDamage = 0;
+
+        CustomerGroupDetails customerGroupDetails = null;
+
+        // rentalRequest fields
+        String id = "";
+        String type = "";
+        int size = 0;
+        int duration = 0;
+
+        // initialize XMLStreamReader
+        XMLStreamReader reader = initializeReader(customerGroupsXmlPath);
+        String elementContent  = "";
+
+        while (reader.hasNext()) {
+
+            int event = reader.next();
+
+            switch (event) {
+
+                case XMLStreamConstants.START_ELEMENT:
+                    String startElement = reader.getLocalName();
+
+                    if (startElement.equals("Request")) {
+                        id = reader.getAttributeValue(null, "id");
+
+                    }
+                    break;
+
+                case XMLStreamConstants.CHARACTERS:
+                    elementContent = reader.getText().trim();
+                    break;
+
+                case XMLStreamConstants.END_ELEMENT:
+                    String endElement = reader.getLocalName();
+
+                    if (endElement.equals("GroupManagerName")) { // adding CustomerGroupDetails to Management
+                        customerGroupDetails = management.addCustomerGroup(elementContent);
+
+                    }
+                    if (endElement.equals("Name")) {
+                        name = elementContent;
+
+                    }
+                    if (endElement.equals("Vandalism")) {
+                        vandalismType = elementContent;
+
+                    }
+                    if (endElement.equals("MinimumDamage")) {
+                        minDamage = Integer.parseInt(elementContent);
+
+                    }
+                    if (endElement.equals("MaximumDamage")) {
+                        maxDamage = Integer.parseInt(elementContent);
+
+                    }
+                    if (endElement.equals("Customer")) { // adding new CustomerDetails object to CustomerGroup
+                        customerGroupDetails.addCustomer(id, vandalismType, minDamage, maxDamage);
+
+                    }
+                    if (endElement.equals("Type")) {
+                        type = elementContent;
+
+                    }
+                    if (endElement.equals("Size")) {
+                        size = Integer.parseInt(elementContent);
+
+                    }
+                    if (endElement.equals("Duration")) {
+                        duration = Integer.parseInt(elementContent);
+
+                    }
+                    if (endElement.equals("Request")) { // adding new RentalRequest to CustomerGroup
+                        customerGroupDetails.addRentalRequest(name, type, size, duration);
+
+                    }
+                    break;
+            }
+        }
     }
 }

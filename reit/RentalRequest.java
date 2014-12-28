@@ -3,7 +3,7 @@ package reit;
 /**
  * Created by airbag on 12/9/14.
  */
-public class RentalRequest {
+class RentalRequest {
 
     // fields
     private enum RequestStatus {INCOMPLETE, FULFILLED, INPROGRESS, COMPLETE}
@@ -14,7 +14,7 @@ public class RentalRequest {
     private int durationOfStay;
     private Asset asset;
 
-    public RentalRequest(String id, String assetType, int assetSize, int durationOfStay) {
+    protected RentalRequest(String id, String assetType, int assetSize, int durationOfStay) {
         this.id = id;
         this.assetType = assetType;
         this.assetSize = assetSize;
@@ -22,53 +22,53 @@ public class RentalRequest {
         requestStatus = RequestStatus.INCOMPLETE;
     }
 
-    public boolean isFulfilled() {
+    protected boolean isFulfilled() {
         return (requestStatus == RequestStatus.FULFILLED);
     }
 
-    public void fulfill(Asset asset) {
+    protected void fulfill(Asset asset) {
         this.asset = asset;
         requestStatus = RequestStatus.FULFILLED;
         Management.logger.info(getId() + " status changed to FULFILLED.");
     }
 
-    public boolean isSuitable(Asset asset) {
+    protected boolean isSuitable(Asset asset) {
         return asset.isSuitable(assetType, assetSize);
     }
 
-    public void inProgress() {
+    protected void inProgress() {
         requestStatus = RequestStatus.INPROGRESS;
         asset.occupy();
         Management.logger.info(getId() + " status changed to IN PROGRESS.");
     }
 
-    public void complete() {
+    protected void complete() {
         asset.vacate();
         requestStatus = RequestStatus.COMPLETE;
         Management.logger.info(getId() + " status changed to COMPLETE.");
     }
 
-    public void incomplete() {
+    protected void incomplete() {
         requestStatus = RequestStatus.INCOMPLETE;
     }
 
-    public int stay() {
+    protected int stay() {
         return durationOfStay * Management.DAYS_TO_MILLISECONDS;
     }
 
-    public void updateDamage(double damagePercentage) {
+    protected void updateDamage(double damagePercentage) {
         asset.updateDamage(damagePercentage);
     }
 
-    public DamageReport createDamageReport(double totalDamage) {
+    protected DamageReport createDamageReport(double totalDamage) {
         return new DamageReport(asset, totalDamage);
     }
 
-    public int getDurationOfStay () {
+    protected int getDurationOfStay () {
         return durationOfStay;
     }
 
-    public String getId() {
+    protected String getId() {
         return "[Rental Request " + id + "]";
 
     }

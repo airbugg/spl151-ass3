@@ -12,8 +12,8 @@ public class Management {
 
     // fields
     public static final Logger logger = Logger.getLogger(Management.class.getName());
-    public static final int DAYS_TO_MILLISECONDS = 24000;
-    public static final int SEC_TO_MILL = 1000;
+    public static final int DAYS_TO_MILLISECONDS = 240;
+    public static final int SEC_TO_MILL = 10;
 
     private Warehouse warehouse;
     private Assets assets;
@@ -36,6 +36,7 @@ public class Management {
 
     public Management(Warehouse warehouse) { // public constructor
         this.warehouse = warehouse;
+        this.assets = new Assets();
         this.rentalRequests = new LinkedBlockingDeque<RentalRequest>();
         this.clerks = new Vector<ClerkDetails>();
         this.repairToolInformationMap = new HashMap<String, ArrayList<RepairToolInformation>>();
@@ -72,18 +73,32 @@ public class Management {
         return asset;
     }
 
-    public void addCustomerGroup(CustomerGroupDetails customerGroupDetails) {
+    public CustomerGroupDetails addCustomerGroup(String groupManager) {
+        CustomerGroupDetails customerGroupDetails = new CustomerGroupDetails(groupManager);
         customers.add(customerGroupDetails);
+        return customerGroupDetails;
     }
 
-    public void addItemRepairTool(String name,
-                                  ArrayList<RepairToolInformation> repairToolInformation) {
-        repairToolInformationMap.put(name, repairToolInformation);
+    public void addNewContentRepairInformation(String content) {
+        repairToolInformationMap.put(content, new ArrayList<RepairToolInformation>());
+        repairMaterialInformationMap.put(content, new ArrayList<RepairMaterialInformation>());
+
     }
 
-    public void addItemRepairMaterial(String name,
-                                      ArrayList<RepairMaterialInformation> repairMaterialInformation) {
-        repairMaterialInformationMap.put(name, repairMaterialInformation);
+    public void addItemRepairMaterialInformation(String content,
+                                                 String repairMaterialName,
+                                                 int quantity) {
+        repairMaterialInformationMap.get(content).add(new RepairMaterialInformation(repairMaterialName, quantity));
+    }
+
+    public void addItemRepairToolInformation(String content,
+                                             String repairToolName,
+                                             int quantity) {
+        repairToolInformationMap.get(content).add(new RepairToolInformation(repairToolName, quantity));
+    }
+
+    public void sortRepairInformationMaps() {
+        //Collections.sort();
     }
 
     public void setTotalNumberOfRentalRequests(int nRentalRequests) { // TODO: THERE MUST BE A BETTER WAY...

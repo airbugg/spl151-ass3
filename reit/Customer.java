@@ -3,7 +3,7 @@ package reit;
 /**
  * Created by airbag on 12/9/14.
  */
-public class Customer {
+class Customer {
 
     // fields
     public enum VandalismType { Arbitrary, Fixed, None }
@@ -12,14 +12,14 @@ public class Customer {
     private int minDamage;
     private int maxDamage;
 
-    public Customer(String name, VandalismType vandalismType, int minDamage, int maxDamage) {
+    protected Customer(String name, VandalismType vandalismType, int minDamage, int maxDamage) {
         this.name = name;
         this.vandalismType = vandalismType;
         this.minDamage = minDamage;
         this.maxDamage = maxDamage;
     }
 
-    public double vandalize() {
+    protected double vandalize() {
 
         double damage = 0.5; // default wear&tear value
 
@@ -39,7 +39,7 @@ public class Customer {
         return damage;
     }
 
-    public String getName() {
+    protected String getName() {
         return name;
     }
 

@@ -8,7 +8,7 @@ import java.util.Vector;
 /**
  * Created by airbag on 12/9/14.
  */
-class CustomerGroupDetails {
+public class CustomerGroupDetails {
 
     private String groupManagerName;
     private Queue<RentalRequest> rentalRequests;
@@ -21,13 +21,15 @@ class CustomerGroupDetails {
         this.rentalRequests = new LinkedList<RentalRequest>();
     }
 
-    public void addCustomer(Customer customer) {
-        customers.add(customer);
-
+    public void addCustomer(String name, String vandalismType, int minDamage, int maxDamage) {
+        customers.add(new Customer(name,
+                Customer.VandalismType.valueOf(vandalismType),
+                minDamage,
+                maxDamage));
     }
 
-    public void addRentalRequest(RentalRequest rentalRequest) {
-        rentalRequests.add(rentalRequest);
+    public void addRentalRequest(String id, String type, int size, int duration) {
+        rentalRequests.add(new RentalRequest(id, type, size, duration));
 
     }
 
