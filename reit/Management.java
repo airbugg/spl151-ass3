@@ -26,7 +26,7 @@ public class Management {
     private CountDownLatch maintenanceShiftLatch;
     private AtomicInteger nUnhandledRequests;
     private int nUnhandledRequestsPerShift;
-    private Object beginNewShift;
+    private final Object beginNewShift;
     private BlockingQueue<RentalRequest> rentalRequests;
 
     private Vector<CustomerGroupDetails> customers;
