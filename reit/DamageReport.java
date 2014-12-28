@@ -3,17 +3,17 @@ package reit;
 /**
  * Created by airbag on 12/9/14.
  */
-public class DamageReport {
+class DamageReport {
 
     private Asset asset;
     private double damagePercent;
 
-    public DamageReport(Asset asset, double totalDamage) {
+    DamageReport(Asset asset, double totalDamage) {
         this.asset = asset;
         this.damagePercent = totalDamage;
     }
 
-    public void inflictDamage() {
+    void inflictDamage() {
         asset.updateDamage(damagePercent);
     }
 

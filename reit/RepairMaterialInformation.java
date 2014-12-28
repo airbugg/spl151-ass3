@@ -8,16 +8,16 @@ class RepairMaterialInformation implements Comparable<RepairMaterialInformation>
     private String name;
     private int quantity;
 
-    public RepairMaterialInformation(String name, int quantity) {
+    RepairMaterialInformation(String name, int quantity) {
         this.name = name;
         this.quantity = quantity;
     }
 
-    public String getName() {
+    String getName() {
         return name;
     }
 
-    public int getQuantity() {
+    int getQuantity() {
         return quantity;
     }
 

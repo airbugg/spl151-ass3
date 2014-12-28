@@ -9,16 +9,16 @@ class RepairToolInformation implements Comparable<RepairToolInformation> {
     private String name;
     private int quantity;
 
-    public RepairToolInformation(String name, int quantity) {
+    RepairToolInformation(String name, int quantity) {
         this.name = name;
         this.quantity = quantity;
     }
 
-    public String getName() {
+    String getName() {
         return name;
     }
 
-    public int getQuantity() {
+    int getQuantity() {
         return quantity;
     }
 

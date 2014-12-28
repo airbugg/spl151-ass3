@@ -11,17 +11,17 @@ class Assets {
     private BlockingQueue<DamageReport> damageReports;
     private Object assetLock;
 
-    public Assets() {
+    Assets() {
         this.assets = new ArrayList<Asset>();
         assetLock = new Object();
         this.damageReports = new LinkedBlockingQueue<DamageReport>();
     }
 
-    public void addAsset(Asset asset) {
+    void addAsset(Asset asset) {
         assets.add(asset);
     }
 
-    public Asset find(RentalRequest rentalRequest, ClerkDetails clerk) {
+    Asset find(RentalRequest rentalRequest, ClerkDetails clerk) {
         boolean assetFound = false;
         Asset suitableAsset = null;
         synchronized (assetLock) {
@@ -44,7 +44,7 @@ class Assets {
         return suitableAsset;
     }
 
-    public void submitDamageReport(DamageReport damageReport) { // adds another damageReport to
+    void submitDamageReport(DamageReport damageReport) { // adds another damageReport to
         damageReports.add(damageReport);
         synchronized (assetLock) {
             try {
@@ -55,7 +55,7 @@ class Assets {
         }
     }
 
-    public ArrayList<Asset> getDamagedAssets() {
+    ArrayList<Asset> getDamagedAssets() {
         ArrayList<Asset> damagedProperty = new ArrayList<Asset>();
 
         for (Asset asset : assets) { // TODO: figure out where the hell we should use damageReport..
@@ -66,7 +66,7 @@ class Assets {
         return damagedProperty;
     }
 
-    public void applyDamage() { // iterate over damage reports, inflict damage
+    void applyDamage() { // iterate over damage reports, inflict damage
         for (DamageReport damageReport : damageReports) {
             damageReport.inflictDamage();
         }

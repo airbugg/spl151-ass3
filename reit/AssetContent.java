@@ -9,28 +9,28 @@ class AssetContent {
     private double health;
     private double repairCostMultiplier;
 
-    public AssetContent(String contentName, double repairCostMultiplier) {
+    AssetContent(String contentName, double repairCostMultiplier) {
         name = contentName;
         health = 100;
         this.repairCostMultiplier = repairCostMultiplier;
     }
 
-    public void breakAsset(double percentage) {
+    void breakAsset(double percentage) {
         health -= percentage;
     }
 
-    public void fix() {
+    void fix() {
         health = 100;
     }
 
-    public double timeToFix() {
+    double timeToFix() {
         return (100 - health) * repairCostMultiplier;
     }
-    public boolean isBroken() {
+    boolean isBroken() {
         return health <= DAMAGE_THRESHOLD;
     }
 
-    public String getName() {
+    String getName() {
         return name;
     }
     public String toString() {

@@ -13,7 +13,7 @@ public class Location {
         this.y = y;
     }
 
-    public double calculateDistance(Location other) {
+    double calculateDistance(Location other) {
         return Math.sqrt(Math.abs(other.x - this.x) + Math.abs(other.y - this.y));
     }
 

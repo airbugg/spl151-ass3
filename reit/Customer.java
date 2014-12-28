@@ -6,20 +6,20 @@ package reit;
 class Customer {
 
     // fields
-    public enum VandalismType { Arbitrary, Fixed, None }
+    enum VandalismType { Arbitrary, Fixed, None }
     private VandalismType vandalismType;
     private String name;
     private int minDamage;
     private int maxDamage;
 
-    protected Customer(String name, VandalismType vandalismType, int minDamage, int maxDamage) {
+    Customer(String name, VandalismType vandalismType, int minDamage, int maxDamage) {
         this.name = name;
         this.vandalismType = vandalismType;
         this.minDamage = minDamage;
         this.maxDamage = maxDamage;
     }
 
-    protected double vandalize() {
+    double vandalize() {
 
         double damage = 0.5; // default wear&tear value
 
@@ -39,7 +39,7 @@ class Customer {
         return damage;
     }
 
-    protected String getName() {
+    String getName() {
         return name;
     }
 

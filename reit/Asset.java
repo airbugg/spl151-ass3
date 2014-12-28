@@ -17,7 +17,7 @@ public class Asset {
     private int costPerNight;
     private int size;
 
-    protected Asset(String name, String type, Location location,
+    Asset(String name, String type, Location location,
                  int costPerNight, int size) {
         this.name = name;
         this.type = type;
@@ -32,11 +32,11 @@ public class Asset {
         assetContentContainer.add(new AssetContent(name, repairMultiplier));
     }
 
-    protected boolean isWrecked() {
+    boolean isWrecked() {
         return (status == Status.UNAVAILABLE);
     }
 
-    protected synchronized void updateDamage(double percentage) {
+    synchronized void updateDamage(double percentage) {
 
         for (AssetContent assetContent : assetContentContainer) {
             assetContent.breakAsset(percentage);
@@ -44,7 +44,7 @@ public class Asset {
         checkHealth();
     }
 
-    protected synchronized void repairAsset() {
+    synchronized void repairAsset() {
         for (AssetContent assetContent : assetContentContainer) {
             assetContent.fix();
         }
@@ -52,7 +52,7 @@ public class Asset {
         Management.logger.info(getName() + " has been repaired.");
     }
 
-    protected long timeToFix() {
+    long timeToFix() {
         double timeToFix = 0;
 
         for (AssetContent assetContent : assetContentContainer) {
@@ -74,7 +74,7 @@ public class Asset {
         }
     }
 
-    protected String whatsDamaged() {
+    String whatsDamaged() {
         String damagedGoods = "";
 
         for (AssetContent assetContent : assetContentContainer) {
@@ -86,30 +86,30 @@ public class Asset {
         return damagedGoods;
     }
 
-    protected boolean isSuitable(String type, int size) {
+    boolean isSuitable(String type, int size) {
         return (this.type.equals(type) &&
                 this.size >= size &&
                 this.status.equals(Status.AVAILABLE));
     }
 
-    protected long distanceToClerk(Location location) {
+    long distanceToClerk(Location location) {
         return (Math.round(this.location.calculateDistance(location)));
     }
 
-    protected synchronized void book() {
+    synchronized void book() {
         status = Status.BOOKED;
     }
 
-    protected synchronized void occupy() {
+    synchronized void occupy() {
         status = Status.OCCUPIED;
     }
 
-    protected synchronized void vacate() {
+    synchronized void vacate() {
         status = Status.AVAILABLE;
         Management.logger.info(getName() + " has been vacated.");
     }
 
-    protected String listContent() {
+    String listContent() {
         StringBuilder contentList = new StringBuilder();
 
         for (AssetContent content : assetContentContainer) {
@@ -119,7 +119,7 @@ public class Asset {
         return contentList.toString();
     }
 
-    protected String getName() {
+    String getName() {
         return "[" + name + "]";
     }
 

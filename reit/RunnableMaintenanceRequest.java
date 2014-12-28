@@ -19,7 +19,7 @@ class RunnableMaintenanceRequest implements Runnable {
     private CountDownLatch shiftLatch;
 
 
-    public RunnableMaintenanceRequest(Asset asset,
+    RunnableMaintenanceRequest(Asset asset,
                                       HashMap<String, ArrayList<RepairToolInformation>> repairToolInformation,
                                       HashMap<String, ArrayList<RepairMaterialInformation>> repairMaterialInformation,
                                       Warehouse warehouse,

@@ -39,20 +39,20 @@ public class CustomerGroupDetails {
         return null;
     }
 
-    public boolean isRequestsLeft() {
+    boolean isRequestsLeft() {
         return !rentalRequests.isEmpty();
     }
 
-    public Iterator<Customer> customerIterator() {
+    Iterator<Customer> customerIterator() {
         return customers.iterator();
     }
 
-    public int numOfCustomers() {
+    int numOfCustomers() {
         return customers.size();
 
     }
 
-    public String getName() {
+    String getName() {
         return "[" + groupManagerName + "]";
     }
 

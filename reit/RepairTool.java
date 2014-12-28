@@ -7,12 +7,12 @@ class RepairTool implements Comparable<RepairTool> {
     private Semaphore quantity;
     private String name;
 
-    protected RepairTool(String name, int quantity) {
+    RepairTool(String name, int quantity) {
         this.name = name;
         this.quantity = new Semaphore(quantity);
     }
 
-    protected void acquireTool(int quantity) {
+    void acquireTool(int quantity) {
         try {
             this.quantity.acquire(quantity);
         } catch (InterruptedException e) {
@@ -20,15 +20,15 @@ class RepairTool implements Comparable<RepairTool> {
         }
     }
 
-    protected void releaseTool(int amount) {
+    void releaseTool(int amount) {
         quantity.release(amount);
     }
 
-    protected String getName() {
+    String getName() {
         return name;
     }
 
-    protected int getQuantity() {
+    int getQuantity() {
         return quantity.availablePermits();
     }
 

@@ -10,24 +10,24 @@ class RepairMaterial implements Comparable<RepairMaterial> {
     private Semaphore quantity;
 
 
-    protected RepairMaterial(String materialName, int quantity) {
+    RepairMaterial(String materialName, int quantity) {
         this.materialName = materialName;
         this.quantity = new Semaphore(quantity);
 
     }
 
-    protected void acquireMaterial (int quantity) {
+    void acquireMaterial (int quantity) {
         try {
             this.quantity.acquire(quantity);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
-    protected String getName() {
+    String getName() {
         return materialName;
     }
 
-    protected int getQuantity() {
+    int getQuantity() {
         return quantity.availablePermits();
     }
 

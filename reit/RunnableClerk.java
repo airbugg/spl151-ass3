@@ -22,7 +22,7 @@ class RunnableClerk implements Runnable {
     private Semaphore reportSemaphore;
     private Object beginNewShift;
 
-    public RunnableClerk(ClerkDetails clerkDetails,
+    RunnableClerk(ClerkDetails clerkDetails,
                          BlockingQueue<RentalRequest> rentalRequests,
                          CyclicBarrier barrier,
                          Assets assets,
