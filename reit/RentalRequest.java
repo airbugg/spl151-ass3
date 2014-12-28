@@ -8,10 +8,10 @@ class RentalRequest {
     // fields
     private enum RequestStatus {INCOMPLETE, FULFILLED, INPROGRESS, COMPLETE}
     private RequestStatus requestStatus;
-    private String id;
-    private String assetType;
-    private int assetSize;
-    private int durationOfStay;
+    private final String id;
+    private final String assetType;
+    private final int assetSize;
+    private final int durationOfStay;
     private Asset asset;
 
     RentalRequest(String id, String assetType, int assetSize, int durationOfStay) {
@@ -36,7 +36,7 @@ class RentalRequest {
         return asset.isSuitable(assetType, assetSize);
     }
 
-    protected void inProgress() {
+    void inProgress() {
         requestStatus = RequestStatus.INPROGRESS;
         asset.occupy();
         Management.logger.info(getId() + " status changed to IN PROGRESS.");

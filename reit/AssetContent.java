@@ -5,9 +5,9 @@ package reit;
  */
 class AssetContent {
     private final int DAMAGE_THRESHOLD = 65;
-    private String name;
+    private final String name;
     private double health;
-    private double repairCostMultiplier;
+    private final double repairCostMultiplier;
 
     AssetContent(String contentName, double repairCostMultiplier) {
         name = contentName;

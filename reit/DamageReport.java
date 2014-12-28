@@ -5,8 +5,8 @@ package reit;
  */
 class DamageReport {
 
-    private Asset asset;
-    private double damagePercent;
+    private final Asset asset;
+    private final double damagePercent;
 
     DamageReport(Asset asset, double totalDamage) {
         this.asset = asset;

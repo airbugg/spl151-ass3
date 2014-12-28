@@ -7,10 +7,10 @@ class Customer {
 
     // fields
     enum VandalismType { Arbitrary, Fixed, None }
-    private VandalismType vandalismType;
-    private String name;
-    private int minDamage;
-    private int maxDamage;
+    private final VandalismType vandalismType;
+    private final String name;
+    private final int minDamage;
+    private final int maxDamage;
 
     Customer(String name, VandalismType vandalismType, int minDamage, int maxDamage) {
         this.name = name;

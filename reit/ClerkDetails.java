@@ -5,8 +5,8 @@ package reit;
  */
 class ClerkDetails {
 
-    private String name;
-    private Location location;
+    private final String name;
+    private final Location location;
 
     ClerkDetails(String name, Location location) {
         this.name = name;

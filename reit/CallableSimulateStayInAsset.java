@@ -9,8 +9,8 @@ class CallableSimulateStayInAsset implements Callable {
 
     // fields
 
-    private RentalRequest rentalRequest;
-    private Customer customer;
+    private final RentalRequest rentalRequest;
+    private final Customer customer;
 
     CallableSimulateStayInAsset(RentalRequest rentalRequest, Customer customer) {
         this.rentalRequest = rentalRequest;

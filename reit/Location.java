@@ -5,8 +5,8 @@ package reit;
  */
 public class Location {
 
-    private double x;
-    private double y;
+    private final double x;
+    private final double y;
 
     public Location(double x, double y) {
         this.x = x;

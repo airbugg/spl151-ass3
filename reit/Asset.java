@@ -8,14 +8,14 @@ import java.util.ListIterator;
  */
 public class Asset {
 
-    private String name;
-    private String type;
-    private Location location;
-    private ArrayList<AssetContent> assetContentContainer;
+    private final String name;
+    private final String type;
+    private final Location location;
+    private final ArrayList<AssetContent> assetContentContainer;
     private enum Status {AVAILABLE, BOOKED, OCCUPIED, UNAVAILABLE}
     private Status status;
-    private int costPerNight;
-    private int size;
+    private final int costPerNight;
+    private final int size;
 
     Asset(String name, String type, Location location,
                  int costPerNight, int size) {

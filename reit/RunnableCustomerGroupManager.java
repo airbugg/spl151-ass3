@@ -53,10 +53,10 @@ class RunnableCustomerGroupManager implements Runnable {
     private void simulateStay(RentalRequest currentRequest) throws ExecutionException, InterruptedException {
         currentRequest.inProgress();
         double totalDamage = 0;
-        StringBuilder damageDetails = new StringBuilder(customerGroupDetails.getName().toString());
+        StringBuilder damageDetails = new StringBuilder(customerGroupDetails.getName());
 
         // we'll sum up the damage values returned by each simulated customer
-        Executor executor = Executors.newCachedThreadPool();
+        ExecutorService executor = Executors.newCachedThreadPool();
         CompletionService<Double> completionService = new ExecutorCompletionService<Double>(executor);
         Management.logger.info(customerGroupDetails.getName() + " is simulating a " + currentRequest.getDurationOfStay() + " day stay.");
         Iterator<Customer> customerIterator = customerGroupDetails.customerIterator();
@@ -70,7 +70,7 @@ class RunnableCustomerGroupManager implements Runnable {
             damageDetails.append("[Damage=").append(currentDamage).append("]");
         }
 
-
+        executor.shutdown();
         // vacate asset
         currentRequest.complete();
         // submit reit.reit.DamageReport to management

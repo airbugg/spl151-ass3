@@ -7,9 +7,9 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 class Assets {
 
-    private ArrayList<Asset> assets;
-    private BlockingQueue<DamageReport> damageReports;
-    private Object assetLock;
+    private final ArrayList<Asset> assets;
+    private final BlockingQueue<DamageReport> damageReports;
+    private final Object assetLock;
 
     Assets() {
         this.assets = new ArrayList<Asset>();

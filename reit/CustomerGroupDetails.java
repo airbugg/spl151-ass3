@@ -10,9 +10,9 @@ import java.util.Vector;
  */
 public class CustomerGroupDetails {
 
-    private String groupManagerName;
-    private Queue<RentalRequest> rentalRequests;
-    private Vector<Customer> customers;
+    private final String groupManagerName;
+    private final Queue<RentalRequest> rentalRequests;
+    private final Vector<Customer> customers;
 
 
     public CustomerGroupDetails(String groupManagerName) {

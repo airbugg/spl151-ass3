@@ -15,22 +15,21 @@ public class Management {
     public static final int DAYS_TO_MILLISECONDS = 240;
     public static final int SEC_TO_MILL = 10;
 
-    private Warehouse warehouse;
-    private Assets assets;
+    private final Warehouse warehouse;
+    private final Assets assets;
 
-    private HashMap<String, ArrayList<RepairMaterialInformation>> repairMaterialInformationMap;
-    private HashMap<String, ArrayList<RepairToolInformation>> repairToolInformationMap;
+    private final HashMap<String, ArrayList<RepairMaterialInformation>> repairMaterialInformationMap;
+    private final HashMap<String, ArrayList<RepairToolInformation>> repairToolInformationMap;
 
-    private Semaphore reportSemaphore;
+    private final Semaphore reportSemaphore;
     private CyclicBarrier clerkShiftBarrier;
-    private CountDownLatch maintenanceShiftLatch;
-    private AtomicInteger nUnhandledRequests;
+    private final AtomicInteger nUnhandledRequests;
     private int nUnhandledRequestsPerShift;
     private final Object beginNewShift;
-    private BlockingQueue<RentalRequest> rentalRequests;
+    private final BlockingQueue<RentalRequest> rentalRequests;
 
-    private Vector<CustomerGroupDetails> customers;
-    private Vector<ClerkDetails> clerks;
+    private final Vector<CustomerGroupDetails> customers;
+    private final Vector<ClerkDetails> clerks;
 
     private int nMaintenanceWorkers;
 
@@ -165,7 +164,7 @@ public class Management {
         logger.info("MANAGEMENT: Maintenance shift begins.. Retrieving damaged asset list.");
         ArrayList<Asset> damagedAssets = assets.getDamagedAssets();
         // initialize latch. when this reaches zero, maintenance work is done.
-        maintenanceShiftLatch = new CountDownLatch(damagedAssets.size());
+        CountDownLatch maintenanceShiftLatch = new CountDownLatch(damagedAssets.size());
 
         ExecutorService maintenanceExecutor = Executors.newFixedThreadPool(nMaintenanceWorkers);
         logger.info("MANAGEMENT: Executing maintenance worker threads..");
