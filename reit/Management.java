@@ -12,8 +12,8 @@ public class Management {
 
     // fields
     public static final Logger logger = Logger.getLogger(Management.class.getName());
-    public static final int DAYS_TO_MILLISECONDS = 240;
-    public static final int SEC_TO_MILL = 10;
+    public static final int DAYS_TO_MILLISECONDS = 24000;
+    public static final int SEC_TO_MILL = 1000;
 
     private final Warehouse warehouse;
     private final Assets assets;
@@ -66,6 +66,14 @@ public class Management {
         clerks.add(new ClerkDetails(name, location));
     }
 
+    /**
+     * @param name
+     * @param type
+     * @param size
+     * @param location
+     * @param cost
+     * @return
+     */
     public Asset addAsset (String name, String type, int size, Location location, int cost) {
         Asset asset = new Asset(name, type, location, cost, size);
         assets.addAsset(asset);
@@ -198,9 +206,6 @@ public class Management {
         }
     }
 
-    /**
-     * Some function
-     */
     private void waitForReports() {
 
         try {

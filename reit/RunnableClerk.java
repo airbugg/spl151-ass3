@@ -50,7 +50,7 @@ class RunnableClerk implements Runnable {
                     synchronized (currentRequest) {
                         Asset asset = assets.find(currentRequest, clerkDetails);
                         asset.book();
-                        Management.logger.info(asset.getName() + " was booked by " + clerkDetails.getName());
+                        Management.logger.info(asset.getName() + " was booked by " + clerkDetails.getName()); // TODO: update statistics (id, asset)
                         travelToAsset(asset); // wasting time
                         currentRequest.fulfill(asset);
                         reportSemaphore.acquire(1);

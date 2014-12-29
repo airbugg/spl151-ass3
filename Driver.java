@@ -10,8 +10,8 @@ class Driver {
         // parse XML
         Management management = XMLParser.parseInitialData(args[0]);
         XMLParser.parseContentRepairDetails(args[1], management);
-        XMLParser.parseCustomerGroups(args[2], management);
-        XMLParser.parseAssets(args[3], management);
+        XMLParser.parseAssets(args[2], management);
+        XMLParser.parseCustomerGroups(args[3], management);
 
 
         System.out.println("Finished parsing files.");
