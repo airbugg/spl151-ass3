@@ -93,7 +93,7 @@ class Assets {
 
 
     public String toString() {
-        StringBuilder output = new StringBuilder("::reit.Asset Report::\n");
+        StringBuilder output = new StringBuilder("::Asset Report::\n");
 
         for (Asset asset : assets) {
             output.append(asset).append("\n");

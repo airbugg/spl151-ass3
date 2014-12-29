@@ -198,6 +198,9 @@ public class Management {
         }
     }
 
+    /**
+     * Some function
+     */
     private void waitForReports() {
 
         try {
