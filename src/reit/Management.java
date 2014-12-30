@@ -21,6 +21,7 @@ public class Management {
     private final HashMap<String, ArrayList<RepairMaterialInformation>> repairMaterialInformationMap;
     private final HashMap<String, ArrayList<RepairToolInformation>> repairToolInformationMap;
 
+    private Statistics statistics;
     private final Semaphore reportSemaphore;
     private CyclicBarrier clerkShiftBarrier;
     private final AtomicInteger nUnhandledRequests;
@@ -46,6 +47,7 @@ public class Management {
         this.nMaintenanceWorkers = 0;
         this.beginNewShift = new Object();
         this.reportSemaphore = new Semaphore(0);
+        statistics = new Statistics(warehouse);
     }
 
     public void simulate() { // main simulation loop
@@ -61,6 +63,19 @@ public class Management {
             beginNewShift(); // notify clerks a new shift has begun.
         }
     }
+
+    /**
+     *
+     * @param income = the income got from a single rental and should be summed with the rest of the bling-blings.
+     */
+    public void addIncomeToStatistics(int income){ statistics.addIncome(income);    }
+
+    /**
+     *
+     * @param id - the id of the request fulfilled.
+     * @param request - the request fulfilled.
+     */
+    public void addFulfilledRequestToStatistics(String id, RentalRequest request){ statistics.addFulfilledRequest(id,request);}
 
     public void addClerk(String name, Location location) {
         clerks.add(new ClerkDetails(name, location));

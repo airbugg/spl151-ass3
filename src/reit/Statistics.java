@@ -15,7 +15,11 @@ public class Statistics {
     private AtomicInteger MoneyGained;
     private HashMap<String,RentalRequest> rentalRequestsFulfilled;
 
-    public Statistics(Warehouse warehouse, BlockingQueue<RentalRequest> rentalRequests){
+    /**
+     * default constructor
+     * @param warehouse - the
+     */
+    public Statistics(Warehouse warehouse){
         this.warehouse = warehouse;
         rentalRequestsFulfilled = new HashMap<String, RentalRequest>();
         MoneyGained = new AtomicInteger(0);
