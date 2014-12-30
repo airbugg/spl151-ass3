@@ -17,7 +17,7 @@ public class Statistics {
 
     /**
      * default constructor
-     * @param warehouse - the
+     * @param warehouse - the main warehouse of the program which we who's statistics we'll need to print statistics
      */
     public Statistics(Warehouse warehouse){
         this.warehouse = warehouse;
@@ -25,37 +25,49 @@ public class Statistics {
         MoneyGained = new AtomicInteger(0);
     }
 
-    public  void showWarehouseStatistics(){
-        synchronized(System.out){
-            warehouse.printStatistics();
-        }
-    }
-
     /**
-     * 
-     * @return
+     *
+     * @param id- the id of the request fulfilled
+     * @param request- the request fulfilled
      */
     public synchronized void addFulfilledRequest(String id, RentalRequest request) {
         rentalRequestsFulfilled.put(id,request);
     }
 
 
+    /**
+     *
+     * @return- StringBulder of fulfilled requests and their information
+     */
     public StringBuilder showFulfilledRentalRequests(){
         StringBuilder requests = new StringBuilder();
         for(Map.Entry<String,RentalRequest> entry : rentalRequestsFulfilled.entrySet()){
-            requests.append("request id: " + entry.getKey() + " was fulfilled by the asset: " + entry.getValue().getAssetName());
+            requests.append("request id: " + entry.getKey() + " was fulfilled by the asset: " + entry.getValue().getAssetName() + "\n");
         }
         return requests;
     }
 
+    /**
+     *
+     * @param income- the income needed to sum for the total income of the program
+     */
     public void addIncome(int income){
         MoneyGained.addAndGet(income);
     }
 
-    public void printStatistics(){
-            System.out.println("Current income summed is " + MoneyGained.toString());
-            showWarehouseStatistics();
-            System.out.println(showFulfilledRentalRequests());
-    }
+    /**
+     * prints the current: 1) total money gained during the simulator
+     *                     2) the amount of tools and materials used so far in the simulator
+     *                     3) the information of the requests fulfilled so far
+     */
 
+
+    public String toString(){
+        StringBuilder currentStatistics = new StringBuilder();
+        currentStatistics.append("Current income summed is " + MoneyGained.toString() + "\n");
+        currentStatistics.append(warehouse.WarehouseStatistics());
+        currentStatistics.append(showFulfilledRentalRequests());
+
+        return new String(currentStatistics);
+    }
 }

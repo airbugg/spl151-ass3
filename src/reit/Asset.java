@@ -20,6 +20,14 @@ public class Asset {
     private final int costPerNight;
     private final int size;
 
+    /**
+     * main constructor, build in the parsing stage and stored in Assets
+     * @param name
+     * @param type
+     * @param location
+     * @param costPerNight
+     * @param size
+     */
     Asset(String name, String type, Location location,
                  int costPerNight, int size) {
         this.name = name;
@@ -31,14 +39,27 @@ public class Asset {
         this.size = size;
     }
 
+    /**
+     * adding contents to the contents ArrayList
+     * @param name
+     * @param repairMultiplier
+     */
     public void addContent(String name, double repairMultiplier) {
         assetContentContainer.add(new AssetContent(name, repairMultiplier));
     }
 
+    /**
+     *
+     * @return - is the asset wracked?
+     */
     boolean isWrecked() {
         return (status == Status.UNAVAILABLE);
     }
 
+    /**
+     * raise the damage for
+     * @param percentage
+     */
     synchronized void updateDamage(double percentage) {
 
         for (AssetContent assetContent : assetContentContainer) {
