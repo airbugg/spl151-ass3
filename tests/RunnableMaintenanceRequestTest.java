@@ -30,7 +30,7 @@ public class RunnableMaintenanceRequestTest {
 
     }
 
-    private Warehouse generateWarehouse() {
+    public static Warehouse generateWarehouse() {
         Warehouse warehouse = new Warehouse();
         warehouse.addRepairTool("driller",200);
         warehouse.addRepairTool("spoon",200);
@@ -47,9 +47,9 @@ public class RunnableMaintenanceRequestTest {
     }
 
     private Assets generateAssets() {
-        ArrayList<Asset> assetList = new ArrayList<Asset>();
-        assetList.add(new Asset("gals","house",1,1,AssetTest.generateContentList(),500,4));
-        return new Assets(assetList);
+        Assets assets = new Assets();
+        assets.addAsset(new Asset("gals","house",1,1,AssetTest.generateContentList(),500,4));
+        return assets;
     }
 
     private HashMap<String, LinkedList<RepairMaterialInformation>> generateRepairMaterialInformationContainer() {

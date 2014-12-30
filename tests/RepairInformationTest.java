@@ -1,11 +1,7 @@
-import javafx.util.Pair;
 import org.junit.Before;
-import org.junit.Test;
+import reit.RepairInformation;
 
-import java.util.Iterator;
 import java.util.LinkedList;
-
-import static org.junit.Assert.*;
 
 public class RepairInformationTest {
 

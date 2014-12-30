@@ -1,5 +1,8 @@
+package reit;
+
 /**
  * Created by airbag on 12/9/14.
  */
-public class DamageReport {
+public class Logger {
+
 }
