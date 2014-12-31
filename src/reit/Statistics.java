@@ -8,6 +8,14 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
+ * Statistics:
+ * This class keeps simulator's given-time statistics about:
+ * 1) how much money was gained soo far
+ * 2) amount of tools and materials used soo far
+ * 3) fulfilled rental requests and their information
+ *
+ * to our enjoyment
+ *
  * Created by airbag on 12/9/14.
  */
 public class Statistics {

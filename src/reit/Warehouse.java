@@ -18,7 +18,7 @@ public class Warehouse {
 
 
     /**
-     * default constructor, initializing the data-structures of the object
+     * Main constructor, initializing the data-structures of the object
      */
     public Warehouse() {
         this.repairToolContainer = new HashMap<String, RepairTool>();
@@ -27,26 +27,27 @@ public class Warehouse {
 
 
     /**
-     * adding new tool to the container
+     * Adding new tool to the container
      * @param toolName
-     * @param quantity - the initialized quantity (might change during the run of the simulator)
+     * @param quantity - the quantity of tools in the warehouse
      */
     public void addRepairTool(String toolName, int quantity) {
         repairToolContainer.put(toolName, new RepairTool(toolName, quantity));
     }
 
     /**
-     * adding new material to the container
+     * Adding new material to the container
      * @param materialName
-     * @param quantity - the initialized quantity (might change during the run of the simulator)
+     * @param quantity - the quantity of tools in the warehouse
      */
     public void addRepairMaterial(String materialName, int quantity) {
         repairMaterialContainer.put(materialName, new RepairMaterial(materialName, quantity));
     }
 
     /**
+     *Simulates renting a tool from the warehouse
      *
-     * @param toolName - the tool need to be rent
+     * @param toolName - the tool needed to be rent
      * @param quantity - the quantity needed
      */
     public void rentATool(String toolName, int quantity) {
@@ -54,6 +55,7 @@ public class Warehouse {
     }
 
     /**
+     *Simulates taking a material from the warehouse
      *
      * @param materialName - the material needed
      * @param quantity - the quantity needed
@@ -63,17 +65,20 @@ public class Warehouse {
     }
 
     /**
+     *Simulates returning a tool from the warehouse
      *
-     * @param toolName
-     * @param quantity
+     * @param toolName - the tool returning
+     * @param quantity - the quantity returned
      */
     public void releaseTool(String toolName, int quantity) {
         repairToolContainer.get(toolName).releaseTool(quantity);
     }
 
     /**
-     * a part of the statistics printing, printing the amount of
-     * tools/materials used so far in the simulator
+     * A part of the statistics printing.
+     *
+     * @return - a StringBuilder consists of the amount of tool/materials used soo far in the simulator
+     * (for each tool/material)
      */
     public synchronized StringBuilder WarehouseStatistics() {
         StringBuilder WarehouseStatistics = new StringBuilder();
