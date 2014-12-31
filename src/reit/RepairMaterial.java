@@ -15,6 +15,7 @@ class RepairMaterial implements Comparable<RepairMaterial> {
     RepairMaterial(String materialName, int quantity) {
         this.materialName = materialName;
         this.quantity = new Semaphore(quantity);
+        totalAcquired = new AtomicInteger(0);
 
     }
 

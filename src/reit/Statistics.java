@@ -42,7 +42,7 @@ public class Statistics {
     public StringBuilder showFulfilledRentalRequests(){
         StringBuilder requests = new StringBuilder();
         for(Map.Entry<String,RentalRequest> entry : rentalRequestsFulfilled.entrySet()){
-            requests.append("request id: " + entry.getKey() + " was fulfilled by the asset: " + entry.getValue().getAssetName() + "\n");
+            requests.append("\n" + "request id: " + entry.getKey() + " was fulfilled by the asset: " + entry.getValue().getAssetName() + "\n");
         }
         return requests;
     }
@@ -64,7 +64,7 @@ public class Statistics {
 
     public String toString(){
         StringBuilder currentStatistics = new StringBuilder();
-        currentStatistics.append("Current income summed is " + MoneyGained.toString() + "\n");
+        currentStatistics.append("Current income summed is " + MoneyGained.toString() + "\n\n");
         currentStatistics.append(warehouse.WarehouseStatistics());
         currentStatistics.append(showFulfilledRentalRequests());
 
