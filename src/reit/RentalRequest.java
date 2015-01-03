@@ -5,6 +5,8 @@ package reit;
  */
 class RentalRequest {
 
+
+
     // fields
     private enum RequestStatus {INCOMPLETE, FULFILLED, INPROGRESS, COMPLETE}
     private RequestStatus requestStatus;
@@ -32,6 +34,10 @@ class RentalRequest {
         this.asset = asset;
         requestStatus = RequestStatus.FULFILLED;
         Management.logger.info(getId() + " status changed to FULFILLED.");
+    }
+
+    public int calculateCost() {
+        return durationOfStay*asset.getCostPerNight();
     }
 
     boolean isSuitable(Asset asset) {

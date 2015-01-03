@@ -42,6 +42,8 @@ class RunnableCustomerGroupManager implements Runnable {
             }
             try {
                 simulateStay(currentRequest);
+                management.addFulfilledRequestToStatistics(currentRequest.getId(),currentRequest);
+                management.addIncomeToStatistics(currentRequest.calculateCost()*customerGroupDetails.numOfCustomers());
             } catch (ExecutionException e) {
                 e.printStackTrace();
             } catch (InterruptedException e) {
@@ -84,6 +86,5 @@ class RunnableCustomerGroupManager implements Runnable {
         Management.logger.info(damageDetails.append("====> [Total Damage=").append(Math.round(totalDamage)).append("]").toString());
         management.submitDamageReport(currentRequest.createDamageReport(totalDamage));
         Management.logger.info(customerGroupDetails.getName() + " has submitted a damage report to management.");
-
     }
 }

@@ -189,6 +189,8 @@ public class Asset {
         return "[" + name + "]";
     }
 
+    int getCostPerNight(){ return costPerNight;}
+
     /**
      *
      * @return - A string representing the state of the asset

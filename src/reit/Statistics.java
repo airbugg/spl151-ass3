@@ -72,7 +72,7 @@ public class Statistics {
 
     public String toString(){
         StringBuilder currentStatistics = new StringBuilder();
-        currentStatistics.append("Current income summed is " + MoneyGained.toString() + "\n\n");
+        currentStatistics.append("Current income summed is " + MoneyGained.toString() + "NIS" + "\n\n");
         currentStatistics.append(warehouse.WarehouseStatistics());
         currentStatistics.append(showFulfilledRentalRequests());
 

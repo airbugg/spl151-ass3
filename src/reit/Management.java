@@ -61,6 +61,7 @@ public class Management {
             updateDamage(); // iterate over acquired damage reports, update damage.
             beginMaintenanceShift(); // call maintenance
             beginNewShift(); // notify clerks a new shift has begun.
+            System.out.println(statistics.toString()); //print statistics at the end of all shifts
         }
     }
 
