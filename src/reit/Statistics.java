@@ -45,12 +45,16 @@ public class Statistics {
 
     /**
      *
-     * @return- StringBulder of fulfilled requests and their information
+     * @return- StringBuilder of fulfilled requests and their information
      */
     public StringBuilder showFulfilledRentalRequests(){
         StringBuilder requests = new StringBuilder();
         for(Map.Entry<String,RentalRequest> entry : rentalRequestsFulfilled.entrySet()){
-            requests.append("\n" + "request id: " + entry.getKey() + " was fulfilled by the asset: " + entry.getValue().getAssetName() + "\n");
+            requests.append("\nrequest id: ");
+            requests.append(entry.getKey());
+            requests.append(" was fulfilled by the asset: ");
+            requests.append(entry.getValue().getAssetName());
+            requests.append("\n");
         }
         return requests;
     }
@@ -68,11 +72,11 @@ public class Statistics {
      *                     2) the amount of tools and materials used so far in the simulator
      *                     3) the information of the requests fulfilled so far
      */
-
-
     public String toString(){
         StringBuilder currentStatistics = new StringBuilder();
-        currentStatistics.append("Current income summed is " + MoneyGained.toString() + "NIS" + "\n\n");
+        currentStatistics.append("Current income summed is ");
+        currentStatistics.append(MoneyGained.toString());
+        currentStatistics.append(" NIS\n\n");
         currentStatistics.append(warehouse.WarehouseStatistics());
         currentStatistics.append(showFulfilledRentalRequests());
 

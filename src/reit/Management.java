@@ -50,6 +50,10 @@ public class Management {
         statistics = new Statistics(warehouse);
     }
 
+    /**
+     * simulate:
+     * Starts program simulation. Calls secondary helper functions to launch Customer & Clerk threads.
+     */
     public void simulate() { // main simulation loop
 
         init();
@@ -61,18 +65,18 @@ public class Management {
             updateDamage(); // iterate over acquired damage reports, update damage.
             beginMaintenanceShift(); // call maintenance
             beginNewShift(); // notify clerks a new shift has begun.
-            System.out.println(statistics.toString()); //print statistics at the end of all shifts
+            System.out.println(statistics); //print statistics at the end of all shifts
         }
     }
 
     /**
-     *
+     * addIncomeToStatistics:
      * @param income = the income got from a single rental and should be summed with the rest of the bling-blings.
      */
     public void addIncomeToStatistics(int income){ statistics.addIncome(income);    }
 
     /**
-     *
+     * addFulfilledRequestToStatistics:
      * @param id - the id of the request fulfilled.
      * @param request - the request fulfilled.
      */
@@ -83,6 +87,7 @@ public class Management {
     }
 
     /**
+     * addAsset:
      * @param name
      * @param type
      * @param size
@@ -248,5 +253,4 @@ public class Management {
         nUnhandledRequestsPerShift = nUnhandledRequests.get();
         reportSemaphore.release(nUnhandledRequestsPerShift); // filling it up again, before clerks' next shift begins
     }
-
 }
