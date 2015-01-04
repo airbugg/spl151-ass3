@@ -6,10 +6,10 @@
     <property name="jar.dir"    value="${build.dir}/jar"/>
     <property name="main-class" value="Driver"/>
 
-    <property name="arg0" value="xml/InitialData.xml"/>
-    <property name="arg1" value="xml/AssetContentsRepairDetails.xml"/>
-    <property name="arg2" value="xml/Assets.xml"/>
-    <property name="arg3" value="xml/CustomersGroups.xml"/>
+    <property name="arg0" value="InitialData.xml"/>
+    <property name="arg1" value="AssetContentsRepairDetails.xml"/>
+    <property name="arg2" value="Assets.xml"/>
+    <property name="arg3" value="CustomersGroups.xml"/>
 
     <target name="clean">
         <delete dir="${build.dir}/classes"/>
