@@ -73,16 +73,12 @@ public class Management {
         try {
             nClerksWorking.await(); // waiting for all clerks to declare unemployment before printing statistics.
             synchronized (System.err) {
-                //System.out.println(statistics); //print statistics
+                LOGGER.info(statistics.toString());
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
-    }
-
-    public void printStatistics() {
-        System.out.println(statistics);
     }
 
     /**
