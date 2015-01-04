@@ -13,8 +13,8 @@ public class Management {
 
     // fields
     public static final Logger LOGGER = Logger.getLogger(Management.class.getName());
-    public static final int DAYS_TO_MILLISECONDS = 240;
-    public static final int SEC_TO_MILL = 10;
+    public static final int DAYS_TO_MILLISECONDS = 24000;
+    public static final int SEC_TO_MILL = 1000;
 
     private final Warehouse warehouse;
     private final Assets assets;
@@ -72,10 +72,13 @@ public class Management {
         }
         try {
             nClerksWorking.await(); // waiting for all clerks to declare unemployment before printing statistics.
+            synchronized (System.err) {
+                System.out.println(statistics); //print statistics
+            }
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        System.out.println(statistics); //print statistics
+
     }
 
     /**
