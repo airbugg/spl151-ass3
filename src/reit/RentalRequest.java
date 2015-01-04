@@ -56,16 +56,8 @@ class RentalRequest {
         Management.logger.info(getId() + " status changed to COMPLETE.");
     }
 
-    void incomplete() {
-        requestStatus = RequestStatus.INCOMPLETE;
-    }
-
     int stay() {
         return durationOfStay * Management.DAYS_TO_MILLISECONDS;
-    }
-
-    void updateDamage(double damagePercentage) {
-        asset.updateDamage(damagePercentage);
     }
 
     DamageReport createDamageReport(double totalDamage) {

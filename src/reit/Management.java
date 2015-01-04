@@ -65,7 +65,10 @@ public class Management {
             updateDamage(); // iterate over acquired damage reports, update damage.
             beginMaintenanceShift(); // call maintenance
             beginNewShift(); // notify clerks a new shift has begun.
-            System.out.println(statistics); //print statistics at the end of all shifts
+
+            synchronized (System.out) {
+                System.out.println(statistics); //print statistics at the end of all shifts
+            }
         }
     }
 
@@ -101,45 +104,88 @@ public class Management {
         return asset;
     }
 
+    /**
+     * addCustomerGroup:
+     * Adds a new CustomerGroup to container.
+     * @param groupManager - Name of groupManager.
+     * @return CustomerGroupDetails object.
+     */
     public CustomerGroupDetails addCustomerGroup(String groupManager) {
         CustomerGroupDetails customerGroupDetails = new CustomerGroupDetails(groupManager);
         customers.add(customerGroupDetails);
         return customerGroupDetails;
     }
 
+    /**
+     * addNewContentRepairInformation:
+     * Adds new ContentRepairInformation object for a specific AssetContent.
+     * @param content
+     */
     public void addNewContentRepairInformation(String content) {
         repairToolInformationMap.put(content, new ArrayList<RepairToolInformation>());
         repairMaterialInformationMap.put(content, new ArrayList<RepairMaterialInformation>());
 
     }
 
+    /**
+     * addItemRepairMaterialInformation:
+     * Adds new ItemRepairMaterialInformation object to the list of repair materials required for content.
+     * @param content
+     * @param repairMaterialName
+     * @param quantity
+     */
     public void addItemRepairMaterialInformation(String content,
                                                  String repairMaterialName,
                                                  int quantity) {
         repairMaterialInformationMap.get(content).add(new RepairMaterialInformation(repairMaterialName, quantity));
     }
-
+    /**
+     * addItemRepairToolInformation:
+     * Adds new ItemRepairToolInformation object to the list of repair tools required for content.
+     * @param content
+     * @param repairToolName
+     * @param quantity
+     */
     public void addItemRepairToolInformation(String content,
                                              String repairToolName,
                                              int quantity) {
         repairToolInformationMap.get(content).add(new RepairToolInformation(repairToolName, quantity));
     }
 
-
+    /**
+     * setTotalNumberOfRentalRequests:
+     * Sets total number of expected rental requests.
+     * @param nRentalRequests
+     */
     public void setTotalNumberOfRentalRequests(int nRentalRequests) {
         this.nUnhandledRequests.set(nRentalRequests);
         this.nUnhandledRequestsPerShift = nRentalRequests;
     }
 
+    /**
+     * setNumberOfMaintenanceWorkers:
+     * Sets total number of maintenance workers in simulation.
+     * @param nMaintenanceWorkers
+     */
     public void setNumberOfMaintenanceWorkers(int nMaintenanceWorkers) {
         this.nMaintenanceWorkers = nMaintenanceWorkers;
     }
 
+    /**
+     * submitDamageReport:
+     * Submits a new damageReport to be handled.
+     * @param damageReport
+     */
     public void submitDamageReport(DamageReport damageReport) {
         assets.submitDamageReport(damageReport); // submit report to Assets.
         reportSemaphore.release(1);
     }
 
+    /**
+     * addRentalRequest:
+     * Adds new rental request object to collection.
+     * @param rentalRequest
+     */
     public void addRentalRequest(RentalRequest rentalRequest) {
         rentalRequests.add(rentalRequest);
     }
@@ -192,6 +238,7 @@ public class Management {
     private void beginMaintenanceShift() {
         logger.info("MANAGEMENT: Maintenance shift begins.. Retrieving damaged asset list.");
         ArrayList<Asset> damagedAssets = assets.getDamagedAssets();
+
         // initialize latch. when this reaches zero, maintenance work is done.
         CountDownLatch maintenanceShiftLatch = new CountDownLatch(damagedAssets.size());
 

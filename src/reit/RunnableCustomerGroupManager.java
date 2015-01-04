@@ -15,7 +15,7 @@ class RunnableCustomerGroupManager implements Runnable {
 
 
     RunnableCustomerGroupManager(Management management,
-                                        CustomerGroupDetails customerGroupDetails) {
+                                 CustomerGroupDetails customerGroupDetails) {
         this.management = management;
         this.customerGroupDetails = customerGroupDetails;
 
