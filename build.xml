@@ -26,6 +26,15 @@
         <compilerarg line="-proc:none"/>
         </javac>
     </target>
+    
+    <target name="jar" depends="compile">
+        <mkdir dir="${jar.dir}"/>
+        <jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${classes.dir}">
+            <manifest>
+                <attribute name="Main-class" value="${main-class}"/>
+            </manifest>
+        </jar>
+    </target>
 
 
     <target name="run"  depends="jar">
