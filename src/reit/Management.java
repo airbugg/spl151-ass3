@@ -5,7 +5,8 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
 
-/**
+/** Management:
+ *  This class controls the overall logic of simulation flow.
  * Created by airbag on 12/8/14.
  */
 public class Management {
@@ -95,12 +96,12 @@ public class Management {
 
     /**
      * addAsset:
-     * @param name
-     * @param type
-     * @param size
-     * @param location
-     * @param cost
-     * @return
+     * @param name - name of asset
+     * @param type - type of asset
+     * @param size - size of asset
+     * @param location - location of asset
+     * @param cost - cost of asset, per night, per person
+     * @return - said asset.
      */
     public Asset addAsset (String name, String type, int size, Location location, int cost) {
         Asset asset = new Asset(name, type, location, cost, size);
@@ -123,7 +124,7 @@ public class Management {
     /**
      * addNewContentRepairInformation:
      * Adds new ContentRepairInformation object for a specific AssetContent.
-     * @param content
+     * @param content - content to add
      */
     public void addNewContentRepairInformation(String content) {
         repairToolInformationMap.put(content, new ArrayList<RepairToolInformation>());
@@ -134,9 +135,9 @@ public class Management {
     /**
      * addItemRepairMaterialInformation:
      * Adds new ItemRepairMaterialInformation object to the list of repair materials required for content.
-     * @param content
-     * @param repairMaterialName
-     * @param quantity
+     * @param content - content name
+     * @param repairMaterialName - repair material name
+     * @param quantity - quantity to add
      */
     public void addItemRepairMaterialInformation(String content,
                                                  String repairMaterialName,
@@ -146,9 +147,9 @@ public class Management {
     /**
      * addItemRepairToolInformation:
      * Adds new ItemRepairToolInformation object to the list of repair tools required for content.
-     * @param content
-     * @param repairToolName
-     * @param quantity
+     * @param content - content name
+     * @param repairToolName - repair tool name
+     * @param quantity - quantity to add
      */
     public void addItemRepairToolInformation(String content,
                                              String repairToolName,
@@ -159,7 +160,7 @@ public class Management {
     /**
      * setTotalNumberOfRentalRequests:
      * Sets total number of expected rental requests.
-     * @param nRentalRequests
+     * @param nRentalRequests - # of rental requests
      */
     public void setTotalNumberOfRentalRequests(int nRentalRequests) {
         this.nUnhandledRequests.set(nRentalRequests);
@@ -169,7 +170,7 @@ public class Management {
     /**
      * setNumberOfMaintenanceWorkers:
      * Sets total number of maintenance workers in simulation.
-     * @param nMaintenanceWorkers
+     * @param nMaintenanceWorkers - # of maintenance workers available.
      */
     public void setNumberOfMaintenanceWorkers(int nMaintenanceWorkers) {
         this.nMaintenanceWorkers = nMaintenanceWorkers;
@@ -178,7 +179,7 @@ public class Management {
     /**
      * submitDamageReport:
      * Submits a new damageReport to be handled.
-     * @param damageReport
+     * @param damageReport - the damage report to be submitted.
      */
     public void submitDamageReport(DamageReport damageReport) {
         assets.submitDamageReport(damageReport); // submit report to Assets.
@@ -188,7 +189,7 @@ public class Management {
     /**
      * addRentalRequest:
      * Adds new rental request object to collection.
-     * @param rentalRequest
+     * @param rentalRequest - the rental request to be added.
      */
     public void addRentalRequest(RentalRequest rentalRequest) {
         rentalRequests.add(rentalRequest);
@@ -222,7 +223,7 @@ public class Management {
     }
 
     private void runCustomers() {
-        LOGGER.info("MANAGEMENT: Initializing reit.Customer Groups...");
+        LOGGER.info("MANAGEMENT: Initializing Customer Groups...");
         for (CustomerGroupDetails customerGroup : customers) {
             new Thread(new RunnableCustomerGroupManager(this, customerGroup)).start();
         }
