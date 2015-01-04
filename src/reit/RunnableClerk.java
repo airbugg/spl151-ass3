@@ -1,9 +1,6 @@
 package reit;
 
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.BrokenBarrierException;
-import java.util.concurrent.CyclicBarrier;
-import java.util.concurrent.Semaphore;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
@@ -21,6 +18,7 @@ class RunnableClerk implements Runnable {
     private AtomicInteger nUnhandledRequests;
     private Semaphore reportSemaphore;
     private Object beginNewShift;
+    private CountDownLatch nClerksWorking;
 
     RunnableClerk(ClerkDetails clerkDetails,
                          BlockingQueue<RentalRequest> rentalRequests,
@@ -28,7 +26,8 @@ class RunnableClerk implements Runnable {
                          Assets assets,
                          AtomicInteger nUnhandledRequests,
                          Semaphore reportSemaphore,
-                         Object beginNewShift) {
+                         Object beginNewShift,
+                         CountDownLatch nClerksWorking) {
         this.clerkDetails = clerkDetails;
         this.rentalRequests = rentalRequests;
         this.barrier = barrier;
@@ -37,12 +36,13 @@ class RunnableClerk implements Runnable {
         this.nUnhandledRequests = nUnhandledRequests;
         this.reportSemaphore = reportSemaphore;
         this.beginNewShift = beginNewShift;
+        this.nClerksWorking = nClerksWorking;
     }
 
 
     @Override
     public void run() {
-        while (nUnhandledRequests.get() > 0) {
+        while (nUnhandledRequests.getAndDecrement() > 0) { // thread safety is a must. decrement request count by 1 per iteration.
             while (shiftLength < 8) { // 8 hour shifts..
                 Management.LOGGER.info(clerkDetails.getName() + " is up!");
                 try {
@@ -54,7 +54,6 @@ class RunnableClerk implements Runnable {
                         travelToAsset(asset); // wasting time
                         currentRequest.fulfill(clerkDetails, asset);
                         reportSemaphore.acquire(1);
-                        nUnhandledRequests.getAndDecrement(); // decrement unhandled requests count by one, safely..
                         currentRequest.notifyAll(); // asset is booked, request fulfilled. notify customers.
                     }
 
@@ -77,8 +76,8 @@ class RunnableClerk implements Runnable {
                 e.printStackTrace();
             }
         }
-
         Management.LOGGER.info(clerkDetails.getName() + ": NO RENTAL REQUESTS LEFT. TERMINATING...");
+        nClerksWorking.countDown();
     }
 
     private void travelToAsset(Asset asset) throws InterruptedException {

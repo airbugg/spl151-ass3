@@ -46,7 +46,7 @@ public class Statistics {
      *
      * @return- StringBuilder of fulfilled requests and their information
      */
-    public StringBuilder showFulfilledRentalRequests(){
+    private StringBuilder showFulfilledRentalRequests(){
         StringBuilder requests = new StringBuilder("[RENTAL REQUESTS STATISTICS]\n\n");
         for(RentalRequest rentalRequest : rentalRequestsFulfilled) {
             requests.append(rentalRequest.getId());
@@ -67,7 +67,7 @@ public class Statistics {
      *
      * @param income- the income needed to sum for the total income of the program
      */
-    public void addIncome(int income){
+    void addIncome(int income){
         MoneyGained.addAndGet(income);
     }
 

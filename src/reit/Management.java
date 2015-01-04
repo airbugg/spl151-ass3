@@ -12,8 +12,8 @@ public class Management {
 
     // fields
     public static final Logger LOGGER = Logger.getLogger(Management.class.getName());
-    public static final int DAYS_TO_MILLISECONDS = 240;
-    public static final int SEC_TO_MILL = 10;
+    public static final int DAYS_TO_MILLISECONDS = 24000;
+    public static final int SEC_TO_MILL = 1000;
 
     private final Warehouse warehouse;
     private final Assets assets;
@@ -25,6 +25,7 @@ public class Management {
     private final Semaphore reportSemaphore;
     private CyclicBarrier clerkShiftBarrier;
     private final AtomicInteger nUnhandledRequests;
+    private CountDownLatch nClerksWorking;
     private int nUnhandledRequestsPerShift;
     private final Object beginNewShift;
     private final BlockingQueue<RentalRequest> rentalRequests;
@@ -47,6 +48,7 @@ public class Management {
         this.nMaintenanceWorkers = 0;
         this.beginNewShift = new Object();
         this.reportSemaphore = new Semaphore(0);
+        this.nClerksWorking = null;
         statistics = new Statistics(warehouse);
     }
 
@@ -68,18 +70,18 @@ public class Management {
 
         }
         try {
-            Thread.sleep(1000);
+            nClerksWorking.await(); // waiting for all clerks to declare unemployment before printing statistics.
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        System.out.println(statistics); //print statistic
+        System.out.println(statistics); //print statistics
     }
 
     /**
      * addIncomeToStatistics:
      * @param income = the income got from a single rental and should be summed with the rest of the bling-blings.
      */
-    public void addIncomeToStatistics(int income){ statistics.addIncome(income);    }
+    void addIncomeToStatistics(int income){ statistics.addIncome(income);    }
 
     /**
      * addFulfilledRequestToStatistics:
@@ -216,6 +218,7 @@ public class Management {
     private void init() {
         reportSemaphore.release(nUnhandledRequests.get()); // initialize reportSemaphore to # of rental requests
         nUnhandledRequestsPerShift = nUnhandledRequests.get(); // before the simulation begins, these are equal
+        nClerksWorking = new CountDownLatch(clerks.size());
     }
 
     private void runCustomers() {
@@ -233,7 +236,8 @@ public class Management {
             new Thread(new RunnableClerk(clerk, rentalRequests,
                     clerkShiftBarrier, assets,
                     nUnhandledRequests, reportSemaphore,
-                    beginNewShift)).start();
+                    beginNewShift,
+                    nClerksWorking)).start();
         }
     }
 
@@ -260,8 +264,8 @@ public class Management {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        maintenanceExecutor.shutdown();
         LOGGER.info("MAINTENANCE: Done! let's hit the bar!");
+        maintenanceExecutor.shutdown();
         // done. let's hit the bar!
     }
 

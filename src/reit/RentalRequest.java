@@ -55,7 +55,7 @@ class RentalRequest {
     }
 
     int calculateCost() {
-        return durationOfStay*asset.getCostPerNight();
+        return durationOfStay*asset.getCostPerNight()*fCustomerGroupDetails.numOfCustomers();
     }
 
     boolean isSuitable(Asset asset) {

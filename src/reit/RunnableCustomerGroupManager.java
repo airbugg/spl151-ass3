@@ -43,7 +43,7 @@ class RunnableCustomerGroupManager implements Runnable {
             try {
                 simulateStay(currentRequest);
                 management.addFulfilledRequestToStatistics(currentRequest);
-                management.addIncomeToStatistics(currentRequest.calculateCost()*customerGroupDetails.numOfCustomers());
+                management.addIncomeToStatistics(currentRequest.calculateCost());
             } catch (ExecutionException e) {
                 e.printStackTrace();
             } catch (InterruptedException e) {
