@@ -22,14 +22,17 @@
         <javac srcdir="${src.dir}/reit" destdir="${classes.dir}"/>
     </target>
 
-    <target name="jar" depends="compile">
-        <mkdir dir="${jar.dir}"/>
-        <jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${classes.dir}">
-            <manifest>
-                <attribute name="Main-class" value="${main-class}"/>
-            </manifest>
-        </jar>
+    <target name="compile">
+        <mkdir dir="${build.dir}"/>
+        <mkdir dir="${classes.dir}"/>
+        <javac  includeantruntime="false" srcdir="${src.dir}" destdir="${classes.dir}">
+        <compilerarg line="-proc:none"/>
+        </javac>
+        <javac  includeantruntime="false" srcdir="${src.dir}/reit" destdir="${classes.dir}">
+        <compilerarg line="-proc:none"/>
+        </javac>
     </target>
+
 
     <target name="run"  depends="jar">
         <java jar="${jar.dir}/${ant.project.name}.jar"  fork="true">
