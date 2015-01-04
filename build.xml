@@ -15,12 +15,6 @@
         <delete dir="${build.dir}/classes"/>
     </target>
 
-    <target name="compile">
-        <mkdir dir="${build.dir}"/>
-        <mkdir dir="${classes.dir}"/>
-        <javac srcdir="${src.dir}" destdir="${classes.dir}"/>
-        <javac srcdir="${src.dir}/reit" destdir="${classes.dir}"/>
-    </target>
 
     <target name="compile">
         <mkdir dir="${build.dir}"/>
