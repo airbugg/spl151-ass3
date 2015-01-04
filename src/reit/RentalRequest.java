@@ -1,10 +1,7 @@
 package reit;
 
-import java.sql.Time;
-import java.time.LocalTime;
-
 /**
- * Created by airbag on 12/9/14.
+ * Rental Request Class
  */
 class RentalRequest {
 
@@ -20,7 +17,6 @@ class RentalRequest {
     private final int assetSize;
     private final int durationOfStay;
     private Asset asset;
-    private Time fTime;
 
     RentalRequest(String id, String assetType, int assetSize, int durationOfStay,
                   CustomerGroupDetails customerGroupDetails) {
@@ -30,7 +26,6 @@ class RentalRequest {
         this.durationOfStay = durationOfStay;
         this.fCustomerGroupDetails = customerGroupDetails;
         this.fClerkDetails = null;
-        this.fTime = null;
         requestStatus = RequestStatus.INCOMPLETE;
     }
 
@@ -44,12 +39,11 @@ class RentalRequest {
 
     String getClerkName() { return fClerkDetails.getName(); }
 
-    String getRequestFulfilmentTime() { return "[" + fTime.toString() + "]"; }
+    String getRequestFulfilmentTime() { return "[" + new java.util.Date().toString() + "]"; }
 
     void fulfill(ClerkDetails clerkDetails, Asset asset) {
         this.asset = asset;
         this.fClerkDetails = clerkDetails;
-        this.fTime = Time.valueOf(LocalTime.now());
         requestStatus = RequestStatus.FULFILLED;
         Management.LOGGER.info(getId() + " status changed to FULFILLED.");
     }

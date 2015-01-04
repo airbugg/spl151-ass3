@@ -13,8 +13,8 @@ public class Management {
 
     // fields
     public static final Logger LOGGER = Logger.getLogger(Management.class.getName());
-    public static final int DAYS_TO_MILLISECONDS = 24000;
-    public static final int SEC_TO_MILL = 1000;
+    public static final int DAYS_TO_MILLISECONDS = 240;
+    public static final int SEC_TO_MILL = 10;
 
     private final Warehouse warehouse;
     private final Assets assets;

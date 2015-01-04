@@ -1,10 +1,6 @@
 package reit;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -44,7 +40,7 @@ public class Statistics {
 
     /**
      *
-     * @return- StringBuilder of fulfilled requests and their information
+     * @return - StringBuilder of fulfilled requests and their information
      */
     private StringBuilder showFulfilledRentalRequests(){
         StringBuilder requests = new StringBuilder("[RENTAL REQUESTS STATISTICS]\n\n");
@@ -54,7 +50,7 @@ public class Statistics {
             requests.append(rentalRequest.getCustomerManagerName());
             requests.append("\tfor asset ");
             requests.append(rentalRequest.getAssetName());
-            requests.append("\tFulfilled at ");
+            requests.append("\tFulfilled on ");
             requests.append(rentalRequest.getRequestFulfilmentTime());
             requests.append("\tby ");
             requests.append(rentalRequest.getClerkName());
