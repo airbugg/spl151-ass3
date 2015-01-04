@@ -283,7 +283,7 @@ public final class XMLParser {
 
                     }
                     if (endElement.equals("Customer")) { // adding new CustomerDetails object to CustomerGroup
-                        customerGroupDetails.addCustomer(id, vandalismType, minDamage, maxDamage);
+                        customerGroupDetails.addCustomer(name, vandalismType, minDamage, maxDamage);
 
                     }
                     if (endElement.equals("Type")) {
@@ -299,7 +299,7 @@ public final class XMLParser {
 
                     }
                     if (endElement.equals("Request")) { // adding new RentalRequest to CustomerGroup
-                        customerGroupDetails.addRentalRequest(name, type, size, duration);
+                        customerGroupDetails.addRentalRequest(id, type, size, duration);
 
                     }
                     break;

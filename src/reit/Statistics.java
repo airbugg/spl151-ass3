@@ -21,7 +21,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class Statistics {
     private Warehouse warehouse;
     private AtomicInteger MoneyGained;
-    private HashMap<String,RentalRequest> rentalRequestsFulfilled;
+    private ArrayList<RentalRequest> rentalRequestsFulfilled;
 
     /**
      * default constructor
@@ -29,17 +29,16 @@ public class Statistics {
      */
     public Statistics(Warehouse warehouse){
         this.warehouse = warehouse;
-        rentalRequestsFulfilled = new HashMap<String, RentalRequest>();
+        rentalRequestsFulfilled = new ArrayList<RentalRequest>();
         MoneyGained = new AtomicInteger(0);
     }
 
     /**
      *
-     * @param id- the id of the request fulfilled
      * @param request- the request fulfilled
      */
-    public synchronized void addFulfilledRequest(String id, RentalRequest request) {
-        rentalRequestsFulfilled.put(id,request);
+    public synchronized void addFulfilledRequest(RentalRequest request) {
+        rentalRequestsFulfilled.add(request);
     }
 
 
@@ -48,12 +47,17 @@ public class Statistics {
      * @return- StringBuilder of fulfilled requests and their information
      */
     public StringBuilder showFulfilledRentalRequests(){
-        StringBuilder requests = new StringBuilder();
-        for(Map.Entry<String,RentalRequest> entry : rentalRequestsFulfilled.entrySet()){
-            requests.append("\nrequest id: ");
-            requests.append(entry.getKey());
-            requests.append(" was fulfilled by the asset: ");
-            requests.append(entry.getValue().getAssetName());
+        StringBuilder requests = new StringBuilder("[RENTAL REQUESTS STATISTICS]\n\n");
+        for(RentalRequest rentalRequest : rentalRequestsFulfilled) {
+            requests.append(rentalRequest.getId());
+            requests.append("\t\t");
+            requests.append(rentalRequest.getCustomerManagerName());
+            requests.append("\tfor asset ");
+            requests.append(rentalRequest.getAssetName());
+            requests.append("\tFulfilled at ");
+            requests.append(rentalRequest.getRequestFulfilmentTime());
+            requests.append("\tby ");
+            requests.append(rentalRequest.getClerkName());
             requests.append("\n");
         }
         return requests;
@@ -74,10 +78,11 @@ public class Statistics {
      */
     public String toString(){
         StringBuilder currentStatistics = new StringBuilder();
-        currentStatistics.append("Current income summed is ");
+        currentStatistics.append("\n[TOTAL INCOME]\n[");
         currentStatistics.append(MoneyGained.toString());
-        currentStatistics.append(" NIS\n\n");
+        currentStatistics.append(" NIS]");
         currentStatistics.append(warehouse.WarehouseStatistics());
+        currentStatistics.append("\n\n");
         currentStatistics.append(showFulfilledRentalRequests());
 
         return new String(currentStatistics);

@@ -32,10 +32,6 @@ class RepairTool implements Comparable<RepairTool> {
         return name;
     }
 
-    int getQuantity() {
-        return quantity.availablePermits();
-    }
-
     public int getTotalAcquired(){ return totalAcquired.get();}
 
     public String toString() {

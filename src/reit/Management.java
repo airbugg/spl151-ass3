@@ -11,9 +11,9 @@ import java.util.logging.Logger;
 public class Management {
 
     // fields
-    public static final Logger logger = Logger.getLogger(Management.class.getName());
-    public static final int DAYS_TO_MILLISECONDS = 24000;
-    public static final int SEC_TO_MILL = 1000;
+    public static final Logger LOGGER = Logger.getLogger(Management.class.getName());
+    public static final int DAYS_TO_MILLISECONDS = 240;
+    public static final int SEC_TO_MILL = 10;
 
     private final Warehouse warehouse;
     private final Assets assets;
@@ -66,10 +66,13 @@ public class Management {
             beginMaintenanceShift(); // call maintenance
             beginNewShift(); // notify clerks a new shift has begun.
 
-            synchronized (System.out) {
-                System.out.println(statistics); //print statistics at the end of all shifts
-            }
         }
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println(statistics); //print statistic
     }
 
     /**
@@ -80,10 +83,9 @@ public class Management {
 
     /**
      * addFulfilledRequestToStatistics:
-     * @param id - the id of the request fulfilled.
      * @param request - the request fulfilled.
      */
-    public void addFulfilledRequestToStatistics(String id, RentalRequest request){ statistics.addFulfilledRequest(id,request);}
+    public void addFulfilledRequestToStatistics(RentalRequest request){ statistics.addFulfilledRequest(request);}
 
     public void addClerk(String name, Location location) {
         clerks.add(new ClerkDetails(name, location));
@@ -217,7 +219,7 @@ public class Management {
     }
 
     private void runCustomers() {
-        logger.info("MANAGEMENT: Initializing reit.Customer Groups...");
+        LOGGER.info("MANAGEMENT: Initializing reit.Customer Groups...");
         for (CustomerGroupDetails customerGroup : customers) {
             new Thread(new RunnableCustomerGroupManager(this, customerGroup)).start();
         }
@@ -226,7 +228,7 @@ public class Management {
     private void runClerks() {
         // ensuring we'll wait for all clerks to end their shift
         clerkShiftBarrier = new CyclicBarrier(clerks.size() + 1); // +1 for management
-        logger.info("MANAGEMENT: Initializing RunnableClerks...");
+        LOGGER.info("MANAGEMENT: Initializing RunnableClerks...");
         for (ClerkDetails clerk : clerks) {
             new Thread(new RunnableClerk(clerk, rentalRequests,
                     clerkShiftBarrier, assets,
@@ -236,14 +238,14 @@ public class Management {
     }
 
     private void beginMaintenanceShift() {
-        logger.info("MANAGEMENT: Maintenance shift begins.. Retrieving damaged asset list.");
+        LOGGER.info("MANAGEMENT: Maintenance shift begins.. Retrieving damaged asset list.");
         ArrayList<Asset> damagedAssets = assets.getDamagedAssets();
 
         // initialize latch. when this reaches zero, maintenance work is done.
         CountDownLatch maintenanceShiftLatch = new CountDownLatch(damagedAssets.size());
 
         ExecutorService maintenanceExecutor = Executors.newFixedThreadPool(nMaintenanceWorkers);
-        logger.info("MANAGEMENT: Executing maintenance worker threads..");
+        LOGGER.info("MANAGEMENT: Executing maintenance worker threads..");
         for (Asset asset : damagedAssets) {
             maintenanceExecutor.execute(new RunnableMaintenanceRequest(asset,
                     repairToolInformationMap,
@@ -259,7 +261,7 @@ public class Management {
             e.printStackTrace();
         }
         maintenanceExecutor.shutdown();
-        logger.info("MAINTENANCE: Done! let's hit the bar!");
+        LOGGER.info("MAINTENANCE: Done! let's hit the bar!");
         // done. let's hit the bar!
     }
 
@@ -269,7 +271,7 @@ public class Management {
 
     private void beginNewShift() {
         synchronized (beginNewShift) {
-            logger.info("MANAGEMENT: CALLING ALL CLERKS!! NEW SHIFT HAS BEGUN!");
+            LOGGER.info("MANAGEMENT: CALLING ALL CLERKS!! NEW SHIFT HAS BEGUN!");
             beginNewShift.notifyAll();
         }
     }

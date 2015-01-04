@@ -66,7 +66,7 @@ class RunnableMaintenanceRequest implements Runnable {
             }
         }
 
-        Management.logger.info("MAINTENANCE: ACQUIRING TOOLS FOR: " + fAsset);
+        Management.LOGGER.info("MAINTENANCE: ACQUIRING TOOLS FOR: " + fAsset);
         for (Map.Entry<String,Integer> entry : requiredTools.entrySet()) { // actually acquire tools..
             warehouse.rentATool(entry.getKey(), entry.getValue());
         }
@@ -87,14 +87,14 @@ class RunnableMaintenanceRequest implements Runnable {
             }
         }
 
-        Management.logger.info("MAINTENANCE: ACQUIRING MATERIALS...");
+        Management.LOGGER.info("MAINTENANCE: ACQUIRING MATERIALS...");
         for (Map.Entry<String,Integer> entry : requiredMaterials.entrySet()) { // actually acquire materials..
             warehouse.takeMaterial(entry.getKey(), entry.getValue());
         }
     }
 
     private void releaseTools() {
-        Management.logger.info("MAINTENANCE: RELEASING TOOLS...");
+        Management.LOGGER.info("MAINTENANCE: RELEASING TOOLS...");
         for (Map.Entry<String,Integer> entry : requiredTools.entrySet()) {
             warehouse.releaseTool(entry.getKey(),entry.getValue());
         }
@@ -102,7 +102,7 @@ class RunnableMaintenanceRequest implements Runnable {
 
 
     private void repairingAsset (long timeToFix) {
-        Management.logger.info("MAINTENANCE: FIXING ASSET...");
+        Management.LOGGER.info("MAINTENANCE: FIXING ASSET...");
         try {
             Thread.sleep(timeToFix);
         } catch (InterruptedException e) {

@@ -44,15 +44,15 @@ class RunnableClerk implements Runnable {
     public void run() {
         while (nUnhandledRequests.get() > 0) {
             while (shiftLength < 8) { // 8 hour shifts..
-                Management.logger.info(clerkDetails.getName() + " is up!");
+                Management.LOGGER.info(clerkDetails.getName() + " is up!");
                 try {
                     currentRequest = rentalRequests.take(); // pull rental request from queue
                     synchronized (currentRequest) {
                         Asset asset = assets.find(currentRequest, clerkDetails);
                         asset.book();
-                        Management.logger.info(asset.getName() + " was booked by " + clerkDetails.getName()); // TODO: update statistics (id, asset)
+                        Management.LOGGER.info(asset.getName() + " was booked by " + clerkDetails.getName()); // TODO: update statistics (id, asset)
                         travelToAsset(asset); // wasting time
-                        currentRequest.fulfill(asset);
+                        currentRequest.fulfill(clerkDetails, asset);
                         reportSemaphore.acquire(1);
                         nUnhandledRequests.getAndDecrement(); // decrement unhandled requests count by one, safely..
                         currentRequest.notifyAll(); // asset is booked, request fulfilled. notify customers.
@@ -63,7 +63,7 @@ class RunnableClerk implements Runnable {
                 }
             }
             try {
-                Management.logger.info(clerkDetails.getName() + " is off-duty.");
+                Management.LOGGER.info(clerkDetails.getName() + " is off-duty.");
                 barrier.await(); // done for today. waiting for everyone else to finish so that I, too, could go home..
 
                 synchronized (beginNewShift) { // praying next shift won't be as bad as the last.
@@ -78,12 +78,12 @@ class RunnableClerk implements Runnable {
             }
         }
 
-        Management.logger.info(clerkDetails.getName() + ": NO RENTAL REQUESTS LEFT. TERMINATING...");
+        Management.LOGGER.info(clerkDetails.getName() + ": NO RENTAL REQUESTS LEFT. TERMINATING...");
     }
 
     private void travelToAsset(Asset asset) throws InterruptedException {
         long timeToSleep = clerkDetails.distanceToTravel(asset) * 2;
-        Management.logger.info(clerkDetails.getName() + " is traveling for " + timeToSleep + " miles.");
+        Management.LOGGER.info(clerkDetails.getName() + " is traveling for " + timeToSleep + " miles.");
         shiftLength += timeToSleep;
         Thread.sleep(timeToSleep * Management.SEC_TO_MILL); // sleep at the wheel, to and fro
     }

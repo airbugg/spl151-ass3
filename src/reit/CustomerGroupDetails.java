@@ -29,7 +29,7 @@ public class CustomerGroupDetails {
     }
 
     public void addRentalRequest(String id, String type, int size, int duration) {
-        rentalRequests.add(new RentalRequest(id, type, size, duration));
+        rentalRequests.add(new RentalRequest(id, type, size, duration, this));
 
     }
 
