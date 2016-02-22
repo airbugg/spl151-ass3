@@ -37,7 +37,7 @@ class RepairMaterial implements Comparable<RepairMaterial> {
     void acquireMaterial (int quantity) {
         try {
             this.quantity.acquire(quantity);
-            totalAcquired.addAndGet(quantity);
+            totalAcquired.getAndAdd(quantity);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

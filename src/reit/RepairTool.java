@@ -18,7 +18,7 @@ class RepairTool implements Comparable<RepairTool> {
     void acquireTool(int quantity) {
         try {
             this.quantity.acquire(quantity);
-            totalAcquired.addAndGet(quantity);
+            totalAcquired.getAndAdd(quantity);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
