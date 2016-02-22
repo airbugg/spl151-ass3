@@ -1,7 +1,7 @@
 package reit;
 
 /**
- * Created by airbag on 12/9/14.
+ * Rental Request Class
  */
 class RentalRequest {
 
@@ -10,17 +10,22 @@ class RentalRequest {
     // fields
     private enum RequestStatus {INCOMPLETE, FULFILLED, INPROGRESS, COMPLETE}
     private RequestStatus requestStatus;
+    private final CustomerGroupDetails fCustomerGroupDetails;
+    private ClerkDetails fClerkDetails;
     private final String id;
     private final String assetType;
     private final int assetSize;
     private final int durationOfStay;
     private Asset asset;
 
-    RentalRequest(String id, String assetType, int assetSize, int durationOfStay) {
+    RentalRequest(String id, String assetType, int assetSize, int durationOfStay,
+                  CustomerGroupDetails customerGroupDetails) {
         this.id = id;
         this.assetType = assetType;
         this.assetSize = assetSize;
         this.durationOfStay = durationOfStay;
+        this.fCustomerGroupDetails = customerGroupDetails;
+        this.fClerkDetails = null;
         requestStatus = RequestStatus.INCOMPLETE;
     }
 
@@ -28,16 +33,23 @@ class RentalRequest {
         return (requestStatus == RequestStatus.FULFILLED);
     }
 
-    public String getAssetName(){ return asset.getName();}
+    String getAssetName(){ return asset.getName();}
 
-    void fulfill(Asset asset) {
+    String getCustomerManagerName() { return fCustomerGroupDetails.getName(); }
+
+    String getClerkName() { return fClerkDetails.getName(); }
+
+    String getRequestFulfilmentTime() { return "[" + new java.util.Date().toString() + "]"; }
+
+    void fulfill(ClerkDetails clerkDetails, Asset asset) {
         this.asset = asset;
+        this.fClerkDetails = clerkDetails;
         requestStatus = RequestStatus.FULFILLED;
-        Management.logger.info(getId() + " status changed to FULFILLED.");
+        Management.LOGGER.info(getId() + " status changed to FULFILLED.");
     }
 
-    public int calculateCost() {
-        return durationOfStay*asset.getCostPerNight();
+    int calculateCost() {
+        return durationOfStay*asset.getCostPerNight()*fCustomerGroupDetails.numOfCustomers();
     }
 
     boolean isSuitable(Asset asset) {
@@ -47,25 +59,17 @@ class RentalRequest {
     void inProgress() {
         requestStatus = RequestStatus.INPROGRESS;
         asset.occupy();
-        Management.logger.info(getId() + " status changed to IN PROGRESS.");
+        Management.LOGGER.info(getId() + " status changed to IN PROGRESS.");
     }
 
     void complete() {
         asset.vacate();
         requestStatus = RequestStatus.COMPLETE;
-        Management.logger.info(getId() + " status changed to COMPLETE.");
-    }
-
-    void incomplete() {
-        requestStatus = RequestStatus.INCOMPLETE;
+        Management.LOGGER.info(getId() + " status changed to COMPLETE.");
     }
 
     int stay() {
         return durationOfStay * Management.DAYS_TO_MILLISECONDS;
-    }
-
-    void updateDamage(double damagePercentage) {
-        asset.updateDamage(damagePercentage);
     }
 
     DamageReport createDamageReport(double totalDamage) {

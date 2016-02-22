@@ -15,7 +15,7 @@ class RunnableCustomerGroupManager implements Runnable {
 
 
     RunnableCustomerGroupManager(Management management,
-                                        CustomerGroupDetails customerGroupDetails) {
+                                 CustomerGroupDetails customerGroupDetails) {
         this.management = management;
         this.customerGroupDetails = customerGroupDetails;
 
@@ -42,8 +42,8 @@ class RunnableCustomerGroupManager implements Runnable {
             }
             try {
                 simulateStay(currentRequest);
-                management.addFulfilledRequestToStatistics(currentRequest.getId(),currentRequest);
-                management.addIncomeToStatistics(currentRequest.calculateCost()*customerGroupDetails.numOfCustomers());
+                management.addFulfilledRequestToStatistics(currentRequest);
+                management.addIncomeToStatistics(currentRequest.calculateCost());
             } catch (ExecutionException e) {
                 e.printStackTrace();
             } catch (InterruptedException e) {
@@ -51,7 +51,7 @@ class RunnableCustomerGroupManager implements Runnable {
             }
         }
 
-        Management.logger.info(customerGroupDetails.getName() + " has no rental requests left. TERMINATING.");
+        Management.LOGGER.info(customerGroupDetails.getName() + " has no rental requests left. TERMINATING.");
     }
 
     /**
@@ -67,7 +67,7 @@ class RunnableCustomerGroupManager implements Runnable {
         // we'll sum up the damage values returned by each simulated customer
         ExecutorService executor = Executors.newCachedThreadPool();
         CompletionService<Double> completionService = new ExecutorCompletionService<Double>(executor);
-        Management.logger.info(customerGroupDetails.getName() + " is simulating a " + currentRequest.getDurationOfStay() + " day stay.");
+        Management.LOGGER.info(customerGroupDetails.getName() + " is simulating a " + currentRequest.getDurationOfStay() + " day stay.");
         Iterator<Customer> customerIterator = customerGroupDetails.customerIterator();
         while (customerIterator.hasNext()) { // launch each customer as a reit.CallableSimulateStayInAsset
             completionService.submit(new CallableSimulateStayInAsset(currentRequest, customerIterator.next()));
@@ -83,8 +83,8 @@ class RunnableCustomerGroupManager implements Runnable {
         // vacate asset
         currentRequest.complete();
         // submit reit.reit.DamageReport to management
-        Management.logger.info(damageDetails.append("====> [Total Damage=").append(Math.round(totalDamage)).append("]").toString());
+        Management.LOGGER.info(damageDetails.append("====> [Total Damage=").append(Math.round(totalDamage)).append("]").toString());
         management.submitDamageReport(currentRequest.createDamageReport(totalDamage));
-        Management.logger.info(customerGroupDetails.getName() + " has submitted a damage report to management.");
+        Management.LOGGER.info(customerGroupDetails.getName() + " has submitted a damage report to management.");
     }
 }

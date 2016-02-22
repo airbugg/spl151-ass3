@@ -77,7 +77,7 @@ public class Asset {
             assetContent.fix();
         }
         status = Status.AVAILABLE; // making asset available
-        Management.logger.info(getName() + " has been repaired.");
+        Management.LOGGER.info(getName() + " has been repaired.");
     }
 
     /**
@@ -164,7 +164,7 @@ public class Asset {
      */
     synchronized void vacate() {
         status = Status.AVAILABLE;
-        Management.logger.info(getName() + " has been vacated.");
+        Management.LOGGER.info(getName() + " has been vacated.");
     }
 
     /**

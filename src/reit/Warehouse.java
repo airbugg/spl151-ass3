@@ -81,13 +81,13 @@ public class Warehouse {
      * (for each tool/material)
      */
     public synchronized StringBuilder WarehouseStatistics() {
-        StringBuilder WarehouseStatistics = new StringBuilder();
-        WarehouseStatistics.append("current warehouse statistics:" + "\n");
-        WarehouseStatistics.append("the total amount of tools used in the program so far: " + "\n");
+        StringBuilder WarehouseStatistics = new StringBuilder("\n\n[WAREHOUSE STATISTICS]\n");
+
+        WarehouseStatistics.append("\n[Tools used during simulation]\n\n");
             for(Map.Entry<String,RepairTool> entry : repairToolContainer.entrySet()){
                 WarehouseStatistics.append("[" + entry.getKey() + "] = " + entry.getValue().getTotalAcquired() + "\n");
             }
-        WarehouseStatistics.append("the total amount of materials used in the program so far: " + "\n");
+        WarehouseStatistics.append("\n[Materials used during simulation]\n\n");
             for(Map.Entry<String,RepairMaterial> entry : repairMaterialContainer.entrySet()){
                 WarehouseStatistics.append("[" + entry.getKey() + "] = " + entry.getValue().getTotalAcquired() + "\n");
             }

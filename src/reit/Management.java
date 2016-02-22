@@ -5,13 +5,14 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
 
-/**
+/** Management:
+ *  This class controls the overall logic of simulation flow.
  * Created by airbag on 12/8/14.
  */
 public class Management {
 
     // fields
-    public static final Logger logger = Logger.getLogger(Management.class.getName());
+    public static final Logger LOGGER = Logger.getLogger(Management.class.getName());
     public static final int DAYS_TO_MILLISECONDS = 24000;
     public static final int SEC_TO_MILL = 1000;
 
@@ -25,6 +26,7 @@ public class Management {
     private final Semaphore reportSemaphore;
     private CyclicBarrier clerkShiftBarrier;
     private final AtomicInteger nUnhandledRequests;
+    private CountDownLatch nClerksWorking;
     private int nUnhandledRequestsPerShift;
     private final Object beginNewShift;
     private final BlockingQueue<RentalRequest> rentalRequests;
@@ -47,9 +49,14 @@ public class Management {
         this.nMaintenanceWorkers = 0;
         this.beginNewShift = new Object();
         this.reportSemaphore = new Semaphore(0);
+        this.nClerksWorking = null;
         statistics = new Statistics(warehouse);
     }
 
+    /**
+     * simulate:
+     * Starts program simulation. Calls secondary helper functions to launch Customer & Clerk threads.
+     */
     public void simulate() { // main simulation loop
 
         init();
@@ -61,34 +68,43 @@ public class Management {
             updateDamage(); // iterate over acquired damage reports, update damage.
             beginMaintenanceShift(); // call maintenance
             beginNewShift(); // notify clerks a new shift has begun.
-            System.out.println(statistics.toString()); //print statistics at the end of all shifts
+
         }
+        try {
+            nClerksWorking.await(); // waiting for all clerks to declare unemployment before printing statistics.
+            synchronized (System.err) {
+                LOGGER.info(statistics.toString());
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
     }
 
     /**
-     *
+     * addIncomeToStatistics:
      * @param income = the income got from a single rental and should be summed with the rest of the bling-blings.
      */
-    public void addIncomeToStatistics(int income){ statistics.addIncome(income);    }
+    void addIncomeToStatistics(int income){ statistics.addIncome(income);    }
 
     /**
-     *
-     * @param id - the id of the request fulfilled.
+     * addFulfilledRequestToStatistics:
      * @param request - the request fulfilled.
      */
-    public void addFulfilledRequestToStatistics(String id, RentalRequest request){ statistics.addFulfilledRequest(id,request);}
+    public void addFulfilledRequestToStatistics(RentalRequest request){ statistics.addFulfilledRequest(request);}
 
     public void addClerk(String name, Location location) {
         clerks.add(new ClerkDetails(name, location));
     }
 
     /**
-     * @param name
-     * @param type
-     * @param size
-     * @param location
-     * @param cost
-     * @return
+     * addAsset:
+     * @param name - name of asset
+     * @param type - type of asset
+     * @param size - size of asset
+     * @param location - location of asset
+     * @param cost - cost of asset, per night, per person
+     * @return - said asset.
      */
     public Asset addAsset (String name, String type, int size, Location location, int cost) {
         Asset asset = new Asset(name, type, location, cost, size);
@@ -96,45 +112,88 @@ public class Management {
         return asset;
     }
 
+    /**
+     * addCustomerGroup:
+     * Adds a new CustomerGroup to container.
+     * @param groupManager - Name of groupManager.
+     * @return CustomerGroupDetails object.
+     */
     public CustomerGroupDetails addCustomerGroup(String groupManager) {
         CustomerGroupDetails customerGroupDetails = new CustomerGroupDetails(groupManager);
         customers.add(customerGroupDetails);
         return customerGroupDetails;
     }
 
+    /**
+     * addNewContentRepairInformation:
+     * Adds new ContentRepairInformation object for a specific AssetContent.
+     * @param content - content to add
+     */
     public void addNewContentRepairInformation(String content) {
         repairToolInformationMap.put(content, new ArrayList<RepairToolInformation>());
         repairMaterialInformationMap.put(content, new ArrayList<RepairMaterialInformation>());
 
     }
 
+    /**
+     * addItemRepairMaterialInformation:
+     * Adds new ItemRepairMaterialInformation object to the list of repair materials required for content.
+     * @param content - content name
+     * @param repairMaterialName - repair material name
+     * @param quantity - quantity to add
+     */
     public void addItemRepairMaterialInformation(String content,
                                                  String repairMaterialName,
                                                  int quantity) {
         repairMaterialInformationMap.get(content).add(new RepairMaterialInformation(repairMaterialName, quantity));
     }
-
+    /**
+     * addItemRepairToolInformation:
+     * Adds new ItemRepairToolInformation object to the list of repair tools required for content.
+     * @param content - content name
+     * @param repairToolName - repair tool name
+     * @param quantity - quantity to add
+     */
     public void addItemRepairToolInformation(String content,
                                              String repairToolName,
                                              int quantity) {
         repairToolInformationMap.get(content).add(new RepairToolInformation(repairToolName, quantity));
     }
 
-
+    /**
+     * setTotalNumberOfRentalRequests:
+     * Sets total number of expected rental requests.
+     * @param nRentalRequests - # of rental requests
+     */
     public void setTotalNumberOfRentalRequests(int nRentalRequests) {
         this.nUnhandledRequests.set(nRentalRequests);
         this.nUnhandledRequestsPerShift = nRentalRequests;
     }
 
+    /**
+     * setNumberOfMaintenanceWorkers:
+     * Sets total number of maintenance workers in simulation.
+     * @param nMaintenanceWorkers - # of maintenance workers available.
+     */
     public void setNumberOfMaintenanceWorkers(int nMaintenanceWorkers) {
         this.nMaintenanceWorkers = nMaintenanceWorkers;
     }
 
+    /**
+     * submitDamageReport:
+     * Submits a new damageReport to be handled.
+     * @param damageReport - the damage report to be submitted.
+     */
     public void submitDamageReport(DamageReport damageReport) {
         assets.submitDamageReport(damageReport); // submit report to Assets.
         reportSemaphore.release(1);
     }
 
+    /**
+     * addRentalRequest:
+     * Adds new rental request object to collection.
+     * @param rentalRequest - the rental request to be added.
+     */
     public void addRentalRequest(RentalRequest rentalRequest) {
         rentalRequests.add(rentalRequest);
     }
@@ -163,10 +222,11 @@ public class Management {
     private void init() {
         reportSemaphore.release(nUnhandledRequests.get()); // initialize reportSemaphore to # of rental requests
         nUnhandledRequestsPerShift = nUnhandledRequests.get(); // before the simulation begins, these are equal
+        nClerksWorking = new CountDownLatch(clerks.size());
     }
 
     private void runCustomers() {
-        logger.info("MANAGEMENT: Initializing reit.Customer Groups...");
+        LOGGER.info("MANAGEMENT: Initializing Customer Groups...");
         for (CustomerGroupDetails customerGroup : customers) {
             new Thread(new RunnableCustomerGroupManager(this, customerGroup)).start();
         }
@@ -175,23 +235,25 @@ public class Management {
     private void runClerks() {
         // ensuring we'll wait for all clerks to end their shift
         clerkShiftBarrier = new CyclicBarrier(clerks.size() + 1); // +1 for management
-        logger.info("MANAGEMENT: Initializing RunnableClerks...");
+        LOGGER.info("MANAGEMENT: Initializing RunnableClerks...");
         for (ClerkDetails clerk : clerks) {
             new Thread(new RunnableClerk(clerk, rentalRequests,
                     clerkShiftBarrier, assets,
                     nUnhandledRequests, reportSemaphore,
-                    beginNewShift)).start();
+                    beginNewShift,
+                    nClerksWorking)).start();
         }
     }
 
     private void beginMaintenanceShift() {
-        logger.info("MANAGEMENT: Maintenance shift begins.. Retrieving damaged asset list.");
+        LOGGER.info("MANAGEMENT: Maintenance shift begins.. Retrieving damaged asset list.");
         ArrayList<Asset> damagedAssets = assets.getDamagedAssets();
+
         // initialize latch. when this reaches zero, maintenance work is done.
         CountDownLatch maintenanceShiftLatch = new CountDownLatch(damagedAssets.size());
 
         ExecutorService maintenanceExecutor = Executors.newFixedThreadPool(nMaintenanceWorkers);
-        logger.info("MANAGEMENT: Executing maintenance worker threads..");
+        LOGGER.info("MANAGEMENT: Executing maintenance worker threads..");
         for (Asset asset : damagedAssets) {
             maintenanceExecutor.execute(new RunnableMaintenanceRequest(asset,
                     repairToolInformationMap,
@@ -206,8 +268,8 @@ public class Management {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        LOGGER.info("MAINTENANCE: Done! let's hit the bar!");
         maintenanceExecutor.shutdown();
-        logger.info("MAINTENANCE: Done! let's hit the bar!");
         // done. let's hit the bar!
     }
 
@@ -217,7 +279,7 @@ public class Management {
 
     private void beginNewShift() {
         synchronized (beginNewShift) {
-            logger.info("MANAGEMENT: CALLING ALL CLERKS!! NEW SHIFT HAS BEGUN!");
+            LOGGER.info("MANAGEMENT: CALLING ALL CLERKS!! NEW SHIFT HAS BEGUN!");
             beginNewShift.notifyAll();
         }
     }
@@ -248,5 +310,4 @@ public class Management {
         nUnhandledRequestsPerShift = nUnhandledRequests.get();
         reportSemaphore.release(nUnhandledRequestsPerShift); // filling it up again, before clerks' next shift begins
     }
-
 }

@@ -44,9 +44,9 @@ class Assets {
                     }
                 }
                 try { // no available assets have been found
-                    Management.logger.info(clerk.getName() + " couldn't find a suitable asset. WAITING...");
+                    Management.LOGGER.info(clerk.getName() + " couldn't find a suitable asset. WAITING...");
                     assetLock.wait(); // so we wait.
-                    Management.logger.info("NOTIFY ALL CLERKS! AN ASSET HAS BEEN VACATED!!");
+                    Management.LOGGER.info("NOTIFY ALL CLERKS! AN ASSET HAS BEEN VACATED!!");
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

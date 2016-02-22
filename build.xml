@@ -6,22 +6,27 @@
     <property name="jar.dir"    value="${build.dir}/jar"/>
     <property name="main-class" value="Driver"/>
 
-    <property name="arg0" value="xml/InitialData.xml"/>
-    <property name="arg1" value="xml/AssetContentsRepairDetails.xml"/>
-    <property name="arg2" value="xml/Assets.xml"/>
-    <property name="arg3" value="xml/CustomersGroups.xml"/>
+    <property name="arg0" value="InitialData.xml"/>
+    <property name="arg1" value="AssetContentsRepairDetails.xml"/>
+    <property name="arg2" value="Assets.xml"/>
+    <property name="arg3" value="CustomersGroups.xml"/>
 
     <target name="clean">
         <delete dir="${build.dir}/classes"/>
     </target>
 
+
     <target name="compile">
         <mkdir dir="${build.dir}"/>
         <mkdir dir="${classes.dir}"/>
-        <javac srcdir="${src.dir}" destdir="${classes.dir}"/>
-        <javac srcdir="${src.dir}/reit" destdir="${classes.dir}"/>
+        <javac  includeantruntime="false" srcdir="${src.dir}" destdir="${classes.dir}">
+        <compilerarg line="-proc:none"/>
+        </javac>
+        <javac  includeantruntime="false" srcdir="${src.dir}/reit" destdir="${classes.dir}">
+        <compilerarg line="-proc:none"/>
+        </javac>
     </target>
-
+    
     <target name="jar" depends="compile">
         <mkdir dir="${jar.dir}"/>
         <jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${classes.dir}">
@@ -30,6 +35,7 @@
             </manifest>
         </jar>
     </target>
+
 
     <target name="run"  depends="jar">
         <java jar="${jar.dir}/${ant.project.name}.jar"  fork="true">

@@ -13,10 +13,6 @@ class Driver {
         XMLParser.parseAssets(args[2], management);
         XMLParser.parseCustomerGroups(args[3], management);
 
-
-        System.out.println("Finished parsing files.");
         management.simulate();
-        System.out.println("Simulation Complete");
-
     }
 }
